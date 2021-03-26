@@ -7,7 +7,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, globalutils, scrtitle, main,
+  SysUtils, video, keyboard, globalutils, scrtitle,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)

@@ -49,12 +49,12 @@ var
   Keypress: TKeyEvent;
 begin
   Keypress := GetKeyEvent;
-  Keypress := TranslateKeyEvent(K);
+  Keypress := TranslateKeyEvent(Keypress);
   if (gameState = 0) then
   begin // beginning of Title menu
     case GetKeyEventChar(Keypress) of
-      'n': newGame;
-      'l': continueGame;
+      'n': ;//newGame;
+      'l': ;//continueGame;
       'q': exitApplication;
     end; // end of title menu screen
   end;
@@ -66,6 +66,7 @@ begin
   { Shutdown video unit }
   ui.shutdownScreen;
   ui.exitMessage;
+  Halt;
 end;
 
 end.
