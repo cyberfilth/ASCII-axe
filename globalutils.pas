@@ -1,0 +1,48 @@
+(* Common functions / utilities *)
+
+unit globalutils;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils;
+
+type
+  coordinates = record
+    x, y: smallint;
+  end;
+
+type
+  (* Tiles that make up the game world *)
+  tile = record
+    (* Unique tile ID *)
+    id: smallint;
+    (* Does the tile block movement *)
+    Blocks: boolean;
+    (* Is the tile visible *)
+    Visible: boolean;
+    (* Is the tile occupied *)
+    Occupied: boolean;
+    (* Has the tile been discovered already *)
+    Discovered: boolean;
+    (* Character used to represent the tile *)
+    Glyph: char;
+  end;
+
+const
+  (* Version info - a = Alpha, d = Debug, r = Release *)
+  VERSION = '30a';
+  (* Save game file *)
+  {$IFDEF Linux}
+  saveFile = '.axes.data';
+  {$ENDIF}
+  {$IFDEF Windows}
+  saveFile = 'axes.data';
+  {$ENDIF}
+
+implementation
+
+end.
+
