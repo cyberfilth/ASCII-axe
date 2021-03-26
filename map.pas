@@ -7,35 +7,48 @@ interface
 uses
   SysUtils;
 
-const
-  MAXROWS = 100;
-  MAXCOLUMNS = 100;
+type
+  (* Tiles that make up the game world *)
+  tile = record
+    (* Unique tile ID *)
+    id: smallint;
+    (* Does the tile block movement *)
+    Blocks: boolean;
+    (* Is the tile visible *)
+    Visible: boolean;
+    (* Is the tile occupied *)
+    Occupied: boolean;
+    (* Has the tile been discovered already *)
+    Discovered: boolean;
+    (* Character used to represent the tile *)
+    Glyph: char;
+  end;
 
 var
-  myArray: array[1..MAXROWS, 1..MAXCOLUMNS] of string;
+  (* Type of map: 2 = cavern, 3 = Bitmask dungeon *)
+  mapType: smallint;
+  (* Game map array *)
+  maparea: array[1..MAXROWS, 1..MAXCOLUMNS] of tile;
+  (* ROWS and COLUMNS used in loops *)
   r, c: smallint;
+  (* Player starting position *)
+  startX, startY: smallint;
 
-procedure generateMap;
+procedure setupMap;
 
 implementation
 
-procedure generateMap;
+
+procedure setupMap;
 begin
-   for r := 1 to MAXROWS do
+  (* give each tile a unique ID number *)
+  id_int: smallint;
   begin
-    for c := 1 to MAXCOLUMNS do
-    begin
-      myArray[r][c] := '#';
-    end;
+  case mapType of
+    2: cavern.generate;
+    3: bitmask_dungeon.generate;
   end;
-  for r := 2 to (MAXROWS - 1) do
-  begin
-    for c := 2 to (MAXCOLUMNS - 1) do
-    begin
-      if (random(3) <> 1) then
-        myArray[r][c] := '.';
-    end;
-  end;
+
 end;
 
 end.

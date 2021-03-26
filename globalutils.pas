@@ -41,6 +41,16 @@ const
   {$IFDEF Windows}
   saveFile = 'axes.data';
   {$ENDIF}
+  (* Columns of the game map *)
+  MAXCOLUMNS = 67;
+  (* Rows of the game map *)
+  MAXROWS = 38;
+
+var
+  (* Name of entity or item that killed the player *)
+  killer: shortstring;
+  (* Turn counter *)
+  playerTurn: integer;
 
 implementation
 

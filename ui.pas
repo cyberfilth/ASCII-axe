@@ -216,6 +216,9 @@ end;
 procedure exitMessage;
 begin
   ClrScr;
+  {$IfDef DEBUG}
+  writeln('Random seed: ' + IntToStr(RandSeed));
+  {$EndIf}
   writeln('Axes, Armour & Ale - Chris Hawkins');
 end;
 

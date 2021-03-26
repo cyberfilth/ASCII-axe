@@ -5,7 +5,7 @@ unit main;
 interface
 
 uses
-  SysUtils, ui, globalutils, Keyboard;
+  SysUtils, ui, globalutils, Keyboard, keyboardinput, map;
 
 var
   (* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
@@ -13,7 +13,7 @@ var
   saveGameExists: boolean;
 
 procedure initialise;
-procedure waitForInput;
+procedure newGame;
 procedure exitApplication;
 
 implementation
@@ -23,13 +23,14 @@ begin
   gameState := 0;
   saveGameExists := False;
   Randomize;
+  { Check if seed set as command line parameter }
   if (ParamCount = 2) then
   begin
     if (ParamStr(1) = '--seed') then
       RandSeed := StrToDWord(ParamStr(2))
     else
     begin
-      (* Set random seed *)
+      { Set random seed if not specified }
       {$IFDEF Linux}
       RandSeed := RandSeed shl 8;
       {$ENDIF}
@@ -38,33 +39,34 @@ begin
       {$ENDIF}
     end;
   end;
-  (* initialise display and show title screen *)
+  { Initialise video unit and show title screen }
   ui.setupScreen;
-  InitKeyboard;
-  waitForInput;
+  { Initialise keyboard unit }
+  keyboardinput.setupKeyboard;
+  keyboardinput.waitForInput;
 end;
 
-procedure waitForInput;
-var
-  Keypress: TKeyEvent;
+
+procedure newGame;
 begin
-  Keypress := GetKeyEvent;
-  Keypress := TranslateKeyEvent(Keypress);
-  if (gameState = 0) then
-  begin // beginning of Title menu
-    case GetKeyEventChar(Keypress) of
-      'n': ;//newGame;
-      'l': ;//continueGame;
-      'q': exitApplication;
-    end; // end of title menu screen
-  end;
+  (* Title menu *)
+  gameState := 1;
+  (* No player-kiler set *)
+  globalutils.killer := 'empty';
+  (* Number of player turns set to zero *)
+  globalutils.playerTurn := 0;
+  (* first map is number 2, a cave *)
+  map.mapType := 2;
+  universe.createNewDungeon(2, map.mapType);
 end;
 
 procedure exitApplication;
 begin
-  DoneKeyBoard;
+  { Shutdown keyboard unit }
+  keyboardinput.shutdownKeyboard;
   { Shutdown video unit }
   ui.shutdownScreen;
+  (* Clear screen and display author message *)
   ui.exitMessage;
   Halt;
 end;
