@@ -87,6 +87,9 @@ procedure NPCgameLoop;
 
 implementation
 
+uses
+  player;
+
 procedure spawnNPCs;
 var
   i, r, c, percentage: smallint;
@@ -121,8 +124,42 @@ begin
 end;
 
 procedure killEntity(id: smallint);
+var
+  i, amount, r, c, attempts: smallint;
 begin
-
+  entityList[id].isDead := True;
+  entityList[id].glyph := '%';
+  entityList[id].blocks := False; // For destroyed barrels
+  map.unoccupy(entityList[id].posX, entityList[id].posY);
+  if (entityList[id].race = 'barrel') then
+    barrel.breakBarrel(entityList[id].posX, entityList[id].posY);
+  if (entityList[id].race = 'green fungus') then
+  begin
+    amount := randomRange(0, 3);
+    if (amount > 0) then
+    begin
+      for i := 1 to amount do
+      begin
+        attempts := 0;
+        repeat
+          // limit the number of attempts to move so the game doesn't hang if no suitable space found
+          Inc(attempts);
+          if attempts > 10 then
+            exit;
+          r := globalutils.randomRange(entityList[id].posY - 4, entityList[id].posY + 4);
+          c := globalutils.randomRange(entityList[id].posX - 4, entityList[id].posX + 4);
+          (* choose a location that is not a wall or occupied *)
+        until (maparea[r][c].Blocks <> True) and (maparea[r][c].Occupied <> True);
+        if (withinBounds(c, r) = True) then
+        begin
+          Inc(npcAmount);
+          green_fungus.createGreenFungus(npcAmount, c, r);
+        end;
+      end;
+      ui.writeBufferedMessages;
+      ui.bufferMessage('The fungus releases spores into the air');
+    end;
+  end;
 end;
 
 procedure drawEntity(c, r: smallint; glyph: char);
@@ -131,43 +168,137 @@ begin
 end;
 
 procedure moveNPC(id, newX, newY: smallint);
+var
+  i: smallint;
 begin
-
+  (* delete NPC at old position *)
+  (* First check if they are standing on an item *)
+  for i := 1 to items.itemAmount do
+    if (items.itemList[i].posX = entityList[id].posX) and
+      (items.itemList[i].posX = entityList[id].posX) then
+      items.redrawItems
+    (* if not, redraw the floor tile *)
+    else
+    if (entityList[id].inView = True) then
+      map.drawTile(entityList[id].posX, entityList[id].posY, 0);
+  (* mark tile as unoccupied *)
+  map.unoccupy(entityList[id].posX, entityList[id].posY);
+  (* update new position *)
+  if (map.isOccupied(newX, newY) = True) and (getCreatureID(newX, newY) <> id) then
+  begin
+    newX := entityList[id].posX;
+    newY := entityList[id].posY;
+  end;
+  entityList[id].posX := newX;
+  entityList[id].posY := newY;
+  (* mark tile as occupied *)
+  map.occupy(newX, newY);
+  (* Check if NPC in players FoV *)
+  if (map.canSee(newX, newY) = True) then
+  begin
+    entityList[id].inView := True;
+    if (entityList[id].discovered = False) then
+    begin
+      ui.displayMessage('You see ' + entityList[id].description);
+      entityList[id].discovered := True;
+    end;
+  end
+  else
+    entityList[id].inView := False;
 end;
 
 procedure redrawNPC;
+var
+  i: smallint;
 begin
-
+  for i := 1 to npcAmount do
+  begin
+    if (entityList[i].inView = True) and (entityList[i].isDead = False) then
+    begin
+      drawEntity(entityList[i].posX, entityList[i].posY, entityList[i].glyph);
+    end;
+  end;
 end;
 
 function getCreatureHP(x, y: smallint): smallint;
+var
+  i: smallint;
 begin
-
+  for i := 0 to npcAmount do
+  begin
+    if (entityList[i].posX = x) and (entityList[i].posY = y) then
+      Result := entityList[i].currentHP;
+  end;
 end;
 
 function getCreatureMaxHP(x, y: smallint): smallint;
+bvar
+  i: smallint;
 begin
-
+  for i := 0 to npcAmount do
+  begin
+    if (entityList[i].posX = x) and (entityList[i].posY = y) then
+      Result := entityList[i].maxHP;
+  end;
 end;
 
 function getCreatureID(x, y: smallint): smallint;
+var
+  i: smallint;
 begin
-
+  Result := 0; // initialise variable
+  for i := 0 to npcAmount do
+  begin
+    if (entityList[i].posX = x) and (entityList[i].posY = y) then
+      Result := i;
+  end;
 end;
 
 function getCreatureName(x, y: smallint): shortstring;
+var
+  i: smallint;
 begin
-
+  for i := 0 to npcAmount do
+  begin
+    if (entityList[i].posX = x) and (entityList[i].posY = y) then
+      Result := entityList[i].race;
+  end;
 end;
 
 function isCreatureVisible(x, y: smallint): boolean;
+var
+  i: smallint;
 begin
-
+  Result := False;
+  for i := 0 to npcAmount do
+    if (entityList[i].posX = x) and (entityList[i].posY = y) then
+      if (entityList[i].inView = True) then
+        Result := True;
 end;
 
 procedure NPCgameLoop;
+var
+  i: smallint;
 begin
+  for i := 1 to npcAmount do
+    if (entityList[i].isDead = False) then
+      entityList[i].entityTakeTurn(i);
+end;
 
+{ Creature }
+
+procedure Creature.entityTakeTurn(i: smallint);
+begin
+  if (entityList[i].race = 'barrel') then
+    barrel.takeTurn(i, entityList[i].posX, entityList[i].posY)
+  else if (entityList[i].race = 'cave rat') then
+    cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY)
+  else if (entityList[i].race = 'blood hyena') then
+    hyena.takeTurn(i, entityList[i].posX, entityList[i].posY)
+  else if (entityList[i].race = 'cave bear') then
+    cave_bear.takeTurn(i, entityList[i].posX, entityList[i].posY)
+  else if (entityList[i].race = 'green fungus') then
+    green_fungus.takeTurn(i, entityList[i].posX, entityList[i].posY);
 end;
 
 end.
