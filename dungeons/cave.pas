@@ -8,7 +8,7 @@ unit cave;
 interface
 
 uses
-  sysutils, globalutils, map;
+  sysutils, globalutils, map, process_cave, Classes;
 
 const
   BLOCKVALUE = 99;
@@ -24,7 +24,7 @@ var
   distances: TDist;
 
 (* TESTING - Write cavern to text file *)
-//filename: ShortString;
+//filename: ShortStringenerateg;
 //myfile: Text;
 
 (* Fill array with walls *)

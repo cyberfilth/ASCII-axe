@@ -71,8 +71,8 @@ begin
     begin
       (* select which type of dungeon to generate *)
       case mapType of
-        2: cavern.generate(i, totalDepth);
-        3: bitmask_dungeon.generate;
+        2: cave.generate(i, totalDepth);
+       // 3: bitmask_dungeon.generate;
       end;
     end;
   end;

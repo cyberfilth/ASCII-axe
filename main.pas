@@ -5,7 +5,7 @@ unit main;
 interface
 
 uses
-  SysUtils, ui, globalutils, Keyboard, keyboardinput, map;
+  SysUtils, ui, globalutils, Keyboard, keyboardinput, map, universe;
 
 var
   (* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
