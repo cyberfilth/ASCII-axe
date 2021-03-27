@@ -5,7 +5,7 @@ unit map;
 interface
 
 uses
-  SysUtils;
+  SysUtils, globalutils, universe;
 
 type
   (* Tiles that make up the game world *)
@@ -41,14 +41,24 @@ implementation
 
 procedure setupMap;
 begin
-  (* give each tile a unique ID number *)
-  id_int: smallint;
+  r := 1;
+  c := 1;
+  (* set up the dungeon tiles *)
+  for r := 1 to globalutils.MAXROWS do
   begin
-  case mapType of
-    2: cavern.generate;
-    3: bitmask_dungeon.generate;
+    for c := 1 to globalutils.MAXCOLUMNS do
+    begin
+      with maparea[r][c] do
+      begin
+        id := universe.dungeonList[0].dlevel[1][r][c].id;
+        Blocks := universe.dungeonList[0].dlevel[1][r][c].Blocks;
+        Visible := universe.dungeonList[0].dlevel[1][r][c].Visible;
+        Discovered := universe.dungeonList[0].dlevel[1][r][c].Discovered;
+        Occupied := universe.dungeonList[0].dlevel[1][r][c].Occupied;
+        Glyph := universe.dungeonList[0].dlevel[1][r][c].Glyph;
+      end;
+    end;
   end;
-
 end;
 
 end.

@@ -58,6 +58,13 @@ begin
   (* first map is number 2, a cave *)
   map.mapType := 2;
   universe.createNewDungeon(2, map.mapType);
+  (* Copy first dungeon to game map *)
+  map.setupMap;
+
+ // no items created yet
+
+ (* Spawn game entities *)
+  entities.spawnNPCs;
 end;
 
 procedure exitApplication;

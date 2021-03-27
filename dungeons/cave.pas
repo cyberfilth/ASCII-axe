@@ -8,7 +8,7 @@ unit cave;
 interface
 
 uses
-  globalutils, map;
+  sysutils, globalutils, map;
 
 const
   BLOCKVALUE = 99;

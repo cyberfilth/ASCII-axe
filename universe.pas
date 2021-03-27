@@ -52,7 +52,6 @@ begin
   dungeonAmount := length(dungeonList);
   Inc(dungeonAmount);
   SetLength(dungeonList, dungeonAmount);
-
   (* Fill dungeon record with values *)
   with dungeonList[0] do
   begin
@@ -67,7 +66,6 @@ begin
     begin
       isVisited[i] := False;
     end;
-
     (* generate the dungeon *)
     for i := 1 to totalDepth do
     begin
@@ -77,7 +75,6 @@ begin
         3: bitmask_dungeon.generate;
       end;
     end;
-
   end;
 end;
 
