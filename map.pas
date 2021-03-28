@@ -34,7 +34,12 @@ var
   (* Player starting position *)
   startX, startY: smallint;
 
+(* Loop through tiles and set their ID, visibility etc *)
 procedure setupMap;
+(* Occupy tile *)
+procedure occupy(x, y: smallint);
+(* Unoccupy tile *)
+procedure unoccupy(x, y: smallint);
 
 implementation
 
@@ -59,6 +64,16 @@ begin
       end;
     end;
   end;
+end;
+
+procedure occupy(x, y: smallint);
+begin
+  maparea[y][x].Occupied := True;
+end;
+
+procedure unoccupy(x, y: smallint);
+begin
+  maparea[y][x].Occupied := False;
 end;
 
 end.

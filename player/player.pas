@@ -42,7 +42,7 @@ procedure gameOver;
 implementation
 
 uses
-  globalutils, map, ui, entities, main;
+  globalutils, player_inventory, map, ui, entities, main;
 
 procedure createPlayer;
 begin

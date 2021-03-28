@@ -88,7 +88,7 @@
     <RunParams>
       <FormatVersion Value="2"/>
     </RunParams>
-    <Units Count="18">
+    <Units Count="19">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -161,6 +161,10 @@
         <Filename Value="screens\scrinventory.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit17>
+      <Unit18>
+        <Filename Value="player\player_inventory.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit18>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
