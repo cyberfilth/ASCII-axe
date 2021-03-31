@@ -1,6 +1,9 @@
 unit main;
 
 {$mode objfpc}{$H+}
+{$IfOpt D+}
+{$Define DEBUG}
+{$EndIf}
 
 interface
 
@@ -60,11 +63,12 @@ begin
   universe.createNewDungeon(2, map.mapType);
   (* Copy first dungeon to game map *)
   map.setupMap;
-
- // no items created yet
-
  (* Spawn game entities *)
   entities.spawnNPCs;
+  (* Drop items *)
+  items.initialiseItems;
+  (* Setup players starting equipment *)
+  player.createEquipment;
 end;
 
 procedure exitApplication;

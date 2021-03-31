@@ -11,15 +11,6 @@ uses
 procedure drawSidepanel;
 (* Clear screen and load various panels for game *)
 procedure displayGameScreen;
-(* Display Experience level *)
-procedure displayXP;
-(* Display Health bar *)
-procedure displayHealth;
-(* Display Attack stat *)
-procedure displayAttack;
-(* Display Defense stat *)
-procedure displayDefense;
-
 
 implementation
 
@@ -79,40 +70,15 @@ begin
   TextOut(70, 3, 'cyan', 'the Worthless');
   TextOut(70, 5, 'cyan', 'Experience:');
   TextOut(70, 6, 'cyan', 'Health:');
-  displayXP;
-  displayHealth;
-  displayAttack;
-  displayDefense;
+  updateXP;
+  updateHealth;
+  updateAttack;
+  updateDefense;
 end;
 
 procedure displayGameScreen;
 begin
   drawSidepanel;
-end;
-
-procedure displayXP;
-begin
-  (* Paint over previous stats *)
-  TextOut(82, 5, 'black', '    ');
-  (* Write Experience points *)
-  TextOut(82, 5, 'red', '20');
-end;
-
-procedure displayHealth;
-begin
-  TextOut(70, 7, 'green', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
-    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
-    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
-end;
-
-procedure displayAttack;
-begin
-  TextOut(70, 8, 'cyan', 'Attack:');
-end;
-
-procedure displayDefense;
-begin
-  TextOut(70, 9, 'cyan', 'Defence:');
 end;
 
 end.

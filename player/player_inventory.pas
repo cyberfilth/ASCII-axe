@@ -6,7 +6,7 @@ unit player_inventory;
 interface
 
 uses
-  SysUtils, entities, ui, globalutils;
+  SysUtils, entities, items, ui, scrgame, globalutils;
 
 type
   (* Items in inventory *)
@@ -82,10 +82,10 @@ begin
     begin
       (* Check for weapons *)
       if (inventory[i].itemType = 'weapon') then
-        ui.updateWeapon(inventory[i].Name)
+        scrgame.updateWeapon(inventory[i].Name)
       (* Check for armour *)
       else if (inventory[i].itemType = 'armour') then
-        ui.updateArmour(inventory[i].Name);
+        scrgame.updateArmour(inventory[i].Name);
     end;
   end;
 end;

@@ -14,7 +14,10 @@ program ascii_axe;
 {$APPTYPE CONSOLE}
 {$ENDIF}
 
-uses
+uses                    // program doesn't use threads so remove after testing
+ //
+ //
+ //...............
  {$IFDEF UseCThreads}cthreads,
  {$ENDIF} {$IFDEF WINDOWS}{$ENDIF}
   SysUtils,

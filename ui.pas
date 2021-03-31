@@ -28,6 +28,18 @@ procedure shutdownScreen;
 procedure screenBlank;
 (* Clear screen and write exit message *)
 procedure exitMessage;
+(* Display equipped weapon *)
+procedure updateWeapon(weaponName: shortstring);
+(* Display equipped armour *)
+procedure updateArmour(armourName: shortstring);
+(* Display Experience level *)
+procedure updateXP;
+(* Display Health bar *)
+procedure updateHealth;
+(* Display Attack stat *)
+procedure updateAttack;
+(* Display Defense stat *)
+procedure updateDefense;
 
 implementation
 
@@ -129,6 +141,53 @@ begin
   writeln('Random seed: ' + IntToStr(RandSeed));
   {$EndIf}
   writeln('Axes, Armour & Ale - Chris Hawkins');
+end;
+
+procedure updateWeapon(weaponName: shortstring);
+begin
+
+end;
+
+procedure updateArmour(armourName: shortstring);
+begin
+
+end;
+
+procedure updateXP;
+begin
+  (* Paint over previous stats *)
+  TextOut(82, 5, 'black', '    ');
+  (* Write Experience points *)
+  TextOut(82, 5, 'red', '20');
+end;
+
+procedure updateHealth;
+var
+  healthPercentage: smallint;
+begin
+  (* Paint over previous stats *)
+  TextOut(78, 6, 'black', '      ');
+  TextOut(70, 7, 'black', '                ');
+  (* Draw Health amount *)
+  TextOut(78, 6, 'cyan', IntToStr(entities.entityList[0].currentHP) + ' / ' +
+    IntToStr(entities.entityList[0].maxHP));
+  (* Draw health bar *)
+
+  (* Calculate percentage of total health *)
+
+  TextOut(70, 7, 'green', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
+end;
+
+procedure updateAttack;
+begin
+  TextOut(70, 8, 'cyan', 'Attack:');
+end;
+
+procedure updateDefense;
+begin
+  TextOut(70, 9, 'cyan', 'Defence:');
 end;
 
 end.
