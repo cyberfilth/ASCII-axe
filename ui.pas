@@ -15,8 +15,11 @@ uses
 
 var
   vid: TVideoMode;
+  messageArray: array[1..7] of string = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
   i: smallint;
   x, y: smallint;
+  (* Status effects *)
+  poisonStatusSet: boolean;
 
 (* Write to the screen *)
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
@@ -32,14 +35,22 @@ procedure exitMessage;
 procedure updateWeapon(weaponName: shortstring);
 (* Display equipped armour *)
 procedure updateArmour(armourName: shortstring);
+(* Display status effects *)
+procedure displayStatusEffect(onoff: byte; effectType: shortstring);
 (* Display Experience level *)
 procedure updateXP;
 (* Display Health bar *)
 procedure updateHealth;
 (* Display Attack stat *)
 procedure updateAttack;
-(* Display Defense stat *)
-procedure updateDefense;
+(* Display Defence stat *)
+procedure updateDefence;
+(* Write text to the message log *)
+procedure displayMessage(message: string);
+(* Store all messages from players turn *)
+procedure bufferMessage(message: string);
+(* Write buffered message to the message log *)
+procedure writeBufferedMessages;
 
 implementation
 
@@ -153,6 +164,11 @@ begin
 
 end;
 
+procedure displayStatusEffect(onoff: byte; effectType: shortstring);
+begin
+  { TODO -cui : Insert status effect in sidebar }
+end;
+
 procedure updateXP;
 begin
   (* Paint over previous stats *)
@@ -174,7 +190,7 @@ begin
   (* Draw health bar *)
 
   (* Calculate percentage of total health *)
-
+   { TODO -cui : calculate length of health bar }
   TextOut(70, 7, 'green', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
     Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
     Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
@@ -185,9 +201,24 @@ begin
   TextOut(70, 8, 'cyan', 'Attack:');
 end;
 
-procedure updateDefense;
+procedure updateDefence;
 begin
   TextOut(70, 9, 'cyan', 'Defence:');
+end;
+
+procedure displayMessage(message: string);
+begin
+  { TODO -cui : All message handling routines need to be implemented }
+end;
+
+procedure bufferMessage(message: string);
+begin
+
+end;
+
+procedure writeBufferedMessages;
+begin
+
 end;
 
 end.
