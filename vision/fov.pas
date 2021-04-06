@@ -16,10 +16,13 @@ procedure fieldOfView(centreX, centreY, radius: smallint; hiDef: byte);
 
 implementation
 
+uses
+  entities;
+
 procedure drawLine(x1, y1, x2, y2: smallint; hiDef: byte);
 var
-  i, deltax, deltay, numpixels, d, dinc1, dinc2, x, xinc1, xinc2,
-  y, yinc1, yinc2: smallint;
+  i, deltax, deltay, numpixels, d, dinc1, dinc2, x, xinc1, xinc2, y,
+  yinc1, yinc2: smallint;
 begin
   (* Calculate delta X and delta Y for initialisation *)
   deltax := abs(x2 - x1);

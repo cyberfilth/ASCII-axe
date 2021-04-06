@@ -174,19 +174,29 @@ begin
     case maparea[r][c].glyph of
       '.': // Cave Floor
       begin
-        mapDisplay[r][c].Glyph := '.';
         if (hiDef = 1) then
-          mapDisplay[r][c].GlyphColour := 'grey'
-        else
+        begin
           mapDisplay[r][c].GlyphColour := 'darkGrey';
+          mapDisplay[r][c].Glyph := Chr(176);
+        end
+        else
+        begin
+          mapDisplay[r][c].GlyphColour := 'darkGrey';
+          mapDisplay[r][c].Glyph := '.';
+        end;
       end;
       '*': // Cave Wall
       begin
-        mapDisplay[r][c].Glyph := Chr(177);
         if (hiDef = 1) then
-          mapDisplay[r][c].GlyphColour := 'brown'
+        begin
+          mapDisplay[r][c].GlyphColour := 'brown';
+          mapDisplay[r][c].Glyph := Chr(219);
+        end
         else
-          mapDisplay[r][c].GlyphColour := 'darkGrey';
+        begin
+          mapDisplay[r][c].GlyphColour := 'brown';
+          mapDisplay[r][c].Glyph := Chr(177);
+        end;
       end;
     end;
   end;
