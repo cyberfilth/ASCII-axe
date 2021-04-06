@@ -29,21 +29,51 @@ begin
   DoneKeyBoard;
 end;
 
+(* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
 procedure waitForInput;
 var
   Keypress: TKeyEvent;
 begin
-  Keypress := GetKeyEvent;
-  Keypress := TranslateKeyEvent(Keypress);
-  if (gameState = 0) then
-  begin // beginning of Title menu
+  { Title menu }
+  while gameState = 0 do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
     case GetKeyEventChar(Keypress) of
-      'n': ;//newGame;
-      'l': ;//continueGame;
+      'n': main.newGame;
+      // 'l': continueGame;
       'q': main.exitApplication;
-    end; // end of title menu screen
+    end;
+  end;
+  { Gameplay controls }
+  while gameState = 1 do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
+    case GetKeyEventCode(Keypress) of
+      kbdLeft:
+      begin
+        Dec(main.playerX);
+        main.gameLoop;
+      end;
+      kbdRight:
+      begin
+        Inc(main.playerX);
+        main.gameLoop;
+      end;
+      kbdUp:
+      begin
+        Dec(main.playerY);
+        main.gameLoop;
+      end;
+      KbdDown:
+      begin
+        Inc(main.playerY);
+        main.gameLoop;
+      end;
+    end;
+
   end;
 end;
 
 end.
-

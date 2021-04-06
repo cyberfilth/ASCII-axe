@@ -38,6 +38,7 @@ begin
     'green': tint := $02;
     'cyan': tint := $03;
     'red': tint := $04;
+    'white': tint := $07;
     else
       tint := $07;
   end;
@@ -77,7 +78,6 @@ begin
   ClearScreen;
   (* prepare changes to the screen *)
   LockScreenUpdate;
-
   scrtitle.displayTitleScreen(0);
   (* Write those changes to the screen *)
   UnlockScreenUpdate;
