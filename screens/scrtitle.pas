@@ -1,13 +1,8 @@
-(* Title screen *)
+unit scrTitle;
 
-unit scrtitle;
-
-{$mode objfpc}{$H+}
+{$mode fpc}{$H+}
 
 interface
-
-uses
-  video;
 
 procedure displayTitleScreen(yn: byte);
 

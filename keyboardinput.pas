@@ -1,8 +1,11 @@
-unit keyboardinput;
+unit KeyboardInput;
 
-{$mode objfpc}{$H+}
+{$mode fpc}{$H+}
 
 interface
+
+uses
+  Keyboard;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;

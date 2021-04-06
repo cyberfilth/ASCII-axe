@@ -9,43 +9,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 program ascii_axe;
 
-{$mode objfpc}{$H+}
+{$mode fpc}{$H+}
 {$IFDEF WINDOWS}
 {$APPTYPE CONSOLE}
 {$ENDIF}
 
-uses                    // program doesn't use threads so remove after testing
- //
- //
- //...............
- {$IFDEF UseCThreads}cthreads,
- {$ENDIF} {$IFDEF WINDOWS}{$ENDIF}
-  SysUtils,
-  video,
-  Keyboard,
-  ui, main;
-
+uses
+  main;
 
 begin
   (* Initialise the display, keyboard and game variables *)
-   main.initialise;
-
-
-  (* UPDATE DISPLAY *)
-  (* prepare changes to the screen *)
-  LockScreenUpdate;
-
-  (* draw the sidebar *)
-  ui.drawSidepanel;
-
-  (* Write those changes to the screen *)
-  UnlockScreenUpdate;
-
-  (* only redraws the parts that have been updated *)
-  UpdateScreen(False);
-
-  (* END OF UPDATE DISPLAY *)
-
-  GetKeyEvent; (* so program doesnt exit straight away *)
-
+  main.initialise;
 end.
