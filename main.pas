@@ -9,7 +9,7 @@ unit main;
 interface
 
 uses
-  ui, Video, SysUtils, KeyboardInput, camera, map, cave, scrGame;
+  ui, Video, SysUtils, KeyboardInput, camera, map, scrGame;
 
 var
   (* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
@@ -75,7 +75,6 @@ begin
   gameState := 1;
   (* first map is number 2, a cave *)
   map.mapType := 2;
-  cave.generateMap;
   map.setupMap;
 
   { prepare changes to the screen }

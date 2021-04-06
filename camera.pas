@@ -5,7 +5,7 @@ unit camera;
 interface
 
 uses
-  SysUtils, globalUtils, ui;
+  SysUtils, globalUtils, ui, map;
 
 const
   camHeight = 19;
@@ -57,6 +57,7 @@ end;
 procedure drawMap(playerX, playerY: smallint);
 var
   pX, pY: smallint; // placeholder for player coordinates
+  gCol: shortstring;
 begin
   pX := playerX;
   pY := playerY;
@@ -65,14 +66,12 @@ begin
   begin
     for c := 1 to camWidth do
     begin
-      if (globalUtils.dungeonArray[r + getY(pY)][c + getX(pX)] = '#') then
-        TextOut(c, r, 'brownBlock', Chr(178))
-      else
-        TextOut(c, r, 'darkgrey', globalUtils.dungeonArray[r + getY(pY)][c + getX(pX)]);
+      gCol := map.mapDisplay[r + getY(pY)][c + getX(pX)].GlyphColour;
+      TextOut(c, r, gCol, map.mapDisplay[r + getY(pY)][c + getX(pX)].Glyph);
     end;
   end;
-
 end;
 
 end.
+
 
