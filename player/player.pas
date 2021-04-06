@@ -7,7 +7,7 @@ unit player;
 interface
 
 uses
-  SysUtils, fov;
+  SysUtils, fov, camera;
 
 type
   (* Store information about the player *)

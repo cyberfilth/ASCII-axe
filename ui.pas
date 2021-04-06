@@ -48,10 +48,13 @@ begin
     'red': tint := $04;
     'magenta': tint := $05;
     'brown': tint := $06;
-    'white': tint := $07;
-    'darkgrey': tint := $08;
+    'grey': tint := $07;
+    'darkGrey': tint := $08;
     'brownBlock': tint := $66;
     'lightCyan': tint := LightCyan;
+    'yellow': tint := Yellow;
+    'lightGrey': tint := LightGray;
+    'white': tint := White;
     else
       tint := $07;
   end;
@@ -138,10 +141,10 @@ begin
     messageArray[1] := message;
     (* Display each line, gradually getting darker *)
     TextOut(1, 21, 'white', messageArray[1]);
-    TextOut(1, 22, 'lightCyan', messageArray[2]);
-    TextOut(1, 23, 'cyan', messageArray[3]);
-    TextOut(1, 24, 'cyan', messageArray[4]);
-    TextOut(1, 25, 'blue', messageArray[5]);
+    TextOut(1, 22, 'lightGrey', messageArray[2]);
+    TextOut(1, 23, 'grey', messageArray[3]);
+    TextOut(1, 24, 'darkGrey', messageArray[4]);
+    TextOut(1, 25, 'darkGrey', messageArray[5]);
   end;
 end;
 

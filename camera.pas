@@ -17,6 +17,7 @@ var
 function getX(Xcoord: smallint): smallint;
 function getY(Ycoord: smallint): smallint;
 procedure drawMap;
+procedure drawEntities;
 
 implementation
 
@@ -63,7 +64,6 @@ var
 begin
   pX := entities.entityList[0].posX;
   pY := entities.entityList[0].posY;
-
   for r := 1 to camHeight do
   begin
     for c := 1 to camWidth do
@@ -72,6 +72,28 @@ begin
       TextOut(c, r, gCol, map.mapDisplay[r + getY(pY)][c + getX(pX)].Glyph);
     end;
   end;
+  drawEntities;
+end;
+
+procedure drawEntities;
+var
+  (* Entity coordinates & counter *)
+  entX, entY, i: smallint;
+  (* Glyph colour *)
+  gCol: shortstring;
+begin
+  (* Loop through all entities and draw them *)
+  //for i := 0 to entities.npcAmount do
+  //begin
+  //  if (entities.entityList[i].inView = True) then
+  //  begin
+      gCol := entities.entityList[0].glyphColour;
+      entX := entities.entityList[0].posX;
+      entY := entities.entityList[0].posY;
+      TextOut(entX - getX(entX), entY - getY(entY), gCol, entities.entityList[0].glyph);
+      //TextOut(c, r, gCol, map.mapDisplay[r + getY(pY)][c + getX(pX)].Glyph);
+    //end;
+ // end;
 end;
 
 end.

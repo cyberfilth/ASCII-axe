@@ -162,7 +162,7 @@ end;
 procedure drawTile(c, r: smallint; hiDef: byte);
 begin
   (* Draw black space if tile is not visible *)
-  if (maparea[r][c].Visible = False) then
+  if (maparea[r][c].Visible = False) and (maparea[r][c].Discovered = False) then
   begin
     mapDisplay[r][c].Glyph := ' ';
     mapDisplay[r][c].GlyphColour := 'black';
@@ -176,9 +176,9 @@ begin
       begin
         mapDisplay[r][c].Glyph := '.';
         if (hiDef = 1) then
-          mapDisplay[r][c].GlyphColour := 'white'
+          mapDisplay[r][c].GlyphColour := 'grey'
         else
-          mapDisplay[r][c].GlyphColour := 'darkgrey';
+          mapDisplay[r][c].GlyphColour := 'darkGrey';
       end;
       '*': // Cave Wall
       begin
@@ -186,7 +186,7 @@ begin
         if (hiDef = 1) then
           mapDisplay[r][c].GlyphColour := 'brown'
         else
-          mapDisplay[r][c].GlyphColour := 'darkgrey';
+          mapDisplay[r][c].GlyphColour := 'darkGrey';
       end;
     end;
   end;

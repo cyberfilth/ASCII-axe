@@ -83,7 +83,6 @@ begin
   (* Draw the game screen *)
   scrGame.displayGameScreen;
 
-
   (* draw map through the camera *)
   camera.drawMap;
   ui.displayMessage('Welcome message here...');
@@ -101,7 +100,7 @@ begin
   (* BEGIN DRAWING TO THE BUFFER *)
 
   (* Redraw Field of View after entities move *)
-  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+  //fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 
   (* draw map through the camera *)
   camera.drawMap;
