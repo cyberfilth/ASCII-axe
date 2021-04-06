@@ -9,13 +9,12 @@ unit main;
 interface
 
 uses
-  ui, Video, SysUtils, KeyboardInput, camera, map, scrGame;
+  ui, Video, SysUtils, KeyboardInput, camera, map, scrGame, globalUtils;
 
 var
   (* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
   gameState: byte;
 
-  playerY, playerX: smallint;
 
 procedure initialise;
 procedure exitApplication;
@@ -23,6 +22,9 @@ procedure newGame;
 procedure gameLoop;
 
 implementation
+
+uses
+  entities, fov;
 
 procedure initialise;
 begin
@@ -65,17 +67,14 @@ end;
 
 procedure newGame;
 begin
-
-  playerX := 10;
-  playerY := 10;
-
-
-
   (* Game state = game running *)
   gameState := 1;
+  playerTurn := 0;
   (* first map is number 2, a cave *)
   map.mapType := 2;
   map.setupMap;
+  (* Spawn game entities *)
+  entities.spawnNPCs;
 
   { prepare changes to the screen }
   LockScreenUpdate;
@@ -83,8 +82,10 @@ begin
   ui.screenBlank;
   (* Draw the game screen *)
   scrGame.displayGameScreen;
+
+
   (* draw map through the camera *)
-  camera.drawMap(playerX, playerY);
+  camera.drawMap;
   ui.displayMessage('Welcome message here...');
   { Write those changes to the screen }
   UnlockScreenUpdate;
@@ -99,8 +100,11 @@ begin
 
   (* BEGIN DRAWING TO THE BUFFER *)
 
+  (* Redraw Field of View after entities move *)
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+
   (* draw map through the camera *)
-  camera.drawMap(playerX, playerY);
+  camera.drawMap;
 
   (* FINISH DRAWING TO THE BUFFER *)
 

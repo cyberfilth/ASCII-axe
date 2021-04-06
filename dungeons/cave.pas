@@ -22,7 +22,6 @@ var
   r, c, i, iterations, tileCounter: smallint;
   totalRooms: byte;
   distances: TDist;
-
 (* TESTING - Write cavern to text file *)
 //filename: ShortStringenerateg;
 //myfile: Text;
@@ -282,7 +281,7 @@ procedure generate(floorNumber, lastFloor: byte);
 var
   numOfFloorTiles: smallint;
 begin
-  (* Cave generator will discard levels that are less than 50% walkable *)
+  (* Cave generator will discard levels that are less than 39% walkable *)
   repeat
     numOfFloorTiles := 0;
     digCave(floorNumber);

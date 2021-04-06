@@ -1,0 +1,3 @@
+drawtile initially called in setup
+draws black spaces
+each call to draw tile after that draws to the map array

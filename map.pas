@@ -1,8 +1,8 @@
-(* Organises the current level into an array *)
+(* Organises the current level into an array together with helper functions *)
 
 unit map;
 
-{$mode fpc}{$H+}
+{$mode objfpc}{$H+}
 {$RANGECHECKS OFF}
 
 interface
@@ -37,7 +37,7 @@ type
   end;
 
 var
-  (* Type of map: 2 = cavern, 3 = Bitmask dungeon *)
+  (* Type of map: 2 = cave, 3 = Bitmask dungeon *)
   mapType: smallint;
   (* Game map array *)
   maparea: array[1..MAXROWS, 1..MAXCOLUMNS] of tile;
@@ -50,14 +50,31 @@ var
 
 (* Loop through tiles and set their ID, visibility etc *)
 procedure setupMap;
+(* Occupy tile *)
+procedure occupy(x, y: smallint);
+(* Unoccupy tile *)
+procedure unoccupy(x, y: smallint);
+(* Check if a map tile is occupied *)
+function isOccupied(checkX, checkY: smallint): boolean;
+(* Check if the coordinates are within the bounds of the gamemap *)
+function withinBounds(x, y: smallint): boolean;
+(* Check if the direction to move to is valid *)
+function canMove(checkX, checkY: smallint): boolean;
+(* Check if an object is in players FoV *)
+function canSee(checkX, checkY: smallint): boolean;
+(* Check if player is on a tile *)
+function hasPlayer(checkX, checkY: smallint): boolean;
 (* Place a tile on the map *)
 procedure drawTile(c, r: smallint; hiDef: byte);
 
 implementation
 
+uses
+  entities;
+
 procedure setupMap;
 var
-  // give each tile a unique ID number
+  (* give each tile a unique ID number *)
   id_int: smallint;
 begin
   case mapType of
@@ -79,14 +96,67 @@ begin
       begin
         id := id_int;
         Blocks := True;
-        Visible := true;// False;
+        Visible := False;
         Discovered := False;
         Occupied := False;
         Glyph := globalUtils.dungeonArray[r][c];
       end;
+      if (globalutils.dungeonArray[r][c] = '.') then
+        maparea[r][c].Blocks := False;
       drawTile(c, r, 1);
     end;
   end;
+end;
+
+procedure occupy(x, y: smallint);
+begin
+  maparea[y][x].Occupied := True;
+end;
+
+procedure unoccupy(x, y: smallint);
+begin
+  maparea[y][x].Occupied := False;
+end;
+
+function isOccupied(checkX, checkY: smallint): boolean;
+begin
+  Result := False;
+  if (maparea[checkY][checkX].Occupied = True) then
+    Result := True;
+end;
+
+function withinBounds(x, y: smallint): boolean;
+begin
+  Result := False;
+  if (x >= 1) and (x <= globalutils.MAXCOLUMNS) and (y >= 1) and
+    (y <= globalutils.MAXROWS) then
+    Result := True;
+end;
+
+function canMove(checkX, checkY: smallint): boolean;
+begin
+  Result := False;
+  if (checkX >= 1) and (checkX <= MAXCOLUMNS) and (checkY >= 1) and
+    (checkY <= MAXROWS) then
+  begin
+    if (maparea[checkY][checkX].Blocks = False) then
+      Result := True;
+  end;
+end;
+
+function canSee(checkX, checkY: smallint): boolean;
+begin
+  Result := False;
+  if (maparea[checkY][checkX].Visible = True) then
+    Result := True;
+end;
+
+function hasPlayer(checkX, checkY: smallint): boolean;
+begin
+  Result := False;
+  if (entities.entityList[0].posX = checkX) and
+    (entities.entityList[0].posY = checkY) then
+    Result := True;
 end;
 
 procedure drawTile(c, r: smallint; hiDef: byte);
@@ -123,4 +193,3 @@ begin
 end;
 
 end.
-

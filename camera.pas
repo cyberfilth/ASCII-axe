@@ -5,7 +5,7 @@ unit camera;
 interface
 
 uses
-  SysUtils, globalUtils, ui, map;
+  SysUtils, globalUtils, ui, map, entities;
 
 const
   camHeight = 19;
@@ -16,7 +16,7 @@ var
 
 function getX(Xcoord: smallint): smallint;
 function getY(Ycoord: smallint): smallint;
-procedure drawMap(playerX, playerY: smallint);
+procedure drawMap;
 
 implementation
 
@@ -54,13 +54,15 @@ begin
     Result := p - hs;
 end;
 
-procedure drawMap(playerX, playerY: smallint);
+procedure drawMap;
 var
-  pX, pY: smallint; // placeholder for player coordinates
+  (* Player coordinates *)
+  pX, pY: smallint;
+  (* Tile colour *)
   gCol: shortstring;
 begin
-  pX := playerX;
-  pY := playerY;
+  pX := entities.entityList[0].posX;
+  pY := entities.entityList[0].posY;
 
   for r := 1 to camHeight do
   begin
@@ -73,5 +75,3 @@ begin
 end;
 
 end.
-
-

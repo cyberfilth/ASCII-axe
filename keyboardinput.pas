@@ -5,7 +5,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard;
+  Keyboard, player;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -53,22 +53,22 @@ begin
     case GetKeyEventCode(Keypress) of
       kbdLeft:
       begin
-        Dec(main.playerX);
+        player.movePlayer(2);
         main.gameLoop;
       end;
       kbdRight:
       begin
-        Inc(main.playerX);
+        player.movePlayer(4);
         main.gameLoop;
       end;
       kbdUp:
       begin
-        Dec(main.playerY);
+        player.movePlayer(1);
         main.gameLoop;
       end;
       KbdDown:
       begin
-        Inc(main.playerY);
+        player.movePlayer(3);
         main.gameLoop;
       end;
     end;
