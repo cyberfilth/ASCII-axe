@@ -5,11 +5,11 @@ unit camera;
 interface
 
 uses
-  map, SysUtils, globalUtils, ui;
+  SysUtils, globalUtils, ui;
 
 const
-  camHeight = 29;
-  camWidth = 29;
+  camHeight = 19;
+  camWidth = 57;
 
 var
   r, c: smallint;
@@ -66,9 +66,9 @@ begin
     for c := 1 to camWidth do
     begin
       if (globalUtils.dungeonArray[r + getY(pY)][c + getX(pX)] = '#') then
-        TextOut(c, r, 'white', Chr(178))
+        TextOut(c, r, 'brownBlock', Chr(178))
       else
-        TextOut(c, r, 'grey', globalUtils.dungeonArray[r + getY(pY)][c + getX(pX)]);
+        TextOut(c, r, 'darkgrey', globalUtils.dungeonArray[r + getY(pY)][c + getX(pX)]);
     end;
   end;
 

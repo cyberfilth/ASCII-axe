@@ -14,6 +14,8 @@ uses
 var
   vid: TVideoMode;
   x, y: smallint;
+  messageArray: array[1..7] of string = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
+  buffer: string;
 
 (* Write to the screen *)
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
@@ -23,6 +25,12 @@ procedure screenBlank;
 procedure setupScreen;
 (* Shutdown the video unit *)
 procedure shutdownScreen;
+(* Write text to the message log *)
+procedure displayMessage(message: string);
+(* Store all messages from players turn *)
+procedure bufferMessage(message: string);
+(* Write buffered message to the message log *)
+procedure writeBufferedMessages;
 
 implementation
 
@@ -38,7 +46,12 @@ begin
     'green': tint := $02;
     'cyan': tint := $03;
     'red': tint := $04;
+    'magenta': tint := $05;
+    'brown': tint := $06;
     'white': tint := $07;
+    'darkgrey': tint := $08;
+    'brownBlock': tint := $66;
+    'lightCyan': tint := LightCyan;
     else
       tint := $07;
   end;
@@ -53,7 +66,6 @@ end;
 procedure screenBlank;
 begin
   for y := 1 to 67 do
-
   begin
     for x := 1 to 91 do
     begin
@@ -70,8 +82,8 @@ begin
   { Initialise the video unit }
   InitVideo;
   InitKeyboard;
-  vid.Col := 67;
-  vid.Row := 91;
+  vid.Col := 80;
+  vid.Row := 25;
   vid.Color := True;
   SetVideoMode(vid);
   SetCursorType(crHidden);
@@ -91,6 +103,59 @@ begin
   ClearScreen;
   DoneVideo;
   DoneKeyboard;
+end;
+
+procedure displayMessage(message: string);
+begin
+  (* Catch duplicate messages *)
+  if (message = messageArray[1]) then
+  begin
+    (* Clear first line *)
+    for x := 1 to 57 do
+    begin
+      TextOut(x, 21, 'black', ' ');
+    end;
+    messageArray[1] := messageArray[1] + ' x2';
+    TextOut(1, 21, 'white', messageArray[1]);
+  end
+  else
+  begin
+    (* Clear the message window *)
+    for y := 21 to 25 do
+    begin
+      for x := 1 to 57 do
+      begin
+        TextOut(x, y, 'black', ' ');
+      end;
+    end;
+    (* Shift all messages down one in the array *)
+    messageArray[7] := messageArray[6];
+    messageArray[6] := messageArray[5];
+    messageArray[5] := messageArray[4];
+    messageArray[4] := messageArray[3];
+    messageArray[3] := messageArray[2];
+    messageArray[2] := messageArray[1];
+    messageArray[1] := message;
+    (* Display each line, gradually getting darker *)
+    TextOut(1, 21, 'white', messageArray[1]);
+    TextOut(1, 22, 'lightCyan', messageArray[2]);
+    TextOut(1, 23, 'cyan', messageArray[3]);
+    TextOut(1, 24, 'cyan', messageArray[4]);
+    TextOut(1, 25, 'blue', messageArray[5]);
+  end;
+end;
+
+{ TODO : If buffered message is longer than a certain length, flush the buffer with writeBuffer procedure }
+procedure bufferMessage(message: string);
+begin
+  buffer := buffer + message + '. ';
+end;
+
+procedure writeBufferedMessages;
+begin
+  if (buffer <> '') then
+    displayMessage(buffer);
+  buffer := '';
 end;
 
 end.

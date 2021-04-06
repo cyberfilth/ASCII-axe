@@ -9,7 +9,7 @@ unit main;
 interface
 
 uses
-  ui, Video, SysUtils, KeyboardInput, camera, map, cave;
+  ui, Video, SysUtils, KeyboardInput, camera, map, cave, scrGame;
 
 var
   (* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
@@ -69,8 +69,6 @@ begin
   playerX := 10;
   playerY := 10;
 
-  (* Clear the screen *)
-  ui.screenBlank;
 
 
   (* Game state = game running *)
@@ -82,8 +80,13 @@ begin
 
   { prepare changes to the screen }
   LockScreenUpdate;
+  (* Clear the screen *)
+  ui.screenBlank;
+  (* Draw the game screen *)
+  scrGame.displayGameScreen;
   (* draw map through the camera *)
   camera.drawMap(playerX, playerY);
+  ui.displayMessage('Welcome message here...');
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
