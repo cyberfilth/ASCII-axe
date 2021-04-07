@@ -176,8 +176,8 @@ begin
       begin
         if (hiDef = 1) then
         begin
-          mapDisplay[r][c].GlyphColour := 'darkGrey';
-          mapDisplay[r][c].Glyph := Chr(176);
+          mapDisplay[r][c].GlyphColour := 'lightGrey';
+          mapDisplay[r][c].Glyph := '.';
         end
         else
         begin

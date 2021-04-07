@@ -14,11 +14,11 @@ procedure displayGameScreen;
 implementation
 
 uses
-  ui;
+  ui, entities;
 
 procedure drawSidepanel;
 var
-  i: SmallInt;
+  i: smallint;
 begin
   (* Stats window *)
   { top line }
@@ -65,16 +65,17 @@ begin
 
   (* Info window *)
 
-  (* Write stats *)
-  // test name
-  TextOut(60, 2, 'cyan', 'Borodagz');
+  (* Write stat titles *)
+  TextOut(60, 2, 'cyan', entities.entityList[0].race);
   TextOut(60, 3, 'cyan', 'the Worthless');
   TextOut(60, 5, 'cyan', 'Experience:');
   TextOut(60, 6, 'cyan', 'Health:');
-  //updateXP;
-  //updateHealth;
-  //updateAttack;
-  //updateDefense;
+
+  (* Write stats *)
+  //ui.updateXP;
+  ui.updateHealth;
+  //ui.updateAttack;
+  //ui.updateDefence;
 end;
 
 procedure displayGameScreen;

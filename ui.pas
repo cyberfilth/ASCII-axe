@@ -31,8 +31,19 @@ procedure displayMessage(message: string);
 procedure bufferMessage(message: string);
 (* Write buffered message to the message log *)
 procedure writeBufferedMessages;
+(* Update Experience points display *)
+procedure updateXP;
+(* Update player health display *)
+procedure updateHealth;
+(* Update player attack value *)
+procedure updateAttack;
+(* Update player defence value *)
+procedure updateDefence;
 
 implementation
+
+uses
+  entities;
 
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 var
@@ -55,6 +66,8 @@ begin
     'yellow': tint := Yellow;
     'lightGrey': tint := LightGray;
     'white': tint := White;
+    'DgreyBGblack': tint := $80;
+    'LgreyBGblack': tint := $70;
     else
       tint := $07;
   end;
@@ -159,6 +172,79 @@ begin
   if (buffer <> '') then
     displayMessage(buffer);
   buffer := '';
+end;
+
+procedure updateXP;
+begin
+
+end;
+
+procedure updateHealth;
+var
+  healthPercentage, bars, i: byte;
+begin
+  (* Paint over previous stats *)
+  TextOut(68, 6, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219));
+  (* Write stats *)
+  TextOut(68, 6, 'cyan', IntToStr(entities.entityList[0].currentHP) +
+    '/' + IntToStr(entities.entityList[0].maxHP));
+  (* Paint over health bar *)
+  TextOut(60, 7, 'black', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
+  (* Length of health bar *)
+  bars := 0;
+  (* Calculate percentage of total health *)
+  healthPercentage :=
+    (entities.entityList[0].currentHP * 100) div entities.entityList[0].maxHP;
+  (* Calculate the length of the health bar *)
+  if (healthPercentage <= 6) then
+    bars := 1
+  else if (healthPercentage > 6) and (healthPercentage <= 12) then
+    bars := 2
+  else if (healthPercentage > 12) and (healthPercentage <= 18) then
+    bars := 3
+  else if (healthPercentage > 18) and (healthPercentage < 25) then
+    bars := 4
+  else if (healthPercentage >= 25) and (healthPercentage <= 31) then
+    bars := 5
+  else if (healthPercentage > 31) and (healthPercentage <= 37) then
+    bars := 6
+  else if (healthPercentage > 37) and (healthPercentage <= 43) then
+    bars := 7
+  else if (healthPercentage > 43) and (healthPercentage < 50) then
+    bars := 8
+  else if (healthPercentage >= 50) and (healthPercentage <= 56) then
+    bars := 9
+  else if (healthPercentage > 56) and (healthPercentage <= 62) then
+    bars := 10
+  else if (healthPercentage > 62) and (healthPercentage <= 68) then
+    bars := 11
+  else if (healthPercentage > 68) and (healthPercentage < 75) then
+    bars := 12
+  else if (healthPercentage >= 75) and (healthPercentage <= 81) then
+    bars := 13
+  else if (healthPercentage > 81) and (healthPercentage <= 87) then
+    bars := 14
+  else if (healthPercentage > 87) and (healthPercentage <= 94) then
+    bars := 15
+  else if (healthPercentage > 94) then
+    bars := 16;
+  (* Draw health bar *)
+  for i := 1 to bars do
+    TextOut(59 + i, 7, 'green', Chr(223));
+end;
+
+procedure updateAttack;
+begin
+
+end;
+
+procedure updateDefence;
+begin
+
 end;
 
 end.
