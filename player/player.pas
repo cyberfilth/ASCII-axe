@@ -7,12 +7,12 @@ unit player;
 interface
 
 uses
-  SysUtils, fov, camera;
+  SysUtils, fov;
 
 type
   (* Store information about the player *)
   Creature = record
-    currentHP, maxHP, attack, defense, posX, posY, visionRange: smallint;
+    currentHP, maxHP, attack, defence, posX, posY, visionRange: smallint;
     experience: integer;
     playerName, title: string;
     (* status effects *)
@@ -33,7 +33,7 @@ function combatCheck(x, y: smallint): boolean;
 implementation
 
 uses
-  entities, globalUtils, map, main, ui, plot_gen;
+  entities, globalUtils, map, ui, plot_gen;
 
 procedure createPlayer;
 begin
@@ -51,7 +51,7 @@ begin
     maxHP := 20;
     currentHP := 20;
     attack := 5;
-    defense := 2;
+    defence := 2;
     weaponDice := 0;
     weaponAdds := 0;
     xpReward := 0;

@@ -70,12 +70,14 @@ begin
   TextOut(60, 3, 'cyan', 'the Worthless');
   TextOut(60, 5, 'cyan', 'Experience:');
   TextOut(60, 6, 'cyan', 'Health:');
+  TextOut(60, 8, 'cyan', 'Attack:');
+  TextOut(60, 9, 'cyan', 'Defence:');
 
   (* Write stats *)
-  //ui.updateXP;
+  ui.updateXP;
   ui.updateHealth;
-  //ui.updateAttack;
-  //ui.updateDefence;
+  ui.updateAttack;
+  ui.updateDefence;
 end;
 
 procedure displayGameScreen;

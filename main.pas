@@ -24,7 +24,7 @@ procedure gameLoop;
 implementation
 
 uses
-  entities, fov;
+  entities;
 
 procedure initialise;
 begin

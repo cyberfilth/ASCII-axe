@@ -8,9 +8,6 @@ unit entities;
 
 interface
 
-uses
-  SysUtils, map, globalUtils, ui;
-
 type
   (* Store information about NPC's *)
 
@@ -23,7 +20,7 @@ type
     (* Description of creature *)
     description: string;
     (* health and position on game map *)
-    currentHP, maxHP, attack, defense, posX, posY, targetX, targetY,
+    currentHP, maxHP, attack, defence, posX, posY, targetX, targetY,
     xpReward, visionRange: smallint;
     (* Weapon stats *)
     weaponDice, weaponAdds: smallint;

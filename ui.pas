@@ -7,9 +7,9 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle,
+  SysUtils, video, keyboard, scrTitle
   {$IFDEF WINDOWS}
-  JwaWinCon {$ENDIF}  ;
+  , JwaWinCon {$ENDIF};
 
 var
   vid: TVideoMode;
@@ -81,9 +81,9 @@ end;
 
 procedure screenBlank;
 begin
-  for y := 1 to 67 do
+  for y := 1 to 25 do
   begin
-    for x := 1 to 91 do
+    for x := 1 to 80 do
     begin
       TextOut(x, y, 'black', ' ');
     end;
@@ -176,7 +176,11 @@ end;
 
 procedure updateXP;
 begin
-
+  (* Paint over previous stats *)
+  TextOut(72, 5, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219));
+  (* Write out XP amount *)
+  TextOut(72, 5, 'cyan', IntToStr(entities.entityList[0].xpReward));
 end;
 
 procedure updateHealth;
@@ -239,12 +243,22 @@ end;
 
 procedure updateAttack;
 begin
-
+  (* Paint over previous stats *)
+  TextOut(68, 8, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219));
+  (* Write out XP amount *)
+  TextOut(68, 8, 'cyan', IntToStr(entities.entityList[0].attack));
 end;
 
 procedure updateDefence;
 begin
-
+  (* Paint over previous stats *)
+  TextOut(69, 9, 'black', Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219));
+  (* Write out XP amount *)
+  TextOut(69, 9, 'cyan', IntToStr(entities.entityList[0].defence));
 end;
 
 end.
