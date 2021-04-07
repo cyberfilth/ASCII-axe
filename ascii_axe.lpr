@@ -20,4 +20,5 @@ uses
 begin
   (* Initialise the display, keyboard and game variables *)
   main.initialise;
+  Exit;
 end.

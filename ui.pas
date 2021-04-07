@@ -7,9 +7,11 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle
+  SysUtils, video, keyboard, scrTitle,
   {$IFDEF WINDOWS}
-  , JwaWinCon {$ENDIF};
+  JwaWinCon, {$ENDIF}
+  (* CRT unit is just to clear the screen on exit *)
+  Crt;
 
 var
   vid: TVideoMode;
@@ -39,6 +41,8 @@ procedure updateHealth;
 procedure updateAttack;
 (* Update player defence value *)
 procedure updateDefence;
+(* Clear screen and write exit message *)
+procedure exitMessage;
 
 implementation
 
@@ -254,11 +258,17 @@ end;
 procedure updateDefence;
 begin
   (* Paint over previous stats *)
-  TextOut(69, 9, 'black', Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219));
+  TextOut(69, 9, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
   TextOut(69, 9, 'cyan', IntToStr(entities.entityList[0].defence));
+end;
+
+procedure exitMessage;
+begin
+  ClrScr;
+  writeln('Random seed: ' + IntToStr(RandSeed));
+  writeln('Axes, Armour & Ale - Chris Hawkins');
 end;
 
 end.

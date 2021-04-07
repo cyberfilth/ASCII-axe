@@ -101,7 +101,8 @@ begin
         Occupied := False;
         Glyph := globalUtils.dungeonArray[r][c];
       end;
-      if (globalutils.dungeonArray[r][c] = '.') then
+      if (globalutils.dungeonArray[r][c] = '.') or { floor tile }
+        (globalutils.dungeonArray[r][c] = '<') then { Stair tile }
         maparea[r][c].Blocks := False;
       drawTile(c, r, 1);
     end;
@@ -172,7 +173,7 @@ begin
   if (mapType = 2) then
   begin
     case maparea[r][c].glyph of
-      '.': // Cave Floor
+      '.': { Cave Floor }
       begin
         if (hiDef = 1) then
         begin
@@ -185,7 +186,20 @@ begin
           mapDisplay[r][c].Glyph := '.';
         end;
       end;
-      '*': // Cave Wall
+      '<': { Upstairs }
+      begin
+        if (hiDef = 1) then
+        begin
+          mapDisplay[r][c].GlyphColour := 'white';
+          mapDisplay[r][c].Glyph := '<';
+        end
+        else
+        begin
+          mapDisplay[r][c].GlyphColour := 'grey';
+          mapDisplay[r][c].Glyph := '<';
+        end;
+      end;
+      '*': { Cave Wall }
       begin
         if (hiDef = 1) then
         begin

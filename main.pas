@@ -16,6 +16,7 @@ var
   gameState: byte;
 
 
+procedure setSeed;
 procedure initialise;
 procedure exitApplication;
 procedure newGame;
@@ -25,6 +26,16 @@ implementation
 
 uses
   entities;
+
+procedure setSeed;
+begin
+  {$IFDEF Linux}
+  RandSeed := RandSeed shl 8;
+  {$ENDIF}
+  {$IFDEF Windows}
+  RandSeed := ((RandSeed shl 8) or GetProcessID);
+  {$ENDIF}
+end;
 
 procedure initialise;
 begin
@@ -38,14 +49,11 @@ begin
     else
     begin
       { Set random seed if not specified }
-      {$IFDEF Linux}
-      RandSeed := RandSeed shl 8;
-      {$ENDIF}
-      {$IFDEF Windows}
-      RandSeed := ((RandSeed shl 8) or GetProcessID);
-      {$ENDIF}
+      setSeed;
     end;
-  end;
+  end
+  else
+    setSeed;
   { Initialise video unit and show title screen }
   ui.setupScreen;
   { Initialise keyboard unit }
@@ -61,7 +69,7 @@ begin
   { Shutdown video unit }
   ui.shutdownScreen;
   (* Clear screen and display author message *)
-  //ui.exitMessage;
+  ui.exitMessage;
   Halt;
 end;
 
@@ -99,8 +107,6 @@ begin
 
   (* BEGIN DRAWING TO THE BUFFER *)
 
-  (* Redraw Field of View after entities move *)
-  //fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 
   (* draw map through the camera *)
   camera.drawMap;
@@ -114,4 +120,3 @@ begin
 end;
 
 end.
-

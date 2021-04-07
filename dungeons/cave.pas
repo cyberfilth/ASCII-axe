@@ -257,7 +257,7 @@ begin
   (* End of floodfill   *)
 
   (* Add stairs *)
- // terrainArray[map.startY][map.startX] := '<';
+  terrainArray[map.startY][map.startX] := '<';
 
   {
   // Write map to text file for testing
