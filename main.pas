@@ -11,9 +11,12 @@ interface
 uses
   ui, Video, SysUtils, KeyboardInput, camera, map, scrGame, globalUtils;
 
+type
+  gameStatus = (stTitle, stGame, stInventory, stQuitMenu, stGameOver);
+
 var
-  (* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
-  gameState: byte;
+  (* State machine for game menus / controls *)
+  gameState: gameStatus;
 
 
 procedure setSeed;
@@ -39,7 +42,7 @@ end;
 
 procedure initialise;
 begin
-  gameState := 0;
+  gameState := stTitle;
   Randomize;
   { Check if seed set as command line parameter }
   if (ParamCount = 2) then
@@ -64,6 +67,7 @@ end;
 
 procedure exitApplication;
 begin
+  gameState := stGameOver;
   { Shutdown keyboard unit }
   keyboardinput.shutdownKeyboard;
   { Shutdown video unit }
@@ -76,7 +80,7 @@ end;
 procedure newGame;
 begin
   (* Game state = game running *)
-  gameState := 1;
+  gameState := stGame;
   playerTurn := 0;
   (* first map is number 2, a cave *)
   map.mapType := 2;

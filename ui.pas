@@ -41,13 +41,17 @@ procedure updateHealth;
 procedure updateAttack;
 (* Update player defence value *)
 procedure updateDefence;
+(* Display Quit Game confirmation *)
+procedure exitPrompt;
+(* Clears the status bar message *)
+procedure clearStatusBar;
 (* Clear screen and write exit message *)
 procedure exitMessage;
 
 implementation
 
 uses
-  entities;
+  entities, KeyboardInput;
 
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 var
@@ -262,6 +266,31 @@ begin
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
   TextOut(69, 9, 'cyan', IntToStr(entities.entityList[0].defence));
+end;
+
+procedure exitPrompt;
+begin
+  (* prepare changes to the screen *)
+  LockScreenUpdate;
+  TextOut(1, 20, 'LgreyBGblack',
+    ' [Q]-Quit game  [X]-Exit to menu  [ESC]-Return to game  ');
+  (* Write those changes to the screen *)
+  UnlockScreenUpdate;
+  (* only redraws the parts that have been updated *)
+  UpdateScreen(False);
+  KeyboardInput.waitForInput;
+end;
+
+procedure clearStatusBar;
+begin
+  (* prepare changes to the screen *)
+  LockScreenUpdate;
+  TextOut(1, 20, 'black', '                                                        ');
+  (* Write those changes to the screen *)
+  UnlockScreenUpdate;
+  (* only redraws the parts that have been updated *)
+  UpdateScreen(False);
+  KeyboardInput.waitForInput;
 end;
 
 procedure exitMessage;
