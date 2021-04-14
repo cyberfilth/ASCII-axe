@@ -1,4 +1,9 @@
-(* Generate a cave using cellular automata and remove unreachable areas *)
+(* Generate a cave using two passes of a cellular automata algorithm and then
+   remove any unreachable areas by floodfilling the map and discarding maps that
+   are less than 39% floor tiles. Stairs are placed on the top level and a
+   connecting stairway is placed on the floor below. If the floor below has a
+   wall tile where the stair should be, that floor is discarded and generated
+   again. *)
 
 unit cave;
 
@@ -19,12 +24,12 @@ type
 
 var
   terrainArray, tempArray, tempArray2: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
-  r, c, i, iterations, tileCounter: smallint;
+  r, c, i, iterations, tileCounter, stairX, stairY: smallint;
   totalRooms: byte;
   distances: TDist;
-(* TESTING - Write cavern to text file *)
-//filename: ShortStringenerateg;
-//myfile: Text;
+  (* TESTING - Write cavern to text file *)
+  filename: ShortString;
+  myfile: Text;
 
 (* Fill array with walls *)
 procedure fillWithWalls;
@@ -33,7 +38,7 @@ procedure randomTileFill;
 (* Dig out the cave *)
 procedure digCave(floorNumber: byte);
 (* Generate a caves and place the stairs *)
-procedure generate(floorNumber, lastFloor: byte);
+procedure generate(idNumber: smallint; totalDepth: byte);
 (* Determines if a tile is a wall or not *)
 function blockORnot(x, y: integer): Tbkinds;
 (* Floodfill cave to find unreachable areas *)
@@ -42,7 +47,7 @@ procedure calcDistances(x, y: smallint);
 implementation
 
 uses
-  map;
+  map, universe;
 
 procedure fillWithWalls;
 begin
@@ -71,220 +76,218 @@ begin
 end;
 
 procedure digCave(floorNumber: byte);
-begin
-  fillWithWalls;
-  randomTileFill;
-
-  (* Run through cave generator process 5 times *)
-  for iterations := 1 to 5 do
-  begin
-    for r := 1 to MAXROWS do
-    begin
-      for c := 1 to MAXCOLUMNS do
-      begin
-        (* Generate landmass *)
-        tileCounter := 0;
-        if (terrainArray[r - 1][c] = '*') then // NORTH
-          Inc(tileCounter);
-        if (terrainArray[r - 1][c + 1] = '*') then // NORTH EAST
-          Inc(tileCounter);
-        if (terrainArray[r][c + 1] = '*') then // EAST
-          Inc(tileCounter);
-        if (terrainArray[r + 1][c + 1] = '*') then // SOUTH EAST
-          Inc(tileCounter);
-        if (terrainArray[r + 1][c] = '*') then // SOUTH
-          Inc(tileCounter);
-        if (terrainArray[r + 1][c - 1] = '*') then // SOUTH WEST
-          Inc(tileCounter);
-        if (terrainArray[r][c - 1] = '*') then // WEST
-          Inc(tileCounter);
-        if (terrainArray[r - 1][c - 1] = '*') then // NORTH WEST
-          Inc(tileCounter);
-        (* Set tiles in temporary array *)
-        if (terrainArray[r][c] = '*') then
-        begin
-          if (tileCounter >= 4) then
-            tempArray[r][c] := '*'
-          else
-            tempArray[r][c] := '.';
-        end;
-        if (terrainArray[r][c] = '.') then
-        begin
-          if (tileCounter >= 5) then
-            tempArray[r][c] := '*'
-          else
-            tempArray[r][c] := '.';
-        end;
-      end;
-    end;
-  end;
-
-  (* Start second cave *)
-  fillWithWalls;
-  randomTileFill;
-
-  (* Run through cave generator process 5 times *)
-  for iterations := 1 to 5 do
-  begin
-    for r := 1 to MAXROWS do
-    begin
-      for c := 1 to MAXCOLUMNS do
-      begin
-        (* Generate landmass *)
-        tileCounter := 0;
-        if (terrainArray[r - 1][c] = '*') then // NORTH
-          Inc(tileCounter);
-        if (terrainArray[r - 1][c + 1] = '*') then // NORTH EAST
-          Inc(tileCounter);
-        if (terrainArray[r][c + 1] = '*') then // EAST
-          Inc(tileCounter);
-        if (terrainArray[r + 1][c + 1] = '*') then // SOUTH EAST
-          Inc(tileCounter);
-        if (terrainArray[r + 1][c] = '*') then // SOUTH
-          Inc(tileCounter);
-        if (terrainArray[r + 1][c - 1] = '*') then // SOUTH WEST
-          Inc(tileCounter);
-        if (terrainArray[r][c - 1] = '*') then // WEST
-          Inc(tileCounter);
-        if (terrainArray[r - 1][c - 1] = '*') then // NORTH WEST
-          Inc(tileCounter);
-        (* Set tiles in temporary array *)
-        if (terrainArray[r][c] = '*') then
-        begin
-          if (tileCounter >= 4) then
-            tempArray2[r][c] := '*'
-          else
-            tempArray2[r][c] := '.';
-        end;
-        if (terrainArray[r][c] = '.') then
-        begin
-          if (tileCounter >= 5) then
-            tempArray2[r][c] := '*'
-          else
-            tempArray2[r][c] := '.';
-        end;
-      end;
-    end;
-  end;
-
-  (* Copy temporary map back to main dungeon map array *)
-  for r := 1 to MAXROWS do
-  begin
-    for c := 1 to MAXCOLUMNS do
-    begin
-      if (tempArray[r][c] = '*') and (tempArray2[r][c] = '*') then
-        terrainArray[r][c] := '.'
-      else if (tempArray[r][c] = '.') and (tempArray2[r][c] = '.') then
-      begin
-        if (terrainArray[r][c] = '*') then
-          terrainArray[r][c] := '*'
-        else
-          terrainArray[r][c] := '*';
-      end
-      else
-        terrainArray[r][c] := '.';
-    end;
-  end;
-  (* draw top and bottom border *)
-  for i := 1 to MAXCOLUMNS do
-  begin
-    terrainArray[1][i] := '*';
-    terrainArray[MAXROWS][i] := '*';
-  end;
-  (* draw left and right border *)
-  for i := 1 to MAXROWS do
-  begin
-    terrainArray[i][1] := '*';
-    terrainArray[i][MAXCOLUMNS] := '*';
-  end;
-
-  (* Total rooms is used to calculate the number of NPC's *)
-  totalRooms := Random(5) + 10; // between 10 - 15 rooms
-
-  (* First floor only, set player start coordinates and place the stairs *)
-  if (floorNumber = 1) then
-  begin
-    repeat
-      map.startX := Random(19) + 1;
-      map.startY := Random(19) + 1;
-    until terrainArray[map.startY][map.startX] = '.';
-    //terrainArray[globalutils.currentDgncentreList[1].y]
-    //  [globalutils.currentDgncentreList[1].x] := '<';
-
-    (* Store position of the staircase *)
-    //stairX := globalutils.currentDgncentreList[totalRooms].x;
-    //stairY := globalutils.currentDgncentreList[totalRooms].y;
-  end;
-
-  (* HARD CODED TEST FOR SECOND FLOOR *)
-  //if (floorNumber = 2) then
-  //begin
-  //  if (caveArray[stairY][stairX] = ':') then
-  //    caveArray[stairY][stairX] := '<';
-  //end;
-
-
-  (* Flood fill the map, removing any areas that can't be reached *)
-  { Initialise distance map }
-  for r := 1 to MAXROWS do
-  begin
-    for c := 1 to MAXCOLUMNS do
-    begin
-      distances[r, c] := BLOCKVALUE;
-    end;
-  end;
-  calcDistances(map.startX, map.startY);
-  (* Floodfill the map *)
-  for r := 1 to MAXROWS do
-  begin
-    for c := 1 to MAXCOLUMNS do
-    begin
-      terrainArray[r][c] := IntToStr(distances[r, c]);
-    end;
-  end;
-
-  (* Change unreachable areas to walls *)
-  for r := 1 to MAXROWS do
-  begin
-    for c := 1 to MAXCOLUMNS do
-    begin
-      if (terrainArray[r][c] = '99') then
-        terrainArray[r][c] := '*'
-      else
-        terrainArray[r][c] := '.';
-    end;
-  end;
-  (* End of floodfill   *)
-
-  (* Add stairs *)
-  terrainArray[map.startY][map.startX] := '<';
-
-  {
-  // Write map to text file for testing
-  filename := 'cavern_level_' + IntToStr(floorNumber) + '.txt';
-  AssignFile(myfile, filename);
-  rewrite(myfile);
-  for r := 1 to MAXROWS do
-  begin
-    for c := 1 to MAXCOLUMNS do
-    begin
-      Write(myfile, terrainArray[r][c]);
-    end;
-    Write(myfile, sLineBreak);
-  end;
-  closeFile(myfile);
-  }
-
-end;
-
-procedure generate(floorNumber, lastFloor: byte);
 var
   numOfFloorTiles: smallint;
 begin
   (* Cave generator will discard levels that are less than 39% walkable *)
   repeat
+    fillWithWalls;
+    randomTileFill;
     numOfFloorTiles := 0;
-    digCave(floorNumber);
+
+    (* Run through cave generator process 5 times *)
+    for iterations := 1 to 5 do
+    begin
+      for r := 1 to MAXROWS do
+      begin
+        for c := 1 to MAXCOLUMNS do
+        begin
+          (* Generate landmass *)
+          tileCounter := 0;
+          if (terrainArray[r - 1][c] = '*') then // NORTH
+            Inc(tileCounter);
+          if (terrainArray[r - 1][c + 1] = '*') then // NORTH EAST
+            Inc(tileCounter);
+          if (terrainArray[r][c + 1] = '*') then // EAST
+            Inc(tileCounter);
+          if (terrainArray[r + 1][c + 1] = '*') then // SOUTH EAST
+            Inc(tileCounter);
+          if (terrainArray[r + 1][c] = '*') then // SOUTH
+            Inc(tileCounter);
+          if (terrainArray[r + 1][c - 1] = '*') then // SOUTH WEST
+            Inc(tileCounter);
+          if (terrainArray[r][c - 1] = '*') then // WEST
+            Inc(tileCounter);
+          if (terrainArray[r - 1][c - 1] = '*') then // NORTH WEST
+            Inc(tileCounter);
+          (* Set tiles in temporary array *)
+          if (terrainArray[r][c] = '*') then
+          begin
+            if (tileCounter >= 4) then
+              tempArray[r][c] := '*'
+            else
+              tempArray[r][c] := '.';
+          end;
+          if (terrainArray[r][c] = '.') then
+          begin
+            if (tileCounter >= 5) then
+              tempArray[r][c] := '*'
+            else
+              tempArray[r][c] := '.';
+          end;
+        end;
+      end;
+    end;
+
+    (* Start second cave *)
+    fillWithWalls;
+    randomTileFill;
+
+    (* Run through cave generator process 5 times *)
+    for iterations := 1 to 5 do
+    begin
+      for r := 1 to MAXROWS do
+      begin
+        for c := 1 to MAXCOLUMNS do
+        begin
+          (* Generate landmass *)
+          tileCounter := 0;
+          if (terrainArray[r - 1][c] = '*') then // NORTH
+            Inc(tileCounter);
+          if (terrainArray[r - 1][c + 1] = '*') then // NORTH EAST
+            Inc(tileCounter);
+          if (terrainArray[r][c + 1] = '*') then // EAST
+            Inc(tileCounter);
+          if (terrainArray[r + 1][c + 1] = '*') then // SOUTH EAST
+            Inc(tileCounter);
+          if (terrainArray[r + 1][c] = '*') then // SOUTH
+            Inc(tileCounter);
+          if (terrainArray[r + 1][c - 1] = '*') then // SOUTH WEST
+            Inc(tileCounter);
+          if (terrainArray[r][c - 1] = '*') then // WEST
+            Inc(tileCounter);
+          if (terrainArray[r - 1][c - 1] = '*') then // NORTH WEST
+            Inc(tileCounter);
+          (* Set tiles in temporary array *)
+          if (terrainArray[r][c] = '*') then
+          begin
+            if (tileCounter >= 4) then
+              tempArray2[r][c] := '*'
+            else
+              tempArray2[r][c] := '.';
+          end;
+          if (terrainArray[r][c] = '.') then
+          begin
+            if (tileCounter >= 5) then
+              tempArray2[r][c] := '*'
+            else
+              tempArray2[r][c] := '.';
+          end;
+        end;
+      end;
+    end;
+
+    (* Copy temporary map back to main dungeon map array *)
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        if (tempArray[r][c] = '*') and (tempArray2[r][c] = '*') then
+          terrainArray[r][c] := '.'
+        else if (tempArray[r][c] = '.') and (tempArray2[r][c] = '.') then
+        begin
+          if (terrainArray[r][c] = '*') then
+            terrainArray[r][c] := '*'
+          else
+            terrainArray[r][c] := '*';
+        end
+        else
+          terrainArray[r][c] := '.';
+      end;
+    end;
+    (* draw top and bottom border *)
+    for i := 1 to MAXCOLUMNS do
+    begin
+      terrainArray[1][i] := '*';
+      terrainArray[MAXROWS][i] := '*';
+    end;
+    (* draw left and right border *)
+    for i := 1 to MAXROWS do
+    begin
+      terrainArray[i][1] := '*';
+      terrainArray[i][MAXCOLUMNS] := '*';
+    end;
+
+    (* Total rooms is used to calculate the number of NPC's *)
+    totalRooms := Random(5) + 10; // between 10 - 15 rooms
+
+    (* First floor only, set player start coordinates *)
+    if (floorNumber = 1) then
+    begin
+      repeat
+        map.startX := Random(19) + 1;
+        map.startY := Random(19) + 1;
+      until terrainArray[map.startY][map.startX] = '.';
+    end;
+
+    (* Flood fill the map, removing any areas that can't be reached *)
+    { Initialise distance map }
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        distances[r, c] := BLOCKVALUE;
+      end;
+    end;
+    calcDistances(map.startX, map.startY);
+    (* Floodfill the map *)
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        terrainArray[r][c] := IntToStr(distances[r, c]);
+      end;
+    end;
+
+    (* Change unreachable areas to walls *)
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        if (terrainArray[r][c] = '99') then
+          terrainArray[r][c] := '*'
+        else
+          terrainArray[r][c] := '.';
+      end;
+    end;
+    (* End of floodfill   *)
+
+    (* First floor only, Place the stairs *)
+    if (floorNumber = 1) then
+    begin
+      (* Upper stairs, placed on players starting location *)
+      terrainArray[map.startY][map.startX] := '<';
+      (* Lower stairs, choose random location on the right side map *)
+      repeat
+        r := globalutils.randomRange(1, MAXROWS);
+        c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
+        (* choose a location that is a floor tile surrounded by floor tiles *)
+      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
+        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
+        (terrainArray[r][c - 1] = '.');
+      (* Place the stairs *)
+      terrainArray[r][c] := '>';
+      (* Save location of stairs *)
+
+    end;
+
+
+    // Write map to text file for testing
+    filename := 'cave_level_' + IntToStr(floorNumber) + '.txt';
+    AssignFile(myfile, filename);
+    rewrite(myfile);
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        Write(myfile, terrainArray[r][c]);
+      end;
+      Write(myfile, sLineBreak);
+    end;
+    closeFile(myfile);
+
+
+    (* Check that at least 39% of the grid is floor tiles *)
     for r := 1 to globalutils.MAXROWS do
     begin
       for c := 1 to globalutils.MAXCOLUMNS do
@@ -294,13 +297,46 @@ begin
       end;
     end;
   until numOfFloorTiles > 1000;
+end;
 
-  (* Copy array to main dungeon *)
-  for r := 1 to globalutils.MAXROWS do
+procedure generate(idNumber: smallint; totalDepth: byte);
+var
+  i: byte;
+  id_int: smallint;
+begin
+  id_int := 0;
+  // REFER TO CAVERN & PROCESS_CAVE ON GIT
+  for i := 1 to totalDepth do
   begin
-    for c := 1 to globalutils.MAXCOLUMNS do
+    digCave(totalDepth);
+    // store location of last stairs
+    //     if i = 1
+    //        first floor
+    //     else
+    //         try and place stairs, regenerate if needed
+
+    ///  dungeon[0] for testing
+    (* set up the dungeon tiles *)
+    for r := 1 to globalutils.MAXROWS do
     begin
-      globalutils.dungeonArray[r][c] := terrainArray[r][c];
+      for c := 1 to globalutils.MAXCOLUMNS do
+      begin
+        Inc(id_int);
+        (* Copy array to main dungeon *)
+        with universe.dungeonList[idNumber].dlevel[0][r][c] do
+        begin
+          { give each tile a unique ID number }
+          id := id_int;
+          Blocks := True;
+          Visible := False;
+          Discovered := False;
+          Occupied := False;
+          Glyph := terrainArray[r][c];
+        end;
+        if (terrainArray[r][c] = '.') or (terrainArray[r][c] = '<') or
+          (terrainArray[r][c] = '>') then
+          universe.dungeonList[idNumber].dlevel[0][r][c].Blocks := False;
+      end;
     end;
   end;
 end;

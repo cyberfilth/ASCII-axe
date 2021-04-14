@@ -48,8 +48,6 @@ var
   (* Player starting position *)
   startX, startY: smallint;
 
-(* Loop through tiles and set their ID, visibility etc *)
-procedure setupMap;
 (* Occupy tile *)
 procedure occupy(x, y: smallint);
 (* Unoccupy tile *)
@@ -71,43 +69,6 @@ implementation
 
 uses
   entities;
-
-procedure setupMap;
-var
-  (* give each tile a unique ID number *)
-  id_int: smallint;
-begin
-  case mapType of
-    0: ;//cave.generate;
-    1: ;//grid_dungeon.generate;
-    2: cave.generate(1, 1);
-    3: ;//bitmask_dungeon.generate;
-  end;
-  r := 1;
-  c := 1;
-  id_int := 0;
-  (* set up the dungeon tiles *)
-  for r := 1 to globalUtils.MAXROWS do
-  begin
-    for c := 1 to globalUtils.MAXCOLUMNS do
-    begin
-      Inc(id_int);
-      with maparea[r][c] do
-      begin
-        id := id_int;
-        Blocks := True;
-        Visible := False;
-        Discovered := False;
-        Occupied := False;
-        Glyph := globalUtils.dungeonArray[r][c];
-      end;
-      if (globalutils.dungeonArray[r][c] = '.') or { floor tile }
-        (globalutils.dungeonArray[r][c] = '<') then { Stair tile }
-        maparea[r][c].Blocks := False;
-      drawTile(c, r, 1);
-    end;
-  end;
-end;
 
 procedure occupy(x, y: smallint);
 begin
@@ -197,6 +158,19 @@ begin
         begin
           mapDisplay[r][c].GlyphColour := 'grey';
           mapDisplay[r][c].Glyph := '<';
+        end;
+      end;
+      '>': { Downstairs }
+      begin
+        if (hiDef = 1) then
+        begin
+          mapDisplay[r][c].GlyphColour := 'white';
+          mapDisplay[r][c].Glyph := '>';
+        end
+        else
+        begin
+          mapDisplay[r][c].GlyphColour := 'grey';
+          mapDisplay[r][c].Glyph := '>';
         end;
       end;
       '*': { Cave Wall }

@@ -1,9 +1,8 @@
 unit globalUtils;
 
-{$mode fpc}{$H+}
+{$mode objfpc}{$H+}
 
 interface
-
 
 type
   coordinates = record
@@ -25,7 +24,18 @@ var
   (* Number of rooms in the current dungeon *)
   currentDgnTotalRooms: smallint;
 
+(* Select random number from a range *)
+function randomRange(fromNumber, toNumber: smallint): smallint;
+
 implementation
+
+function randomRange(fromNumber, toNumber: smallint): smallint;
+var
+  p: smallint;
+begin
+  p := toNumber - fromNumber;
+  Result := random(p + 1) + fromNumber;
+end;
 
 end.
 

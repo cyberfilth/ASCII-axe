@@ -9,7 +9,7 @@ unit main;
 interface
 
 uses
-  ui, Video, SysUtils, KeyboardInput, camera, map, scrGame, globalUtils;
+  Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils, universe;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stQuitMenu, stGameOver);
@@ -82,9 +82,13 @@ begin
   (* Game state = game running *)
   gameState := stGame;
   playerTurn := 0;
-  (* first map is number 2, a cave *)
+  (* Initialise the game world and create 1st cave *)
+  universe.dungeonAmount := 0;
+  SetLength(universe.dungeonList, 0);
+  (* first map type is always a cave *)
   map.mapType := 2;
-  map.setupMap;
+  (* first map is number 1, map type is a cave with tunnels *)
+  universe.createNewDungeon(2, map.mapType);
   (* Spawn game entities *)
   entities.spawnNPCs;
 
