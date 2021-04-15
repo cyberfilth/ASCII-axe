@@ -4,12 +4,12 @@
 
 unit main;
 
-{$mode fpc}{$H+}
+{$mode objfpc}{$H+}
 
 interface
 
 uses
-  Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils, universe;
+  Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils, universe, logging;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stQuitMenu, stGameOver);
@@ -17,7 +17,6 @@ type
 var
   (* State machine for game menus / controls *)
   gameState: gameStatus;
-
 
 procedure setSeed;
 procedure initialise;
@@ -61,6 +60,8 @@ begin
   ui.setupScreen;
   { Initialise keyboard unit }
   keyboardinput.setupKeyboard;
+  { Begin log file }
+  logging.beginLogging;
   { wait for keyboard input }
   keyboardinput.waitForInput;
 end;
@@ -87,8 +88,13 @@ begin
   SetLength(universe.dungeonList, 0);
   (* first map type is always a cave *)
   map.mapType := 2;
-  (* first map is number 1, map type is a cave with tunnels *)
-  universe.createNewDungeon(2, map.mapType);
+
+  { Logging }
+  logging.logAction('>reached main.NewGame');
+  logging.logAction(' Creating new dungeon of type ' + IntToStr(map.mapType));
+
+  (* map type is a cave with tunnels *)
+  universe.createNewDungeon(map.mapType);
   (* Spawn game entities *)
   entities.spawnNPCs;
 

@@ -13,7 +13,7 @@ unit cave;
 interface
 
 uses
-  SysUtils, globalutils, Classes;
+  SysUtils, logging, globalutils, Classes;
 
 const
   BLOCKVALUE = 99;
@@ -79,11 +79,14 @@ procedure digCave(floorNumber: byte);
 var
   numOfFloorTiles: smallint;
 begin
-  (* Cave generator will discard levels that are less than 39% walkable *)
+  numOfFloorTiles := 0;
   repeat
+
+    { Logging }
+    logAction(' cave.digCave start digging cave level ' + IntToStr(floorNumber));
+
     fillWithWalls;
     randomTileFill;
-    numOfFloorTiles := 0;
 
     (* Run through cave generator process 5 times *)
     for iterations := 1 to 5 do
@@ -128,6 +131,9 @@ begin
         end;
       end;
     end;
+
+    { logging }
+    logAction('First pass finished');
 
     (* Start second cave *)
     fillWithWalls;
@@ -177,6 +183,9 @@ begin
       end;
     end;
 
+    { logging }
+    logAction('Second pass finished');
+
     (* Copy temporary map back to main dungeon map array *)
     for r := 1 to MAXROWS do
     begin
@@ -220,6 +229,9 @@ begin
       until terrainArray[map.startY][map.startX] = '.';
     end;
 
+    { logging }
+    logAction('Player coordinates set');
+
     (* Flood fill the map, removing any areas that can't be reached *)
     { Initialise distance map }
     for r := 1 to MAXROWS do
@@ -229,6 +241,10 @@ begin
         distances[r, c] := BLOCKVALUE;
       end;
     end;
+
+    { logging }
+    logAction('Initialised distance map');
+
     calcDistances(map.startX, map.startY);
     (* Floodfill the map *)
     for r := 1 to MAXROWS do
@@ -238,6 +254,9 @@ begin
         terrainArray[r][c] := IntToStr(distances[r, c]);
       end;
     end;
+
+    { logging }
+    logAction('Floodfilled the map');
 
     (* Change unreachable areas to walls *)
     for r := 1 to MAXROWS do
@@ -252,42 +271,10 @@ begin
     end;
     (* End of floodfill   *)
 
-    (* First floor only, Place the stairs *)
-    if (floorNumber = 1) then
-    begin
-      (* Upper stairs, placed on players starting location *)
-      terrainArray[map.startY][map.startX] := '<';
-      (* Lower stairs, choose random location on the right side map *)
-      repeat
-        r := globalutils.randomRange(1, MAXROWS);
-        c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
-        (* choose a location that is a floor tile surrounded by floor tiles *)
-      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
-        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
-        (terrainArray[r][c - 1] = '.');
-      (* Place the stairs *)
-      terrainArray[r][c] := '>';
-      (* Save location of stairs *)
+    { logging }
+    logAction('Filled in unreachable areas');
 
-    end;
-
-
-    // Write map to text file for testing
-    filename := 'cave_level_' + IntToStr(floorNumber) + '.txt';
-    AssignFile(myfile, filename);
-    rewrite(myfile);
-    for r := 1 to MAXROWS do
-    begin
-      for c := 1 to MAXCOLUMNS do
-      begin
-        Write(myfile, terrainArray[r][c]);
-      end;
-      Write(myfile, sLineBreak);
-    end;
-    closeFile(myfile);
-
-
-    (* Check that at least 39% of the grid is floor tiles *)
+    (* Cave generator will discard levels that are less than 39% walkable *)
     for r := 1 to globalutils.MAXROWS do
     begin
       for c := 1 to globalutils.MAXCOLUMNS do
@@ -296,48 +283,94 @@ begin
           Inc(numOfFloorTiles);
       end;
     end;
+
+    { logging }
+    logAction('Checking level is walkable');
   until numOfFloorTiles > 1000;
+
+
+  { logging }
+  logAction('Checking floorNumber = 1. [floorNumber is ' + IntToStr(floorNumber) + ']');
+
+  (* First floor only, Place the stairs *)
+  if (floorNumber = 1) then
+  begin
+    (* Upper stairs, placed on players starting location *)
+    terrainArray[map.startY][map.startX] := '<';
+    { logging }
+    logAction('Up stairs placed');
+    (* Lower stairs, choose random location on the right side map *)
+    repeat
+      r := globalutils.randomRange(3, MAXROWS);
+      c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
+    until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
+      (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
+      (terrainArray[r][c - 1] = '.');
+    (* Place the stairs *)
+    terrainArray[r][c] := '>';
+    (* Save location of stairs *)
+
+    { logging }
+    logAction('Down stairs placed');
+
+  end;
+
+  // Write map to text file for testing
+  filename := 'cave_level_' + IntToStr(floorNumber) + '.txt';
+  AssignFile(myfile, filename);
+  rewrite(myfile);
+  for r := 1 to MAXROWS do
+  begin
+    for c := 1 to MAXCOLUMNS do
+    begin
+      Write(myfile, terrainArray[r][c]);
+    end;
+    Write(myfile, sLineBreak);
+  end;
+  closeFile(myfile);
+  // end of writing map to text file
+
+  { Logging }
+  logAction(' cave.digCave finished digging cave level');
+
 end;
 
 procedure generate(idNumber: smallint; totalDepth: byte);
 var
   i: byte;
-  id_int: smallint;
 begin
-  id_int := 0;
-  // REFER TO CAVERN & PROCESS_CAVE ON GIT
+  { Logging }
+  logAction('>reached cave.generate(idNumber ' + IntToStr(idNumber) +
+    ', totalDepth ' + IntToStr(totalDepth) + ')');
+
   for i := 1 to totalDepth do
   begin
-    digCave(totalDepth);
+    digCave(i);
+
     // store location of last stairs
     //     if i = 1
     //        first floor
     //     else
     //         try and place stairs, regenerate if needed
 
-    ///  dungeon[0] for testing
-    (* set up the dungeon tiles *)
+
+    { Logging }
+    logAction(' Begin copying cave ' + IntToStr(i) + ' to universe.dungeonlist');
+    logAction('   universe.dungeonList[' + IntToStr(idNumber) +
+      '].dlevel[' + IntToStr(i) + '][r][c] := terrainArray[r][c]');
+
+    (* Copy map to the main dungeon *)
     for r := 1 to globalutils.MAXROWS do
     begin
       for c := 1 to globalutils.MAXCOLUMNS do
       begin
-        Inc(id_int);
-        (* Copy array to main dungeon *)
-        with universe.dungeonList[idNumber].dlevel[0][r][c] do
-        begin
-          { give each tile a unique ID number }
-          id := id_int;
-          Blocks := True;
-          Visible := False;
-          Discovered := False;
-          Occupied := False;
-          Glyph := terrainArray[r][c];
-        end;
-        if (terrainArray[r][c] = '.') or (terrainArray[r][c] = '<') or
-          (terrainArray[r][c] = '>') then
-          universe.dungeonList[idNumber].dlevel[0][r][c].Blocks := False;
+        dungeonList[1].dlevel[1][r][c] := terrainArray[r][c];
       end;
     end;
+
+    { Logging }
+    logAction(' Done copying cave ' + IntToStr(i) + ' to universe.dungeonlist');
+
   end;
 end;
 
