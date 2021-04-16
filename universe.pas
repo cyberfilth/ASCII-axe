@@ -40,7 +40,7 @@ procedure createNewDungeon(levelType: byte);
 implementation
 
 uses
-  main;
+  main, map;
 
 procedure createNewDungeon(levelType: byte);
 var
@@ -94,7 +94,7 @@ begin
     end;
 
     (* Copy the dungeon to the game map *)
-
+    map.setupMap(0);
 
   end;
 end;

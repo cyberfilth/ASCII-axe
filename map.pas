@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils;
+  SysUtils, globalUtils, universe;
 
 type
   (* Tiles that make up the game world *)
@@ -64,6 +64,8 @@ function canSee(checkX, checkY: smallint): boolean;
 function hasPlayer(checkX, checkY: smallint): boolean;
 (* Place a tile on the map *)
 procedure drawTile(c, r: smallint; hiDef: byte);
+(* Setup the current level *)
+procedure setupMap(dungeonNumber: smallint);
 
 implementation
 
@@ -186,6 +188,38 @@ begin
           mapDisplay[r][c].Glyph := Chr(177);
         end;
       end;
+    end;
+  end;
+end;
+
+procedure setupMap(dungeonNumber: smallint);
+var
+  (* give each tile a unique ID number *)
+  id_int: smallint;
+begin
+  r := 1;
+  c := 1;
+  id_int := 0;
+  (* set up the dungeon tiles *)
+  for r := 1 to globalUtils.MAXROWS do
+  begin
+    for c := 1 to globalUtils.MAXCOLUMNS do
+    begin
+      Inc(id_int);
+      with maparea[r][c] do
+      begin
+        id := id_int;
+        Blocks := True;
+        Visible := False;
+        Discovered := False;
+        Occupied := False;
+        Glyph := dungeonList[dungeonNumber].dlevel[1][r][c];
+      end;
+      if (dungeonList[dungeonNumber].dlevel[1][r][c] = '.') or { floor tile }
+        (dungeonList[dungeonNumber].dlevel[1][r][c] = '<') or { Upstairs tile }
+        (dungeonList[dungeonNumber].dlevel[1][r][c] = '>') then { Downstairs tile }
+        maparea[r][c].Blocks := False;
+      drawTile(c, r, 1);
     end;
   end;
 end;
