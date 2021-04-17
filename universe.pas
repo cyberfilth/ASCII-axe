@@ -33,14 +33,14 @@ type
 
 var
   dungeonList: array of dungeonLayout;
-  dungeonAmount: smallint;
+  dlistLength: smallint;
 
 procedure createNewDungeon(levelType: byte);
 
 implementation
 
 uses
-  main, map;
+  map;
 
 procedure createNewDungeon(levelType: byte);
 var
@@ -53,18 +53,21 @@ begin
 
   r := 1;
   c := 1;
-  (* Add a dungeon to the list of dungeonList *)
-  dungeonAmount := length(dungeonList);
-  Inc(dungeonAmount);
-  SetLength(dungeonList, dungeonAmount);
-  idNumber := dungeonAmount;
+  (* Add a dungeon to the dungeonList *)
+   dlistLength := length(dungeonList);
+   SetLength(dungeonList, dlistLength + 1);
+  idNumber := Length(dungeonList);
+  dlistLength := length(dungeonList);
 
   { Logging }
+  logAction('----------------------------');
   logAction(' Dungeon added to list');
-  logAction(' Total number of dungeons: ' + IntToStr(dungeonAmount));
+  logAction(' dlistLength: ' + IntToStr(dlistLength));
+  logAction(' idNumber : ' +IntToStr(idNumber));
+  logAction('----------------------------');
 
   (* Fill dungeon record with values *)
-  with dungeonList[0] do
+  with dungeonList[dlistLength - 1] do
   begin
     uniqueID := idNumber;
     // hardcoded values for testing
@@ -82,19 +85,20 @@ begin
     (* generate the dungeon *)
     case levelType of
       0: ;
-      1: ;//grid_dungeon.generate;
-      2:
+      1: ;
+      2:  // Cave
       begin
         { Logging }
-        logAction(' universe.createNewDungeon procedure calls cave.generate(1, ' +
+        logAction(' universe.createNewDungeon procedure calls cave.generate(dlistLength - 1 '+
+          IntToStr(dlistLength - 1) + ', totalDepth ' +
           IntToStr(totalDepth) + ')');
-        cave.generate(1, totalDepth);
+        cave.generate(dlistLength - 1, totalDepth);
       end;
       3: ;//bitmask_dungeon.generate;
     end;
 
     (* Copy the dungeon to the game map *)
-    map.setupMap(0);
+    map.setupMap(dlistLength - 1);
 
   end;
 end;

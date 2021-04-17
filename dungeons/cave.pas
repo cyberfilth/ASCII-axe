@@ -364,7 +364,7 @@ begin
     begin
       for c := 1 to globalutils.MAXCOLUMNS do
       begin
-        dungeonList[1].dlevel[1][r][c] := terrainArray[r][c];
+        dungeonList[idNumber].dlevel[1][r][c] := terrainArray[r][c];
       end;
     end;
 
