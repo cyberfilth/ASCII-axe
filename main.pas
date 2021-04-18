@@ -9,7 +9,8 @@ unit main;
 interface
 
 uses
-  Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils, universe, logging;
+  Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
+  universe, logging;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stQuitMenu, stGameOver);
@@ -56,8 +57,23 @@ begin
   end
   else
     setSeed;
-  { Initialise video unit and show title screen }
-  ui.setupScreen;
+
+  (* Check for previous save file *)
+  if (FileExists(globalUtils.saveDirectory + DirectorySeparator +
+    globalutils.saveFile)) then
+    { Initialise video unit and show title screen }
+    ui.setupScreen(1)
+  else
+  begin
+    try
+      { create directory }
+      CreateDir(globalUtils.saveDirectory);
+    finally
+      { Initialise video unit and show title screen }
+      ui.setupScreen(0);
+    end;
+  end;
+
   { Initialise keyboard unit }
   keyboardinput.setupKeyboard;
   { Begin log file }
@@ -131,6 +147,9 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+  { logging }
+  logAction('- Player coordinates are, X: ' + IntToStr(entityList[0].posX) +
+    ' Y:' + IntToStr(entityList[0].posY));
 end;
 
 end.

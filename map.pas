@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils, universe;
+  SysUtils, globalUtils;
 
 type
   (* Tiles that make up the game world *)
@@ -70,7 +70,7 @@ procedure setupMap(dungeonNumber: smallint);
 implementation
 
 uses
-  entities;
+  entities, universe;
 
 procedure occupy(x, y: smallint);
 begin
@@ -213,11 +213,11 @@ begin
         Visible := False;
         Discovered := False;
         Occupied := False;
-        Glyph := dungeonList[dungeonNumber].dlevel[1][r][c];
+        Glyph := universe.currentDungeon[r][c];
       end;
-      if (dungeonList[dungeonNumber].dlevel[1][r][c] = '.') or { floor tile }
-        (dungeonList[dungeonNumber].dlevel[1][r][c] = '<') or { Upstairs tile }
-        (dungeonList[dungeonNumber].dlevel[1][r][c] = '>') then { Downstairs tile }
+      if (universe.currentDungeon[r][c] = '.') or { floor tile }
+        (universe.currentDungeon[r][c] = '<') or { Upstairs tile }
+        (universe.currentDungeon[r][c] = '>') then { Downstairs tile }
         maparea[r][c].Blocks := False;
       drawTile(c, r, 1);
     end;

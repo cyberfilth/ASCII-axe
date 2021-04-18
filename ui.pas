@@ -24,7 +24,7 @@ procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 (* Blank the screen *)
 procedure screenBlank;
 (* Initialise the video unit *)
-procedure setupScreen;
+procedure setupScreen(yn: byte);
 (* Shutdown the video unit *)
 procedure shutdownScreen;
 (* Write text to the message log *)
@@ -98,7 +98,7 @@ begin
   end;
 end;
 
-procedure setupScreen;
+procedure setupScreen(yn: byte);
 begin
   {$IFDEF WINDOWS}
   SetConsoleTitle('Axes, Armour & Ale');
@@ -114,7 +114,7 @@ begin
   ClearScreen;
   (* prepare changes to the screen *)
   LockScreenUpdate;
-  scrtitle.displayTitleScreen(0);
+  scrtitle.displayTitleScreen(yn);
   (* Write those changes to the screen *)
   UnlockScreenUpdate;
   (* only redraws the parts that have been updated *)

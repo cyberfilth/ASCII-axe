@@ -1,3 +1,5 @@
+(* Common functions / utilities *)
+
 unit globalUtils;
 
 {$mode objfpc}{$H+}
@@ -16,6 +18,16 @@ const
   MAXCOLUMNS = 67;
   (* Rows of the game map *)
   MAXROWS = 38;
+  (* Save game directory *)
+  {$IFDEF Linux}
+  saveDirectory = '.axesData';
+  {$ENDIF}
+  {$IFDEF Windows}
+  saveDirectory = 'axesData';
+  {$ENDIF}
+  (* Save game file *)
+  saveFile = 'saveGame.xml';
+
 
 var
   (* Turn counter *)
@@ -26,6 +38,7 @@ var
 
 (* Select random number from a range *)
 function randomRange(fromNumber, toNumber: smallint): smallint;
+
 
 implementation
 

@@ -7,7 +7,7 @@ unit player;
 interface
 
 uses
-  SysUtils, fov;
+  SysUtils, fov, logging;
 
 type
   (* Store information about the player *)
@@ -76,6 +76,11 @@ begin
   end;
   (* Occupy tile *)
   map.occupy(entityList[0].posX, entityList[0].posY);
+
+   { logging }
+    logAction('- Player coordinates are, X: ' + IntToStr(entityList[0].posX) +
+      ' Y:' + IntToStr(entityList[0].posY));
+
   (* set up inventory *)
 
   (* Draw player and FOV *)

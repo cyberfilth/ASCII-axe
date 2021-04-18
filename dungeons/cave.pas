@@ -227,10 +227,12 @@ begin
         map.startX := Random(19) + 1;
         map.startY := Random(19) + 1;
       until terrainArray[map.startY][map.startX] = '.';
+      { logging }
+      logAction('- Player coordinates set, X: ' + IntToStr(map.startX) +
+        ' Y:' + IntToStr(map.startY));
     end;
 
-    { logging }
-    logAction('Player coordinates set');
+
 
     (* Flood fill the map, removing any areas that can't be reached *)
     { Initialise distance map }
@@ -297,8 +299,10 @@ begin
   begin
     (* Upper stairs, placed on players starting location *)
     terrainArray[map.startY][map.startX] := '<';
+
     { logging }
-    logAction('Up stairs placed');
+    logAction('- Upstairs placed, X: ' + IntToStr(map.startX) +
+      ' Y:' + IntToStr(map.startY));
     (* Lower stairs, choose random location on the right side map *)
     repeat
       r := globalutils.randomRange(3, MAXROWS);
@@ -315,7 +319,7 @@ begin
 
   end;
 
-  // Write map to text file for testing
+  //// Write map to text file for testing
   filename := 'cave_level_' + IntToStr(floorNumber) + '.txt';
   AssignFile(myfile, filename);
   rewrite(myfile);
@@ -328,7 +332,7 @@ begin
     Write(myfile, sLineBreak);
   end;
   closeFile(myfile);
-  // end of writing map to text file
+  //// end of writing map to text file
 
   { Logging }
   logAction(' cave.digCave finished digging cave level');
@@ -354,22 +358,18 @@ begin
     //         try and place stairs, regenerate if needed
 
 
-    { Logging }
-    logAction(' Begin copying cave ' + IntToStr(i) + ' to universe.dungeonlist');
-    logAction('   universe.dungeonList[' + IntToStr(idNumber) +
-      '].dlevel[' + IntToStr(i) + '][r][c] := terrainArray[r][c]');
-
-    (* Copy map to the main dungeon *)
-    for r := 1 to globalutils.MAXROWS do
+    (* write the first level to universe.currentDungeon *)
+    if (i = 1) then
     begin
-      for c := 1 to globalutils.MAXCOLUMNS do
-      begin
-        dungeonList[idNumber].dlevel[1][r][c] := terrainArray[r][c];
-      end;
+      universe.writeNewDungeonLevel(idNumber, 2, 1, totalDepth, totalRooms);
+      { Logging }
+      logAction(' Done copying first level of dungeon to universe.currentDungeon');
     end;
 
+
+
     { Logging }
-    logAction(' Done copying cave ' + IntToStr(i) + ' to universe.dungeonlist');
+    logAction(' After writing file');
 
   end;
 end;
