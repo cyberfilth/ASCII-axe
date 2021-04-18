@@ -320,18 +320,18 @@ begin
   end;
 
   //// Write map to text file for testing
-  filename := 'cave_level_' + IntToStr(floorNumber) + '.txt';
-  AssignFile(myfile, filename);
-  rewrite(myfile);
-  for r := 1 to MAXROWS do
-  begin
-    for c := 1 to MAXCOLUMNS do
-    begin
-      Write(myfile, terrainArray[r][c]);
-    end;
-    Write(myfile, sLineBreak);
-  end;
-  closeFile(myfile);
+  //filename := 'cave_level_' + IntToStr(floorNumber) + '.txt';
+  //AssignFile(myfile, filename);
+  //rewrite(myfile);
+  //for r := 1 to MAXROWS do
+  //begin
+  //  for c := 1 to MAXCOLUMNS do
+  //  begin
+  //    Write(myfile, terrainArray[r][c]);
+  //  end;
+  //  Write(myfile, sLineBreak);
+  //end;
+  //closeFile(myfile);
   //// end of writing map to text file
 
   { Logging }
@@ -358,7 +358,7 @@ begin
     //         try and place stairs, regenerate if needed
 
 
-
+    { First floor only }
     if (i = 1) then
     begin
       (* write the first level to universe.currentDungeon *)

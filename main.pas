@@ -101,7 +101,6 @@ begin
   playerTurn := 0;
   (* Initialise the game world and create 1st cave *)
   universe.dlistLength := 0;
-  SetLength(universe.dungeonList, 0);
   (* first map type is always a cave *)
   map.mapType := 2;
 

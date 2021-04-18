@@ -65,7 +65,7 @@ function hasPlayer(checkX, checkY: smallint): boolean;
 (* Place a tile on the map *)
 procedure drawTile(c, r: smallint; hiDef: byte);
 (* Setup the current level *)
-procedure setupMap(dungeonNumber: smallint);
+procedure setupMap;
 
 implementation
 
@@ -192,7 +192,7 @@ begin
   end;
 end;
 
-procedure setupMap(dungeonNumber: smallint);
+procedure setupMap;
 var
   (* give each tile a unique ID number *)
   id_int: smallint;

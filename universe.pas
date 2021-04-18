@@ -10,32 +10,12 @@ interface
 uses
   SysUtils, DOM, XMLWrite, logging, globalutils, cave, map;
 
-(* individual dungeon / cave *)
-type
-  dungeonLayout = record
-    (* unique identifier *)
-    uniqueID: smallint;
-    (* human-readable name of dungeon *)
-    title: string;
-    (* Type of map: 0 = cave *)
-    dungeonType: smallint;
-    (* total number of floors *)
-    totalDepth: byte;
-    (* current floor the player is on *)
-    currentDepth: byte;
-    (* array of dungeon floor maps *)
-    dlevel: array[1..10, 1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
-    (* stores which parts of each floor is discovered *)
-    discoveredTiles: array[1..10, 1..MAXROWS, 1..MAXCOLUMNS] of boolean;
-    (* stores whether each floor has been visited *)
-    isVisited: array[1..10] of boolean;
-    totalRooms: array[1..10] of byte;
-  end;
-
 var
-  dungeonList: array of dungeonLayout;
-  (* Length of dungeon list *)
-  dlistLength: smallint;
+  (* Number of dungeons *)
+  dlistLength, uniqueID: smallint;
+  (* Info about current dungeon *)
+  totalRooms, currentDepth, totalDepth, dungeonType: byte;
+  title: string;
   currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
 
 (* Creates a dungeon of a specified type *)
@@ -47,47 +27,30 @@ implementation
 
 
 procedure createNewDungeon(levelType: byte);
-var
-  i: byte;
-  idNumber: smallint;
 begin
   r := 1;
   c := 1;
-  (* Add a dungeon to the dungeonList *)
-  dlistLength := length(dungeonList);
-  SetLength(dungeonList, dlistLength + 1);
-  idNumber := Length(dungeonList);
-  dlistLength := length(dungeonList);
+  (* Increment the number of dungeons *)
+  Inc(dlistLength);
+  (* Dungeons unique ID number becomes the highest dungeon amount number *)
+  uniqueID := dlistLength;
+  // hardcoded values for testing
+  title := 'First cave';
+  dungeonType := levelType;
+  totalDepth := 3;
+  currentDepth := 1;
 
-
-  (* Fill dungeon record with values *)
-  with dungeonList[dlistLength - 1] do
-  begin
-    uniqueID := idNumber;
-    // hardcoded values for testing
-    title := 'First cave';
-    dungeonType := levelType;
-    totalDepth := 3;
-    currentDepth := 1;
-    (* set each floor to unvisited *)
-    for i := 1 to 10 do
-    begin
-      isVisited[i] := False;
-    end;
-
-
-    (* generate the dungeon *)
-    case levelType of
-      0: ;
-      1: ;
-      { cave }
-      2: cave.generate(dlistLength, totalDepth);
-      3: ;//bitmask_dungeon.generate;
-    end;
-
-    (* Copy the 1st floor of the dungeon to the game map *)
-    map.setupMap(dlistLength);
+  (* generate the dungeon *)
+  case levelType of
+    0: ; { reserved for random type 1 }
+    1: ; { reserved for random type 2 }
+    { cave }
+    2: cave.generate(dlistLength, totalDepth);
+    3: ;//bitmask_dungeon.generate;
   end;
+
+  (* Copy the 1st floor of the current dungeon to the game map *)
+  map.setupMap;
 end;
 
 procedure writeNewDungeonLevel(idNumber, dType, lvlNum, totalDepth, totalRooms: byte);
@@ -135,6 +98,7 @@ begin
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
     AddElement(datanode, 'dungeonID', UnicodeString(IntToStr(idNumber)));
+    AddElement(datanode, 'title', UnicodeString(title));
     AddElement(datanode, 'floor', UnicodeString(IntToStr(lvlNum)));
     AddElement(datanode, 'totalDepth', UnicodeString(IntToStr(totalDepth)));
     AddElement(datanode, 'mapType', UnicodeString(IntToStr(dType)));
