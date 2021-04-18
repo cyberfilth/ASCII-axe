@@ -34,6 +34,7 @@ type
 
 var
   dungeonList: array of dungeonLayout;
+  (* Length of dungeon list *)
   dlistLength: smallint;
   currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
 
@@ -50,10 +51,6 @@ var
   i: byte;
   idNumber: smallint;
 begin
-  { Logging }
-  logAction('>reached universe.createNewDungeon(levelType ' +
-    IntToStr(levelType) + ')');
-
   r := 1;
   c := 1;
   (* Add a dungeon to the dungeonList *)
@@ -62,12 +59,6 @@ begin
   idNumber := Length(dungeonList);
   dlistLength := length(dungeonList);
 
-  { Logging }
-  logAction('----------------------------');
-  logAction(' Dungeon added to list');
-  logAction(' dlistLength: ' + IntToStr(dlistLength));
-  logAction(' idNumber : ' + IntToStr(idNumber));
-  logAction('----------------------------');
 
   (* Fill dungeon record with values *)
   with dungeonList[dlistLength - 1] do
@@ -89,20 +80,13 @@ begin
     case levelType of
       0: ;
       1: ;
-      2:  // Cave
-      begin
-        { Logging }
-        logAction(' universe.createNewDungeon procedure calls cave.generate(dlistLength - 1 '
-          + IntToStr(dlistLength) + ', totalDepth ' +
-          IntToStr(totalDepth) + ')');
-        cave.generate(dlistLength, totalDepth);
-      end;
+      { cave }
+      2: cave.generate(dlistLength, totalDepth);
       3: ;//bitmask_dungeon.generate;
     end;
 
-    (* Copy the dungeon to the game map *)
+    (* Copy the 1st floor of the dungeon to the game map *)
     map.setupMap(dlistLength);
-
   end;
 end;
 
@@ -117,10 +101,14 @@ var
   var
     NameNode, ValueNode: TDomNode;
   begin
-    NameNode := Doc.CreateElement(Name);    // creates future Node/Name
-    ValueNode := Doc.CreateTextNode(Value); // creates future Node/Name/Value
-    NameNode.Appendchild(ValueNode);        // place value in place
-    Node.Appendchild(NameNode);             // place Name in place
+    { creates future Node/Name }
+    NameNode := Doc.CreateElement(Name);
+    { creates future Node/Name/Value }
+    ValueNode := Doc.CreateTextNode(Value);
+    { place value in place }
+    NameNode.Appendchild(ValueNode);
+    { place Name in place }
+    Node.Appendchild(NameNode);
   end;
 
   function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
@@ -137,9 +125,9 @@ begin
   dfileName := (globalUtils.saveDirectory + PathDelim + 'dungeon_' +
     UnicodeString(IntToStr(idNumber)) + '_f' + UnicodeString(IntToStr(lvlNum)) + '.dat');
   try
-    (* Create a document *)
+    { Create a document }
     Doc := TXMLDocument.Create;
-    (* Create a root node *)
+    { Create a root node }
     RootNode := Doc.CreateElement('root');
     Doc.Appendchild(RootNode);
     RootNode := Doc.DocumentElement;
@@ -167,11 +155,11 @@ begin
         AddElement(datanode, 'Glyph', UnicodeString(cave.terrainArray[r][c]));
       end;
     end;
-
     (* Save XML *)
     WriteXMLFile(Doc, dfileName);
   finally
-    Doc.Free;  // free memory
+    { free memory }
+    Doc.Free;
   end;
 
 end;

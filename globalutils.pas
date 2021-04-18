@@ -31,14 +31,13 @@ const
 
 var
   (* Turn counter *)
-  playerTurn: integer;
+  playerTurn: integer; { TODO : Move this to the Player unit }
   dungeonArray: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
   (* Number of rooms in the current dungeon *)
   currentDgnTotalRooms: smallint;
 
 (* Select random number from a range *)
 function randomRange(fromNumber, toNumber: smallint): smallint;
-
 
 implementation
 

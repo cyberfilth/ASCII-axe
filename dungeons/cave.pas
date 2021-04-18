@@ -358,9 +358,17 @@ begin
     //         try and place stairs, regenerate if needed
 
 
-    (* write the first level to universe.currentDungeon *)
+
     if (i = 1) then
     begin
+      (* write the first level to universe.currentDungeon *)
+      for r := 1 to globalUtils.MAXROWS do
+      begin
+        for c := 1 to globalUtils.MAXCOLUMNS do
+        begin
+          universe.currentDungeon[r][c] := terrainArray[r][c];
+        end;
+      end;
       universe.writeNewDungeonLevel(idNumber, 2, 1, totalDepth, totalRooms);
       { Logging }
       logAction(' Done copying first level of dungeon to universe.currentDungeon');
