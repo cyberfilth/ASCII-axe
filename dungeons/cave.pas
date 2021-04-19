@@ -82,9 +82,6 @@ begin
   numOfFloorTiles := 0;
   repeat
 
-    { Logging }
-    logAction(' cave.digCave start digging cave level ' + IntToStr(floorNumber));
-
     fillWithWalls;
     randomTileFill;
 
@@ -131,9 +128,6 @@ begin
         end;
       end;
     end;
-
-    { logging }
-    logAction('First pass finished');
 
     (* Start second cave *)
     fillWithWalls;
@@ -183,9 +177,6 @@ begin
       end;
     end;
 
-    { logging }
-    logAction('Second pass finished');
-
     (* Copy temporary map back to main dungeon map array *)
     for r := 1 to MAXROWS do
     begin
@@ -227,12 +218,7 @@ begin
         map.startX := Random(19) + 1;
         map.startY := Random(19) + 1;
       until terrainArray[map.startY][map.startX] = '.';
-      { logging }
-      logAction('- Player coordinates set, X: ' + IntToStr(map.startX) +
-        ' Y:' + IntToStr(map.startY));
     end;
-
-
 
     (* Flood fill the map, removing any areas that can't be reached *)
     { Initialise distance map }
@@ -244,9 +230,6 @@ begin
       end;
     end;
 
-    { logging }
-    logAction('Initialised distance map');
-
     calcDistances(map.startX, map.startY);
     (* Floodfill the map *)
     for r := 1 to MAXROWS do
@@ -256,9 +239,6 @@ begin
         terrainArray[r][c] := IntToStr(distances[r, c]);
       end;
     end;
-
-    { logging }
-    logAction('Floodfilled the map');
 
     (* Change unreachable areas to walls *)
     for r := 1 to MAXROWS do
@@ -273,9 +253,6 @@ begin
     end;
     (* End of floodfill   *)
 
-    { logging }
-    logAction('Filled in unreachable areas');
-
     (* Cave generator will discard levels that are less than 39% walkable *)
     for r := 1 to globalutils.MAXROWS do
     begin
@@ -286,56 +263,7 @@ begin
       end;
     end;
 
-    { logging }
-    logAction('Checking level is walkable');
   until numOfFloorTiles > 1000;
-
-
-  { logging }
-  logAction('Checking floorNumber = 1. [floorNumber is ' + IntToStr(floorNumber) + ']');
-
-  (* First floor only, Place the stairs *)
-  if (floorNumber = 1) then
-  begin
-    (* Upper stairs, placed on players starting location *)
-    terrainArray[map.startY][map.startX] := '<';
-
-    { logging }
-    logAction('- Upstairs placed, X: ' + IntToStr(map.startX) +
-      ' Y:' + IntToStr(map.startY));
-    (* Lower stairs, choose random location on the right side map *)
-    repeat
-      r := globalutils.randomRange(3, MAXROWS);
-      c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
-    until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
-      (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
-      (terrainArray[r][c - 1] = '.');
-    (* Place the stairs *)
-    terrainArray[r][c] := '>';
-    (* Save location of stairs *)
-
-    { logging }
-    logAction('Down stairs placed');
-
-  end;
-
-  //// Write map to text file for testing
-  //filename := 'cave_level_' + IntToStr(floorNumber) + '.txt';
-  //AssignFile(myfile, filename);
-  //rewrite(myfile);
-  //for r := 1 to MAXROWS do
-  //begin
-  //  for c := 1 to MAXCOLUMNS do
-  //  begin
-  //    Write(myfile, terrainArray[r][c]);
-  //  end;
-  //  Write(myfile, sLineBreak);
-  //end;
-  //closeFile(myfile);
-  //// end of writing map to text file
-
-  { Logging }
-  logAction(' cave.digCave finished digging cave level');
 
 end;
 
@@ -350,17 +278,23 @@ begin
   for i := 1 to totalDepth do
   begin
     digCave(i);
-
-    // store location of last stairs
-    //     if i = 1
-    //        first floor
-    //     else
-    //         try and place stairs, regenerate if needed
-
-
     { First floor only }
     if (i = 1) then
     begin
+      (* Upper stairs, placed on players starting location *)
+      terrainArray[map.startY][map.startX] := '<';
+      (* Down stairs, choose random location on the right side map *)
+      repeat
+        r := globalutils.randomRange(3, MAXROWS);
+        c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
+      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
+        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
+        (terrainArray[r][c - 1] = '.');
+      (* Place the stairs *)
+      terrainArray[r][c] := '>';
+      (* Save location of stairs *)
+      stairX := c;
+      stairY := r;
       (* write the first level to universe.currentDungeon *)
       for r := 1 to globalUtils.MAXROWS do
       begin
@@ -369,15 +303,77 @@ begin
           universe.currentDungeon[r][c] := terrainArray[r][c];
         end;
       end;
-      universe.writeNewDungeonLevel(idNumber, 2, 1, totalDepth, totalRooms);
-      { Logging }
-      logAction(' Done copying first level of dungeon to universe.currentDungeon');
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
+    end
+    { If the floor number is an odd number }
+    else if (Odd(i)) and (i <> totalDepth) then
+    begin
+      (* Keep generating levels until the stairs can be placed *)
+      repeat
+        digCave(i);
+      until terrainArray[stairY][stairX] = '.';
+      terrainArray[stairY][stairX] := '<';
+      (* Down stairs, choose random location on the right side map *)
+      repeat
+        r := globalutils.randomRange(3, MAXROWS);
+        c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
+      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
+        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
+        (terrainArray[r][c - 1] = '.');
+      (* Place the stairs *)
+      terrainArray[r][c] := '>';
+      (* Save location of stairs *)
+      stairX := c;
+      stairY := r;
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
+    end
+    else if not (Odd(i)) and (i <> totalDepth) then
+      { If the floor number is an even number }
+    begin
+      (* Keep generating levels until the stairs can be placed *)
+      repeat
+        digCave(i);
+      until terrainArray[stairY][stairX] = '.';
+      terrainArray[stairY][stairX] := '<';
+      (* Down stairs, choose random location on the left side map *)
+      repeat
+        r := globalutils.randomRange(3, MAXROWS);
+        c := globalutils.randomRange(3, (MAXCOLUMNS div 2));
+      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
+        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
+        (terrainArray[r][c - 1] = '.');
+      (* Place the stairs *)
+      terrainArray[r][c] := '>';
+      (* Save location of stairs *)
+      stairX := c;
+      stairY := r;
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
+    end
+    else
+      (* Last floor *)
+    begin
+      (* Keep generating levels until the stairs can be placed *)
+      repeat
+        digCave(i);
+      until terrainArray[stairY][stairX] = '.';
+      terrainArray[stairY][stairX] := '<';
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
     end;
 
-
-
-    { Logging }
-    logAction(' After writing file');
+    //// Write map to text file for testing
+    filename := 'cave_level_' + IntToStr(i) + '.txt';
+    AssignFile(myfile, filename);
+    rewrite(myfile);
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        Write(myfile, terrainArray[r][c]);
+      end;
+      Write(myfile, sLineBreak);
+    end;
+    closeFile(myfile);
+    //// end of writing map to text file
 
   end;
 end;
