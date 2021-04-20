@@ -13,7 +13,7 @@ unit cave;
 interface
 
 uses
-  SysUtils, logging, globalutils, Classes;
+  SysUtils, globalutils, Classes;
 
 const
   BLOCKVALUE = 99;
@@ -271,10 +271,6 @@ procedure generate(idNumber: smallint; totalDepth: byte);
 var
   i: byte;
 begin
-  { Logging }
-  logAction('>reached cave.generate(idNumber ' + IntToStr(idNumber) +
-    ', totalDepth ' + IntToStr(totalDepth) + ')');
-
   for i := 1 to totalDepth do
   begin
     digCave(i);

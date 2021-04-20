@@ -5,7 +5,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player;
+  Keyboard, player, map;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -134,6 +134,16 @@ begin
       '7', 'y', 'Y': { NW }
       begin
         player.movePlayer(8);
+        main.gameLoop;
+      end;
+      '<': { Go up the stairs }
+      begin
+        map.ascendStairs;
+        main.gameLoop;
+      end;
+      '>': { Go down the stairs }
+      begin
+        map.descendStairs;
         main.gameLoop;
       end;
       #27: { Escape key - Quit }

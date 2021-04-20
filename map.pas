@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils;
+  SysUtils, globalUtils, ui;
 
 type
   (* Tiles that make up the game world *)
@@ -62,6 +62,10 @@ function canMove(checkX, checkY: smallint): boolean;
 function canSee(checkX, checkY: smallint): boolean;
 (* Check if player is on a tile *)
 function hasPlayer(checkX, checkY: smallint): boolean;
+(* Go up stairs *)
+procedure ascendStairs;
+(* Go down stairs *)
+procedure descendStairs;
 (* Place a tile on the map *)
 procedure drawTile(c, r: smallint; hiDef: byte);
 (* Setup the current level *)
@@ -121,6 +125,41 @@ begin
   if (entities.entityList[0].posX = checkX) and
     (entities.entityList[0].posY = checkY) then
     Result := True;
+end;
+
+procedure ascendStairs;
+begin
+  (* Check if the player is standing on up staircase *)
+  if (maparea[entities.entityList[0].posY][entities.entityList[0].posX].Glyph =
+    '<') then
+  begin
+    (* Check the exit is blocked *)
+    if (universe.currentDepth = 1) and (universe.canExitDungeon = False) then
+      ui.displayMessage('The stairs appear to be blocked')
+    else
+      (* Ascend the stairs *)
+      ui.displayMessage('The stairs are going up');
+  end
+  else
+    (* Cannot ascend *)
+    ui.displayMessage('There are no stairs going up here ');
+end;
+
+procedure descendStairs;
+begin
+  (* Check if the player is standing on up staircase *)
+  if (maparea[entities.entityList[0].posY][entities.entityList[0].posX].Glyph =
+    '>') then
+  begin
+    (* Descend the stairs *)
+    { Write current level to disk }
+     universe.saveDungeonLevel(universe.uniqueID, universe.currentDepth);
+    { Read next level from disk }
+
+  end
+  else
+    (* Cannot descend *)
+    ui.displayMessage('There are no stairs going down here ');
 end;
 
 procedure drawTile(c, r: smallint; hiDef: byte);

@@ -3,11 +3,14 @@
 unit player;
 
 {$mode objfpc}{$H+}
+{$IFOPT D+} {$DEFINE DEBUG} {$ENDIF}
 
 interface
 
 uses
-  SysUtils, fov, logging;
+  SysUtils, fov
+  {$IFDEF DEBUG}, logging
+  {$ENDIF};
 
 type
   (* Store information about the player *)
@@ -77,10 +80,10 @@ begin
   (* Occupy tile *)
   map.occupy(entityList[0].posX, entityList[0].posY);
 
-   { logging }
+  {$IFDEF DEBUG}
     logAction('- Player coordinates are, X: ' + IntToStr(entityList[0].posX) +
       ' Y:' + IntToStr(entityList[0].posY));
-
+   {$ENDIF}
   (* set up inventory *)
 
   (* Draw player and FOV *)
