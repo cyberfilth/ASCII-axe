@@ -149,10 +149,6 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-  {$IFDEF DEBUG}
-  logAction('- Player coordinates are, X: ' + IntToStr(entityList[0].posX) +
-    ' Y:' + IntToStr(entityList[0].posY));
-  {$ENDIF}
 end;
 
 end.

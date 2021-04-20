@@ -79,11 +79,6 @@ begin
   end;
   (* Occupy tile *)
   map.occupy(entityList[0].posX, entityList[0].posY);
-
-  {$IFDEF DEBUG}
-    logAction('- Player coordinates are, X: ' + IntToStr(entityList[0].posX) +
-      ' Y:' + IntToStr(entityList[0].posY));
-   {$ENDIF}
   (* set up inventory *)
 
   (* Draw player and FOV *)

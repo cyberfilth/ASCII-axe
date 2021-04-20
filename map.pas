@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils, ui;
+  SysUtils, globalUtils, ui, logging;
 
 type
   (* Tiles that make up the game world *)
@@ -74,7 +74,7 @@ procedure setupMap;
 implementation
 
 uses
-  entities, universe;
+  entities, universe, fov;
 
 procedure occupy(x, y: smallint);
 begin
@@ -158,6 +158,9 @@ begin
     ui.clearMap;
     { Read next level from disk }
     universe.loadDungeonLevel;
+    { Display Field of View }
+    fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
+      entities.entityList[0].visionRange, 1);
   end
   else
     (* Cannot descend *)
@@ -238,6 +241,9 @@ var
   (* give each tile a unique ID number *)
   id_int: smallint;
 begin
+
+  logAction('>map load map from universe');
+
   r := 1;
   c := 1;
   id_int := 0;

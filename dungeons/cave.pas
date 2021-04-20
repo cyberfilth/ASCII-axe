@@ -299,6 +299,7 @@ begin
           universe.currentDungeon[r][c] := terrainArray[r][c];
         end;
       end;
+      universe.totalRooms:=totalRooms;
       universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
     end
     { If the floor number is an odd number }
