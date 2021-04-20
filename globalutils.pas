@@ -19,12 +19,7 @@ const
   (* Rows of the game map *)
   MAXROWS = 38;
   (* Save game directory *)
-  {$IFDEF Linux}
-  saveDirectory = '.axesData';
-  {$ENDIF}
-  {$IFDEF Windows}
   saveDirectory = 'axesData';
-  {$ENDIF}
   (* Save game file *)
   saveFile = 'saveGame.xml';
 
