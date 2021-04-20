@@ -122,14 +122,22 @@ begin
         Inc(id_int);
         DataNode := AddChild(RootNode, 'map_tiles');
         TDOMElement(dataNode).SetAttribute('id', IntToStr(id_int));
-        if (currentDungeon[r][c] = '*') then
-          AddElement(datanode, 'Blocks', BoolToStr(True))
-        else
-          AddElement(datanode, 'Blocks', BoolToStr(False));
+        { if dungeon type is a cave }
+        if (dType = 2) then
+        begin
+          if (cave.terrainArray[r][c] = '*') then
+            AddElement(datanode, 'Blocks', BoolToStr(True))
+          else
+            AddElement(datanode, 'Blocks', BoolToStr(False));
+        end;
         AddElement(datanode, 'Visible', BoolToStr(False));
         AddElement(datanode, 'Occupied', BoolToStr(False));
         AddElement(datanode, 'Discovered', BoolToStr(False));
-        AddElement(datanode, 'Glyph', currentDungeon[r][c]);
+        { if dungeon type is a cave }
+        if (dType = 2) then
+        begin
+          AddElement(datanode, 'Glyph', cave.terrainArray[r][c]);
+        end;
       end;
     end;
     (* Save XML *)
