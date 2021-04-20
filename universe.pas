@@ -8,7 +8,7 @@ unit universe;
 interface
 
 uses
-  SysUtils, DOM, XMLWrite, globalutils, cave, map;
+  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, map;
 
 var
   (* Number of dungeons *)
@@ -19,6 +19,7 @@ var
   title: string;
   (* Is it possible to leave the current dungeon *)
   canExitDungeon: boolean;
+  (* Used when a dungeon is first generated *)
   currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
 
 (* Creates a dungeon of a specified type *)
@@ -26,12 +27,11 @@ procedure createNewDungeon(levelType: byte);
 (* Write a newly generate level of a dungeon to disk *)
 procedure writeNewDungeonLevel(idNumber, dType, lvlNum, totalDepth, totalRooms: byte);
 (* Write explored dungeon level to disk *)
-procedure saveDungeonLevel(idNumber, lvlNum: byte);
+procedure saveDungeonLevel;
 (* Read dungeon level from disk *)
-procedure loadDungeonLevel(idNumber, lvlNum: byte);
+procedure loadDungeonLevel;
 
 implementation
-
 
 procedure createNewDungeon(levelType: byte);
 begin
@@ -137,7 +137,7 @@ begin
   end;
 end;
 
-procedure saveDungeonLevel(idNumber, lvlNum: byte);
+procedure saveDungeonLevel;
 var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
@@ -170,7 +170,7 @@ var
 begin
   id_int := 0;
   dfileName := (globalUtils.saveDirectory + PathDelim + 'dungeon_' +
-    UnicodeString(IntToStr(idNumber)) + '_f' + UnicodeString(IntToStr(lvlNum)) + '.dat');
+    UnicodeString(IntToStr(uniqueID)) + '_f' + UnicodeString(IntToStr(currentDepth)) + '.dat');
   try
     { Create a document }
     Doc := TXMLDocument.Create;
@@ -181,9 +181,9 @@ begin
 
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
-    AddElement(datanode, 'dungeonID', UnicodeString(IntToStr(idNumber)));
+    AddElement(datanode, 'dungeonID', UnicodeString(IntToStr(uniqueID)));
     AddElement(datanode, 'title', UnicodeString(title));
-    AddElement(datanode, 'floor', UnicodeString(IntToStr(lvlNum)));
+    AddElement(datanode, 'floor', UnicodeString(IntToStr(currentDepth)));
     AddElement(datanode, 'totalDepth', UnicodeString(IntToStr(totalDepth)));
     AddElement(datanode, 'mapType', UnicodeString(IntToStr(dungeonType)));
     AddElement(datanode, 'totalRooms', UnicodeString(IntToStr(totalRooms)));
@@ -195,11 +195,16 @@ begin
       begin
         Inc(id_int);
         DataNode := AddChild(RootNode, 'map_tiles');
-        TDOMElement(dataNode).SetAttribute('id', UnicodeString(IntToStr(maparea[r][c].id)));
-        AddElement(datanode, 'Blocks', UnicodeString(BoolToStr(map.maparea[r][c].Blocks)));
-        AddElement(datanode, 'Visible', UnicodeString(BoolToStr(map.maparea[r][c].Visible)));
-        AddElement(datanode, 'Occupied', UnicodeString(BoolToStr(map.maparea[r][c].Occupied)));
-        AddElement(datanode, 'Discovered', UnicodeString(BoolToStr(map.maparea[r][c].Discovered)));
+        TDOMElement(dataNode).SetAttribute('id',
+          UnicodeString(IntToStr(maparea[r][c].id)));
+        AddElement(datanode, 'Blocks',
+          UnicodeString(BoolToStr(map.maparea[r][c].Blocks)));
+        AddElement(datanode, 'Visible',
+          UnicodeString(BoolToStr(map.maparea[r][c].Visible)));
+        AddElement(datanode, 'Occupied',
+          UnicodeString(BoolToStr(map.maparea[r][c].Occupied)));
+        AddElement(datanode, 'Discovered',
+          UnicodeString(BoolToStr(map.maparea[r][c].Discovered)));
         AddElement(datanode, 'Glyph', UnicodeString(map.maparea[r][c].Glyph));
       end;
     end;
@@ -211,9 +216,48 @@ begin
   end;
 end;
 
-procedure loadDungeonLevel(idNumber, lvlNum: byte);
+procedure loadDungeonLevel;
+var
+  dfileName: string;
+  RootNode, ParentNode, Tile, NextNode, Blocks, Visible, Occupied,
+  Discovered, GlyphNode: TDOMNode;
+  Doc: TXMLDocument;
+  r, c, i: integer;
 begin
+  dfileName := 'dungeon_' + IntToStr(uniqueID) + '_f' +
+    IntToStr(currentDepth + 1) + '.dat';
+  (* Read in dat file from disk *)
+  ReadXMLFile(Doc, dfileName);
+  (* Retrieve the nodes *)
+  RootNode := Doc.DocumentElement.FindNode('levelData');
+  ParentNode := RootNode.FirstChild.NextSibling;
 
+  (* Number of rooms in current level *)
+  totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
+
+  (* Map tile data *)
+  Tile := RootNode.NextSibling;
+  for r := 1 to MAXROWS do
+  begin
+    for c := 1 to MAXCOLUMNS do
+    begin
+      map.maparea[r][c].id := StrToInt(Tile.Attributes.Item[0].NodeValue);
+      Blocks := Tile.FirstChild;
+      map.maparea[r][c].Blocks := StrToBool(Blocks.TextContent);
+      Visible := Blocks.NextSibling;
+      map.maparea[r][c].Visible := StrToBool(Visible.TextContent);
+      Occupied := Visible.NextSibling;
+      map.maparea[r][c].Occupied := StrToBool(Occupied.TextContent);
+      Discovered := Occupied.NextSibling;
+      map.maparea[r][c].Discovered := StrToBool(Discovered.TextContent);
+      GlyphNode := Discovered.NextSibling;
+      (* Convert String to Char *)
+      map.maparea[r][c].Glyph := GlyphNode.TextContent[1];
+      NextNode := Tile.NextSibling;
+      Tile := NextNode;
+    end;
+  end;
+  Inc(currentDepth);
 end;
 
 end.

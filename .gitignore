@@ -41,3 +41,9 @@ bin/*
 *~
 *.swp
 *.swo
+
+# Save game files
+axesData/
+
+# Notes and logs
+*.txt

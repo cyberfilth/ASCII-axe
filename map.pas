@@ -153,9 +153,11 @@ begin
   begin
     (* Descend the stairs *)
     { Write current level to disk }
-     universe.saveDungeonLevel(universe.uniqueID, universe.currentDepth);
+    universe.saveDungeonLevel;
+    { Clear the current view }
+    ui.clearMap;
     { Read next level from disk }
-
+    universe.loadDungeonLevel;
   end
   else
     (* Cannot descend *)

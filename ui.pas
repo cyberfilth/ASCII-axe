@@ -7,7 +7,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle,
+  SysUtils, video, keyboard, scrTitle, globalutils,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -23,6 +23,8 @@ var
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 (* Blank the screen *)
 procedure screenBlank;
+(* Clear the map when moving between floors *)
+procedure clearMap;
 (* Initialise the video unit *)
 procedure setupScreen(yn: byte);
 (* Shutdown the video unit *)
@@ -51,7 +53,7 @@ procedure exitMessage;
 implementation
 
 uses
-  entities, KeyboardInput;
+  entities, KeyboardInput, map;
 
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 var
@@ -96,6 +98,29 @@ begin
       TextOut(x, y, 'black', ' ');
     end;
   end;
+end;
+
+procedure clearMap;
+begin
+  (* prepare changes to the screen *)
+  LockScreenUpdate;
+  (* set up the dungeon tiles *)
+  for r := 1 to globalUtils.MAXROWS do
+  begin
+    for c := 1 to globalUtils.MAXCOLUMNS do
+    begin
+      with maparea[r][c] do
+      begin
+        Visible := False;
+        Discovered := False;
+      end;
+      drawTile(c, r, 0);
+    end;
+  end;
+  (* Write those changes to the screen *)
+  UnlockScreenUpdate;
+  (* only redraws the parts that have been updated *)
+  UpdateScreen(False);
 end;
 
 procedure setupScreen(yn: byte);
