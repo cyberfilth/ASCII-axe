@@ -138,7 +138,21 @@ begin
       ui.displayMessage('The stairs appear to be blocked')
     else
       (* Ascend the stairs *)
-      ui.displayMessage('The stairs are going up');
+      { Write current level to disk }
+      universe.saveDungeonLevel;
+    { Read next level from disk }
+    universe.loadDungeonLevel(universe.currentDepth - 1);
+    { Show already discovered tiles }
+    for r := 1 to globalUtils.MAXROWS do
+    begin
+      for c := 1 to globalUtils.MAXCOLUMNS do
+      begin
+        drawTile(c, r, 0);
+      end;
+    end;
+    { Display Field of View }
+    fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
+      entities.entityList[0].visionRange, 1);
   end
   else
     (* Cannot ascend *)
@@ -154,10 +168,16 @@ begin
     (* Descend the stairs *)
     { Write current level to disk }
     universe.saveDungeonLevel;
-    { Clear the current view }
-    ui.clearMap;
     { Read next level from disk }
-    universe.loadDungeonLevel;
+    universe.loadDungeonLevel(universe.currentDepth + 1);
+    { Show already discovered tiles }
+    for r := 1 to globalUtils.MAXROWS do
+    begin
+      for c := 1 to globalUtils.MAXCOLUMNS do
+      begin
+        drawTile(c, r, 0);
+      end;
+    end;
     { Display Field of View }
     fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
       entities.entityList[0].visionRange, 1);

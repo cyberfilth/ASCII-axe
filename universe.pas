@@ -29,7 +29,7 @@ procedure writeNewDungeonLevel(idNumber, dType, lvlNum, totalDepth, totalRooms: 
 (* Write explored dungeon level to disk *)
 procedure saveDungeonLevel;
 (* Read dungeon level from disk *)
-procedure loadDungeonLevel;
+procedure loadDungeonLevel(lvl: byte);
 
 implementation
 
@@ -225,7 +225,7 @@ begin
   end;
 end;
 
-procedure loadDungeonLevel;
+procedure loadDungeonLevel(lvl: byte);
 var
   dfileName: string;
   RootNode, ParentNode, Tile, NextNode, Blocks, Visible, Occupied,
@@ -235,7 +235,7 @@ var
 begin
   logAction('>universe.loadDungeonLevel');
   dfileName := globalUtils.saveDirectory + PathDelim + 'd_' +
-    IntToStr(uniqueID) + '_f' + IntToStr(currentDepth + 1) + '.dat';
+    IntToStr(uniqueID) + '_f' + IntToStr(lvl) + '.dat';
   try
     logAction('- Opening ' + dfileName);
     (* Read in dat file from disk *)
@@ -279,7 +279,7 @@ begin
   finally
     (* free memory *)
     Doc.Free;
-    Inc(currentDepth);
+    currentDepth := lvl;
   end;
   logAction(' Exiting universe.loadDungeonLevel');
 end;
