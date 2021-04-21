@@ -137,22 +137,24 @@ begin
     if (universe.currentDepth = 1) and (universe.canExitDungeon = False) then
       ui.displayMessage('The stairs appear to be blocked')
     else
+    begin
       (* Ascend the stairs *)
       { Write current level to disk }
       universe.saveDungeonLevel;
-    { Read next level from disk }
-    universe.loadDungeonLevel(universe.currentDepth - 1);
-    { Show already discovered tiles }
-    for r := 1 to globalUtils.MAXROWS do
-    begin
-      for c := 1 to globalUtils.MAXCOLUMNS do
+      { Read next level from disk }
+      universe.loadDungeonLevel(universe.currentDepth - 1);
+      { Show already discovered tiles }
+      for r := 1 to globalUtils.MAXROWS do
       begin
-        drawTile(c, r, 0);
+        for c := 1 to globalUtils.MAXCOLUMNS do
+        begin
+          drawTile(c, r, 0);
+        end;
       end;
+      { Display Field of View }
+      fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
+        entities.entityList[0].visionRange, 1);
     end;
-    { Display Field of View }
-    fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
-      entities.entityList[0].visionRange, 1);
   end
   else
     (* Cannot ascend *)
