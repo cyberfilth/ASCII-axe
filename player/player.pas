@@ -12,17 +12,6 @@ uses
   {$IFDEF DEBUG}, logging
   {$ENDIF};
 
-type
-  (* Store information about the player *)
-  Creature = record
-    currentHP, maxHP, attack, defence, posX, posY, visionRange: smallint;
-    experience: integer;
-    playerName, title: string;
-    (* status effects *)
-    stsDrunk, stsPoison: boolean;
-    (* status timers *)
-    tmrDrunk, tmrPoison: smallint;
-  end;
 
 (* Create player character *)
 procedure createPlayer;
