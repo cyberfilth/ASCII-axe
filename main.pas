@@ -11,7 +11,7 @@ interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe
+  universe, fov
   {$IFDEF DEBUG}, logging
   {$ENDIF};
 
@@ -103,7 +103,6 @@ begin
   (* Game state = game running *)
   gameState := stGame;
   killer := 'empty';
-  playerTurn := 0;
   (* Initialise the game world and create 1st cave *)
   universe.dlistLength := 0;
   (* first map type is always a cave *)
@@ -130,37 +129,45 @@ begin
   { only redraws the parts that have been updated }
   UpdateScreen(False);
 
-  logAction('Total number of NPC''s: ' + IntToStr(entities.npcAmount));
 end;
 
 procedure gameLoop;
 var
-  deleteMe: byte;
+  deleteMe, i: byte;
 begin
+  (* move NPC's *)
+  entities.NPCgameLoop;
+  (* Draw player and FOV *)
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+  (* Redraw all NPC'S *)
+  for i := 1 to entities.npcAmount do
+    entities.redrawMapDisplay(i);
+
   { prepare changes to the screen }
   LockScreenUpdate;
   (* BEGIN DRAWING TO THE BUFFER *)
-
-  (* move NPC's *)
-  entities.NPCgameLoop;
   (* draw map through the camera *)
   camera.drawMap;
-  (* Update health display to show damage *)
-  ui.updateHealth;
-
   (* FINISH DRAWING TO THE BUFFER *)
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
 
+
   entities.occupyUpdate;
-  logAction('----------------');
-  logAction('Entity positions');
-  for deleteMe := 0 to entities.npcAmount do
-  begin
-   logAction(entityList[deleteMe].race + ', X:'+IntToStr(entityList[deleteMe].posX)+' , Y;'+IntToStr(entityList[deleteMe].posY));
-  end;
+  (* Update health display to show damage *)
+  ui.updateHealth;
+  { prepare changes to the screen }
+  LockScreenUpdate;
+  (* BEGIN DRAWING TO THE BUFFER *)
+  (* draw map through the camera *)
+  camera.drawMap;
+  (* FINISH DRAWING TO THE BUFFER *)
+  { Write those changes to the screen }
+  UnlockScreenUpdate;
+  { only redraws the parts that have been updated }
+  UpdateScreen(False);
 end;
 
 end.

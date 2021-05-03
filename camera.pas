@@ -78,22 +78,23 @@ end;
 procedure drawEntities;
 var
   (* Entity coordinates & counter *)
-  entX, entY, i: smallint;
+  entX, entY: smallint;
   (* Glyph colour *)
   gCol: shortstring;
 begin
   (* Loop through all entities *)
-  for i := 0 to entities.npcAmount do
-  begin
-    (* If the entity is in view of the player, and not dead, draw them *)
-    if (entities.entityList[i].inView = True) and (entities.entityList[i].isDead = False) then
-    begin
-      gCol := entities.entityList[i].glyphColour;
-      entX := entities.entityList[i].posX;
-      entY := entities.entityList[i].posY;
-      TextOut(entX - getX(entX), entY - getY(entY), gCol, entities.entityList[i].glyph);
-    end;
-  end;
+  //for i := 0 to entities.npcAmount do
+  //begin
+  //  (* If the entity is in view of the player, and not dead, draw them *)
+  //  if (entities.entityList[i].inView = True) and
+  //    (entities.entityList[i].isDead = False) then
+  //  begin
+      gCol := entities.entityList[0].glyphColour;
+       entX := entities.entityList[0].posX;
+       entY := entities.entityList[0].posY;
+       TextOut(entX - getX(entX), entY - getY(entY), gCol, entities.entityList[0].glyph);
+  //  end;
+  //end;
 end;
 
 end.

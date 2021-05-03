@@ -1,6 +1,6 @@
 (* Weak enemy with simple AI, no pathfinding *)
 
-unit cave_rat;
+unit blood_bat;
 
 {$mode objfpc}{$H+}
 
@@ -9,8 +9,8 @@ interface
 uses
   SysUtils, Math, map;
 
-(* Create a cave rat *)
-procedure createCaveRat(uniqueid, npcx, npcy: smallint);
+(* Create a blood bat *)
+procedure createBloodBat(uniqueid, npcx, npcy: smallint);
 (* Take a turn *)
 procedure takeTurn(id, spx, spy: smallint);
 (* Move in a random direction *)
@@ -29,26 +29,26 @@ implementation
 uses
   entities, globalutils, ui, los;
 
-procedure createCaveRat(uniqueid, npcx, npcy: smallint);
+procedure createBloodbat(uniqueid, npcx, npcy: smallint);
 var
   attitude: byte;
 begin
   (* Detemine hostility *)
-  attitude := randomRange(1, 2);
-  (* Add a cave rat to the list of creatures *)
+  attitude := randomRange(1, 3);
+  (* Add a blood bat to the list of creatures *)
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
   with entities.entityList[entities.listLength] do
   begin
     npcID := uniqueid;
-    race := 'Cave Rat';
-    description := 'a large rat';
-    glyph := 'r';
-    glyphColour := 'brown';
-    maxHP := randomRange(2, 4);
+    race := 'Blood Bat';
+    description := 'a bloated red bat';
+    glyph := 'b';
+    glyphColour := 'red';
+    maxHP := randomRange(1, 3);
     currentHP := maxHP;
-    attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
-    defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
+    attack := randomRange(entityList[0].attack - 2, entityList[0].attack + 2);
+    defence := randomRange(entityList[0].defence - 2, entityList[0].defence + 1);
     weaponDice := 0;
     weaponAdds := 0;
     xpReward := maxHP;
@@ -86,14 +86,20 @@ begin
   entities.moveNPC(id, spx, spy);
   map.occupy(spx, spy);
 
-  (* Can the NPC see the player *)
-  if (entityList[id].inView = True) then
+  (* Is the NPC hostile *)
+  if (entityList[id].hostile = True) then
   begin
-    decision := globalutils.randomRange(1, 2);
-    if (decision = 1) then
-      chasePlayer(id, spx, spy)
+    (* Can the NPC see the player *)
+    if (entityList[id].inView = True) then
+    begin
+      decision := globalutils.randomRange(1, 2);
+      if (decision = 1) then
+        chasePlayer(id, spx, spy)
+      else
+        wander(id, spx, spy);
+    end
     else
-      entities.moveNPC(id, spx, spy);
+      wander(id, spx, spy);
   end
   else
     wander(id, spx, spy);
@@ -167,7 +173,7 @@ begin
     (* Else if tile does not contain player, check for another entity *)
     else if (map.isOccupied(newX, newY) = True) then
     begin
-      ui.bufferMessage('The cave rat bumps into ' + getCreatureName(newX, newY));
+      ui.bufferMessage('The bat flies into ' + getCreatureName(newX, newY));
       entities.moveNPC(id, spx, spy);
     end
     (* if map is unoccupied, move to that tile *)
@@ -256,16 +262,16 @@ begin
     else
     begin
       if (damageAmount = 1) then
-        ui.bufferMessage('The cave rat slightly wounds you')
+        ui.bufferMessage('The bat slightly wounds you')
       else
-        ui.bufferMessage('The cave rat bites you, inflicting ' +
+        ui.bufferMessage('The bat bites you, inflicting ' +
           IntToStr(damageAmount) + ' damage');
       (* Update health display to show damage *)
       ui.updateHealth;
     end;
   end
   else
-    ui.bufferMessage('The cave rat attacks but misses');
+    ui.bufferMessage('The bat attacks but misses');
 end;
 
 end.

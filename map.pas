@@ -87,43 +87,44 @@ end;
 
 function isOccupied(checkX, checkY: smallint): boolean;
 begin
-  Result := False;
   if (maparea[checkY][checkX].Occupied = True) then
-    Result := True;
+    Result := True
+  else
+    Result := False;
 end;
 
 function withinBounds(x, y: smallint): boolean;
 begin
-  Result := False;
   if (x >= 1) and (x <= globalutils.MAXCOLUMNS) and (y >= 1) and
     (y <= globalutils.MAXROWS) then
-    Result := True;
+    Result := True
+  else
+    Result := False;
 end;
 
 function canMove(checkX, checkY: smallint): boolean;
 begin
-  Result := False;
-  if (checkX >= 1) and (checkX <= MAXCOLUMNS) and (checkY >= 1) and
-    (checkY <= MAXROWS) then
-  begin
-    if (maparea[checkY][checkX].Blocks = False) then
-      Result := True;
-  end;
+  if (withinBounds(checkX, checkY) = True) and (maparea[checkY][checkX].Blocks = False) then
+    Result := True
+  else
+    Result := False;
 end;
 
 function canSee(checkX, checkY: smallint): boolean;
 begin
-  Result := False;
   if (maparea[checkY][checkX].Visible = True) then
-    Result := True;
+    Result := True
+  else
+    Result := False;
 end;
 
 function hasPlayer(checkX, checkY: smallint): boolean;
 begin
-  Result := False;
   if (entities.entityList[0].posX = checkX) and
     (entities.entityList[0].posY = checkY) then
-    Result := True;
+    Result := True
+  else
+    Result := False;
 end;
 
 procedure ascendStairs;

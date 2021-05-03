@@ -11,7 +11,7 @@ interface
 uses
   ui, map,
   { List of creatures }
-  cave_rat;
+  cave_rat, blood_bat;
 
 type
   (* Store information about NPC's *)
@@ -30,13 +30,9 @@ type
     (* Weapon stats *)
     weaponDice, weaponAdds: smallint;
     (* Character used to represent NPC on game map *)
-    glyph: char;
+    glyph: shortstring;
     (* Colour of the glyph *)
     glyphColour: shortstring;
-    (* Size of NPC *)
-    NPCsize: smallint;
-    (* Number of turns the entity will track the player when they're out of sight *)
-    trackingTurns: smallint;
     (* Count of turns the entity will keep tracking the player when they're out of sight *)
     moveCount: smallint;
     (* Is the NPC in the players FoV *)
@@ -45,14 +41,14 @@ type
     discovered: boolean;
     (* Some entities block movement, i.e. barrels *)
     blocks: boolean;
+    (* Is the NPC initially hostile *)
+    hostile: boolean;
     (* Is a weapon equipped *)
     weaponEquipped: boolean;
     (* Is Armour equipped *)
     armourEquipped: boolean;
     (* Has the NPC been killed, to be removed at end of game loop *)
     isDead: boolean;
-    (* Whether a special ability has been activated *)
-    abilityTriggered: boolean;
     (* status effects *)
     stsDrunk, stsPoison: boolean;
     (* status timers *)
@@ -83,6 +79,8 @@ function getCreatureName(x, y: smallint): shortstring;
 function isCreatureVisible(x, y: smallint): boolean;
 (* Ensure all NPC's are correctly occupying tiles *)
 procedure occupyUpdate;
+(* Update the map display to show all NPC's *)
+procedure redrawMapDisplay(id: byte);
 (* Call Creatures.takeTurn procedure *)
 procedure NPCgameLoop;
 
@@ -93,9 +91,6 @@ uses
   player;
 
 procedure spawnPlayer;
-
-var
-  i, r, c, percentage: smallint;
 begin
   npcAmount := 1;
   (*  initialise array *)
@@ -105,8 +100,6 @@ begin
 end;
 
 procedure killEntity(id: smallint);
-var
-  i, amount, r, c, attempts: smallint;
 begin
   entityList[id].isDead := True;
   entityList[id].glyph := '%';
@@ -115,8 +108,6 @@ begin
 end;
 
 procedure moveNPC(id, newX, newY: smallint);
-var
-  i: smallint;
 begin
   (* mark tile as unoccupied *)
   map.unoccupy(entityList[id].posX, entityList[id].posY);
@@ -138,6 +129,9 @@ begin
       ui.displayMessage('You see ' + entityList[id].description);
       entityList[id].discovered := True;
     end;
+    (* Draw to map display *)
+    map.mapDisplay[newY, newX].GlyphColour := entityList[id].glyphColour;
+    map.mapDisplay[newY, newX].Glyph := entityList[id].glyph;
   end
   else
     entityList[id].inView := False;
@@ -197,7 +191,7 @@ begin
   Result := False;
   for i := 0 to npcAmount do
     if (entityList[i].posX = x) and (entityList[i].posY = y) then
-      if (entityList[i].inView = True) then
+      if (entityList[i].inView = True) and (entityList[i].glyph <> '%') then
         Result := True;
 end;
 
@@ -210,20 +204,36 @@ begin
       map.occupy(entityList[i].posX, entityList[i].posY);
 end;
 
+procedure redrawMapDisplay(id: byte);
+begin
+  (* Redrawing NPC directly to map display as looping through
+     entity list in the camera unit wasn't working *)
+  if (entityList[id].isDead = False) and (entityList[id].inView = True) then
+  begin
+    map.mapDisplay[entityList[id].posY, entityList[id].posX].GlyphColour :=
+      entityList[id].glyphColour;
+    map.mapDisplay[entityList[id].posY, entityList[id].posX].Glyph :=
+      entityList[id].glyph;
+  end;
+end;
+
 procedure NPCgameLoop;
 var
   i: smallint;
 begin
   for i := 1 to npcAmount do
-    entityList[i].entityTakeTurn(i);
+    if (entityList[i].glyph <> '%') then
+      entityList[i].entityTakeTurn(i);
 end;
 
 { Creature }
 
 procedure Creature.entityTakeTurn(i: smallint);
 begin
-  if (entityList[i].race = 'cave rat') then
-    cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY);
+  if (entityList[i].race = 'Cave Rat') then
+    cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY)
+  else if (entityList[i].race = 'Blood Bat') then
+    blood_bat.takeTurn(i, entityList[i].posX, entityList[i].posY);
   occupyUpdate;
 end;
 

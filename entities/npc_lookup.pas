@@ -9,13 +9,15 @@ interface
 uses
   globalUtils, universe, map,
   { List of creatures }
-  cave_rat;
+  cave_rat, blood_bat;
 
 const
   (* Array of creatures found in a cave, ordered by cave level *)
-  caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'fungus', 'bloodHyena');
+  caveNPC1: array[1..3] of string = ('caveRat', 'caveRat', 'bloodBat');
   caveNPC2: array[1..4] of string = ('caveRat', 'giantRat', 'fungus', 'caveBear');
 
+
+(* randomly choose a creature and call the generate code directly *)
 procedure NPCpicker(i: byte; dungeon: dungeonTerrain);
 
 implementation
@@ -23,16 +25,42 @@ implementation
 procedure NPCpicker(i: byte; dungeon: dungeonTerrain);
 var
   r, c: smallint;
+  randSelect: byte;
+  monster: string;
 begin
-  { randomly choose a creature and call the generate code directly }
   (* Choose random location on the map *)
   repeat
     r := globalutils.randomRange(2, (MAXROWS - 1));
     c := globalutils.randomRange(2, (MAXCOLUMNS - 1));
     (* choose a location that is not a wall or occupied *)
   until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False);
-  { Cave rat hard coded just for testing }
-  cave_rat.createCaveRat(i, c, r);
+
+  (* Randomly choose an NPC based on dungeon depth *)
+  case dungeon of
+    tCave:
+    begin
+      if (universe.currentDepth = 1) then
+      begin
+        randSelect := globalUtils.randomRange(1, 3);
+        monster := caveNPC1[randSelect];
+      end
+      else if (universe.currentDepth = 2) then
+      begin
+        randSelect := globalUtils.randomRange(1, 4);
+        monster := caveNPC2[randSelect];
+      end;
+    end;
+    tDungeon:
+    begin
+      { Placeholder }
+    end;
+  end;
+
+  (* Create NPC *)
+  case monster of
+    'caveRat': cave_rat.createCaveRat(i, c, r);
+    'bloodBat': blood_bat.createBloodBat(i, c, r);
+  end;
 end;
 
 end.

@@ -7,7 +7,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle, globalutils,
+  SysUtils, video, keyboard, scrTitle,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -51,7 +51,7 @@ procedure exitMessage;
 implementation
 
 uses
-  entities, KeyboardInput, map;
+  entities, KeyboardInput;
 
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 var
