@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils, universe, ui, logging;
+  SysUtils, globalUtils, ui, logging;
 
 type
   (* Tiles that make up the game world *)
@@ -37,7 +37,8 @@ type
   end;
 
 var
-  mapType: dungeonTerrain;
+  (* Type of map: 2 = cave, 3 = Bitmask dungeon *)
+  mapType: smallint;
   (* Game map array *)
   maparea: array[1..MAXROWS, 1..MAXCOLUMNS] of tile;
   (* The map that the camera uses *)
@@ -73,7 +74,7 @@ procedure setupMap;
 implementation
 
 uses
-  entities, fov;
+  entities, universe, fov;
 
 procedure occupy(x, y: smallint);
 begin
@@ -198,7 +199,7 @@ begin
   end
   else
   (* Draw cave tiles *)
-  if (mapType = tCave) then
+  if (mapType = 2) then
   begin
     case maparea[r][c].glyph of
       '.': { Cave Floor }

@@ -300,7 +300,7 @@ begin
         end;
       end;
       universe.totalRooms:=totalRooms;
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
     end
     { If the floor number is an odd number }
     else if (Odd(i)) and (i <> totalDepth) then
@@ -322,7 +322,7 @@ begin
       (* Save location of stairs *)
       stairX := c;
       stairY := r;
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
     end
     else if not (Odd(i)) and (i <> totalDepth) then
       { If the floor number is an even number }
@@ -344,7 +344,7 @@ begin
       (* Save location of stairs *)
       stairX := c;
       stairY := r;
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
     end
     else
       (* Last floor *)
@@ -354,11 +354,10 @@ begin
         digCave(i);
       until terrainArray[stairY][stairX] = '.';
       terrainArray[stairY][stairX] := '<';
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      universe.writeNewDungeonLevel(idNumber, 2, i, totalDepth, totalRooms);
     end;
 
-    (*
-    { Write map to text file for testing }
+    //// Write map to text file for testing
     filename := 'cave_level_' + IntToStr(i) + '.txt';
     AssignFile(myfile, filename);
     rewrite(myfile);
@@ -371,8 +370,7 @@ begin
       Write(myfile, sLineBreak);
     end;
     closeFile(myfile);
-    { end of writing map to text file }
-    *)
+    //// end of writing map to text file
 
   end;
 end;

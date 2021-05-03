@@ -60,8 +60,8 @@ var
   entityList: array of Creature;
   npcAmount, listLength: smallint;
 
-(* Add Player to the list of creatures *)
-procedure spawnPlayer;
+(* Generate list of creatures on the map *)
+procedure spawnNPCs;
 
 
 implementation
@@ -69,9 +69,9 @@ implementation
 uses
   player;
 
-procedure spawnPlayer;
+procedure spawnNPCs;
 var
-  i, r, c: smallint;
+  i, r, c, percentage: smallint;
 begin
    npcAmount := 1; //(universe.dungeonList[0].totalRooms[1] + 2);
   (*  initialise array *)

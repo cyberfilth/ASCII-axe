@@ -8,17 +8,13 @@ unit universe;
 interface
 
 uses
-  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, logging;
-
-type
-  dungeonTerrain = (tCave, tDungeon);
+  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, map, logging;
 
 var
   (* Number of dungeons *)
   dlistLength, uniqueID: smallint;
   (* Info about current dungeon *)
-  totalRooms, currentDepth, totalDepth: byte;
-  dungeonType : dungeonTerrain;
+  totalRooms, currentDepth, totalDepth, dungeonType: byte;
   (* Name of the current dungeon *)
   title: string;
   (* Is it possible to leave the current dungeon *)
@@ -27,9 +23,9 @@ var
   currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
 
 (* Creates a dungeon of a specified type *)
-procedure createNewDungeon(levelType: dungeonTerrain);
+procedure createNewDungeon(levelType: byte);
 (* Write a newly generate level of a dungeon to disk *)
-procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte; dtype: dungeonTerrain);
+procedure writeNewDungeonLevel(idNumber, dType, lvlNum, totalDepth, totalRooms: byte);
 (* Write explored dungeon level to disk *)
 procedure saveDungeonLevel;
 (* Read dungeon level from disk *)
@@ -37,10 +33,7 @@ procedure loadDungeonLevel(lvl: byte);
 
 implementation
 
-uses
-  map;
-
-procedure createNewDungeon(levelType: dungeonTerrain);
+procedure createNewDungeon(levelType: byte);
 begin
   r := 1;
   c := 1;
@@ -59,20 +52,23 @@ begin
 
   (* generate the dungeon *)
   case levelType of
-    tCave: cave.generate(dlistLength, totalDepth);
-    tDungeon: ;//bitmask_dungeon.generate;
+    0: ; { reserved for random type 1 }
+    1: ; { reserved for random type 2 }
+    { cave }
+    2: cave.generate(dlistLength, totalDepth);
+    3: ;//bitmask_dungeon.generate;
   end;
 
   (* Copy the 1st floor of the current dungeon to the game map *)
   map.setupMap;
 end;
 
-procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte; dtype: dungeonTerrain);
+procedure writeNewDungeonLevel(idNumber, dType, lvlNum, totalDepth, totalRooms: byte);
 var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
-  dfileName, Value: string;
+  dfileName: string;
 
   procedure AddElement(Node: TDOMNode; Name, Value: string);
   var
@@ -115,8 +111,7 @@ begin
     AddElement(datanode, 'title', title);
     AddElement(datanode, 'floor', IntToStr(lvlNum));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
-     WriteStr(Value, dungeonType);
-    AddElement(datanode, 'mapType', Value);
+    AddElement(datanode, 'mapType', IntToStr(dType));
     AddElement(datanode, 'totalRooms', IntToStr(totalRooms));
 
     (* map tiles *)
@@ -128,7 +123,7 @@ begin
         DataNode := AddChild(RootNode, 'map_tiles');
         TDOMElement(dataNode).SetAttribute('id', IntToStr(id_int));
         { if dungeon type is a cave }
-        if (dType = tCave) then
+        if (dType = 2) then
         begin
           if (cave.terrainArray[r][c] = '*') then
             AddElement(datanode, 'Blocks', BoolToStr(True))
@@ -139,7 +134,7 @@ begin
         AddElement(datanode, 'Occupied', BoolToStr(False));
         AddElement(datanode, 'Discovered', BoolToStr(False));
         { if dungeon type is a cave }
-        if (dType = tCave) then
+        if (dType = 2) then
         begin
           AddElement(datanode, 'Glyph', cave.terrainArray[r][c]);
         end;
@@ -158,7 +153,7 @@ var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
-  dfileName, Value: string;
+  dfileName: string;
 
   procedure AddElement(Node: TDOMNode; Name, Value: string);
   var
@@ -204,8 +199,7 @@ begin
     AddElement(datanode, 'title', title);
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
-    WriteStr(Value, dungeonType);
-    AddElement(datanode, 'mapType', Value);
+    AddElement(datanode, 'mapType', IntToStr(dungeonType));
     AddElement(datanode, 'totalRooms', IntToStr(totalRooms));
 
     (* map tiles *)

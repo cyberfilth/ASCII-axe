@@ -27,7 +27,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="screens;dungeons;player;vision;entities"/>
+            <OtherUnitFiles Value="screens;dungeons;player;vision"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -65,7 +65,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="screens;dungeons;player;vision;entities"/>
+            <OtherUnitFiles Value="screens;dungeons;player;vision"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -97,7 +97,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="18">
+    <Units Count="16">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -166,14 +166,6 @@
         <Filename Value="logging.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit15>
-      <Unit16>
-        <Filename Value="entities\cave_rat.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit16>
-      <Unit17>
-        <Filename Value="vision\los.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit17>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -184,7 +176,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="screens;dungeons;player;vision;entities"/>
+      <OtherUnitFiles Value="screens;dungeons;player;vision"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

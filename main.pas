@@ -106,11 +106,16 @@ begin
   (* Initialise the game world and create 1st cave *)
   universe.dlistLength := 0;
   (* first map type is always a cave *)
-  map.mapType := tCave;
+  map.mapType := 2;
+  {$IFDEF DEBUG}
+  { Logging }
+  logging.logAction('>reached main.NewGame');
+  logging.logAction(' Creating new dungeon of type ' + IntToStr(map.mapType));
+  {$ENDIF}
   (* map type is a cave with tunnels *)
   universe.createNewDungeon(map.mapType);
   (* Spawn game entities *)
-  entities.spawnPlayer;
+  entities.spawnNPCs;
 
   { prepare changes to the screen }
   LockScreenUpdate;
