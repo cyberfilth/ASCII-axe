@@ -9,11 +9,11 @@ interface
 uses
   globalUtils, universe, map,
   { List of creatures }
-  cave_rat, blood_bat;
+  cave_rat, blood_bat, green_fungus;
 
 const
   (* Array of creatures found in a cave, ordered by cave level *)
-  caveNPC1: array[1..3] of string = ('caveRat', 'caveRat', 'bloodBat');
+  caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
   caveNPC2: array[1..4] of string = ('caveRat', 'giantRat', 'fungus', 'caveBear');
 
 
@@ -38,12 +38,12 @@ begin
   (* Randomly choose an NPC based on dungeon depth *)
   case dungeon of
     tCave:
-    begin
+    begin { Level 1}
       if (universe.currentDepth = 1) then
       begin
-        randSelect := globalUtils.randomRange(1, 3);
+        randSelect := globalUtils.randomRange(1, 4);
         monster := caveNPC1[randSelect];
-      end
+      end { Level 2 }
       else if (universe.currentDepth = 2) then
       begin
         randSelect := globalUtils.randomRange(1, 4);
@@ -60,6 +60,7 @@ begin
   case monster of
     'caveRat': cave_rat.createCaveRat(i, c, r);
     'bloodBat': blood_bat.createBloodBat(i, c, r);
+    'greenFungus': green_fungus.createGreenFungus(i, c, r);
   end;
 end;
 

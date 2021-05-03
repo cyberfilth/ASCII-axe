@@ -133,7 +133,7 @@ end;
 
 procedure gameLoop;
 var
-  deleteMe, i: byte;
+  i: byte;
 begin
   (* move NPC's *)
   entities.NPCgameLoop;

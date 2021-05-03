@@ -9,9 +9,9 @@ unit entities;
 interface
 
 uses
-  ui, map,
+  ui, map, globalUtils,
   { List of creatures }
-  cave_rat, blood_bat;
+  cave_rat, blood_bat, green_fungus;
 
 type
   (* Store information about NPC's *)
@@ -100,11 +100,41 @@ begin
 end;
 
 procedure killEntity(id: smallint);
+var
+  i, amount, r, c, attempts: smallint;
 begin
   entityList[id].isDead := True;
   entityList[id].glyph := '%';
   entityList[id].blocks := False; // For destroyed barrels
   map.unoccupy(entityList[id].posX, entityList[id].posY);
+  { Green Fungus }
+  if (entityList[id].race = 'Green Fungus') then
+  begin
+    amount := randomRange(0, 3);
+    if (amount > 0) then
+    begin
+      for i := 1 to amount do
+      begin
+        attempts := 0;
+        repeat
+          (* limit the number of attempts to move so the game doesn't hang if no suitable space found *)
+          Inc(attempts);
+          if attempts > 10 then
+            exit;
+          r := globalutils.randomRange(entityList[id].posY - 4, entityList[id].posY + 4);
+          c := globalutils.randomRange(entityList[id].posX - 4, entityList[id].posX + 4);
+          (* choose a location that is not a wall or occupied *)
+        until (maparea[r][c].Blocks <> True) and (maparea[r][c].Occupied <> True);
+        if (withinBounds(c, r) = True) then
+        begin
+          Inc(npcAmount);
+          green_fungus.createGreenFungus(npcAmount, c, r);
+        end;
+      end;
+      ui.writeBufferedMessages;
+      ui.bufferMessage('The fungus releases spores into the air');
+    end;
+  end;
 end;
 
 procedure moveNPC(id, newX, newY: smallint);
@@ -233,7 +263,10 @@ begin
   if (entityList[i].race = 'Cave Rat') then
     cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY)
   else if (entityList[i].race = 'Blood Bat') then
-    blood_bat.takeTurn(i, entityList[i].posX, entityList[i].posY);
+    blood_bat.takeTurn(i, entityList[i].posX, entityList[i].posY)
+  else if (entityList[i].race = 'Green Fungus') then
+    green_fungus.takeTurn(i, entityList[i].posX, entityList[i].posY);
+
   occupyUpdate;
 end;
 

@@ -4,7 +4,7 @@
   Combat is decided by rolling a random number between 1 and the entity's ATTACK value.
   Then modifiers are added, for example, a 1D6+4 axe will roll a 6 sided die and
   add the result plus 4 to the total damage amount. This is then removed from the
-  opponents DEFENSE rating. If the opponents defense doesn't soak up the whole damage
+  opponents defence rating. If the opponents defence doesn't soak up the whole damage
   amount, the remainder is taken from their Health. This is partly inspired by the
   Tunnels & Trolls rules, my favourite tabletop RPG.
 *)

@@ -135,7 +135,7 @@ begin
   if (message = messageArray[1]) then
   begin
     (* Clear first line *)
-    for x := 1 to 57 do
+    for x := 1 to 80 do
     begin
       TextOut(x, 21, 'black', ' ');
     end;
@@ -147,7 +147,7 @@ begin
     (* Clear the message window *)
     for y := 21 to 25 do
     begin
-      for x := 1 to 57 do
+      for x := 1 to 80 do
       begin
         TextOut(x, y, 'black', ' ');
       end;
