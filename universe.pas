@@ -4,17 +4,23 @@ unit universe;
 
 {$mode objfpc}{$H+}
 {$modeswitch UnicodeStrings}
+{$WARN 4105 off : Implicit string type conversion with potential data loss from "$1" to "$2"}
+{$WARN 4104 off : Implicit string type conversion from "$1" to "$2"}
 
 interface
 
 uses
-  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, map, logging;
+  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, logging;
+
+type
+  dungeonTerrain = (tCave, tDungeon);
 
 var
   (* Number of dungeons *)
   dlistLength, uniqueID: smallint;
   (* Info about current dungeon *)
-  totalRooms, currentDepth, totalDepth, dungeonType: byte;
+  totalRooms, currentDepth, totalDepth: byte;
+  dungeonType: dungeonTerrain;
   (* Name of the current dungeon *)
   title: string;
   (* Is it possible to leave the current dungeon *)
@@ -23,9 +29,12 @@ var
   currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
 
 (* Creates a dungeon of a specified type *)
-procedure createNewDungeon(levelType: byte);
+procedure createNewDungeon(levelType: dungeonTerrain);
+(* Spawn creatures based on dungeon type and player level *)
+procedure spawnDenizens;
 (* Write a newly generate level of a dungeon to disk *)
-procedure writeNewDungeonLevel(idNumber, dType, lvlNum, totalDepth, totalRooms: byte);
+procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
+  dtype: dungeonTerrain);
 (* Write explored dungeon level to disk *)
 procedure saveDungeonLevel;
 (* Read dungeon level from disk *)
@@ -33,7 +42,10 @@ procedure loadDungeonLevel(lvl: byte);
 
 implementation
 
-procedure createNewDungeon(levelType: byte);
+uses
+  map, npc_lookup, entities;
+
+procedure createNewDungeon(levelType: dungeonTerrain);
 begin
   r := 1;
   c := 1;
@@ -52,23 +64,46 @@ begin
 
   (* generate the dungeon *)
   case levelType of
-    0: ; { reserved for random type 1 }
-    1: ; { reserved for random type 2 }
-    { cave }
-    2: cave.generate(dlistLength, totalDepth);
-    3: ;//bitmask_dungeon.generate;
+    tCave: cave.generate(dlistLength, totalDepth);
+    tDungeon: ;//bitmask_dungeon.generate;
   end;
 
   (* Copy the 1st floor of the current dungeon to the game map *)
   map.setupMap;
 end;
 
-procedure writeNewDungeonLevel(idNumber, dType, lvlNum, totalDepth, totalRooms: byte);
+procedure spawnDenizens;
+var
+  { Number of NPC's to create }
+  NPCnumber, i: byte;
+begin
+  { Based on number of rooms in current level, dungeon type & dungeon level }
+  NPCnumber := totalRooms;  { player level is considered when generating the NPCs }
+  entities.npcAmount := NPCnumber;
+  case dungeonType of
+    tDungeon: ;
+    tCave: { Cave }
+    begin
+      (* Number of NPC's = total number of rooms + floor level *)
+      NPCnumber := (totalRooms + currentDepth);
+      (* Create the NPC's *);
+      for i := 1 to NPCnumber do
+      begin
+        { create an encounter table: Monster type: Dungeon type: floor number }
+        { NPC generation will take the Player level into account when creating stats }
+        npc_lookup.NPCpicker(i, tCave);
+      end;
+    end;
+  end;
+end;
+
+procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
+  dtype: dungeonTerrain);
 var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
-  dfileName: string;
+  dfileName, Value: string;
 
   procedure AddElement(Node: TDOMNode; Name, Value: string);
   var
@@ -111,7 +146,8 @@ begin
     AddElement(datanode, 'title', title);
     AddElement(datanode, 'floor', IntToStr(lvlNum));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
-    AddElement(datanode, 'mapType', IntToStr(dType));
+    WriteStr(Value, dungeonType);
+    AddElement(datanode, 'mapType', Value);
     AddElement(datanode, 'totalRooms', IntToStr(totalRooms));
 
     (* map tiles *)
@@ -123,7 +159,7 @@ begin
         DataNode := AddChild(RootNode, 'map_tiles');
         TDOMElement(dataNode).SetAttribute('id', IntToStr(id_int));
         { if dungeon type is a cave }
-        if (dType = 2) then
+        if (dType = tCave) then
         begin
           if (cave.terrainArray[r][c] = '*') then
             AddElement(datanode, 'Blocks', BoolToStr(True))
@@ -134,7 +170,7 @@ begin
         AddElement(datanode, 'Occupied', BoolToStr(False));
         AddElement(datanode, 'Discovered', BoolToStr(False));
         { if dungeon type is a cave }
-        if (dType = 2) then
+        if (dType = tCave) then
         begin
           AddElement(datanode, 'Glyph', cave.terrainArray[r][c]);
         end;
@@ -153,7 +189,7 @@ var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
-  dfileName: string;
+  dfileName, Value: string;
 
   procedure AddElement(Node: TDOMNode; Name, Value: string);
   var
@@ -179,9 +215,6 @@ var
   end;
 
 begin
-
-  logAction('>universe.saveDungeonLevel');
-
   id_int := 0;
   dfileName := (globalUtils.saveDirectory + PathDelim + 'd_' +
     IntToStr(uniqueID) + '_f' + IntToStr(currentDepth) + '.dat');
@@ -199,7 +232,8 @@ begin
     AddElement(datanode, 'title', title);
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
-    AddElement(datanode, 'mapType', IntToStr(dungeonType));
+    WriteStr(Value, dungeonType);
+    AddElement(datanode, 'mapType', Value);
     AddElement(datanode, 'totalRooms', IntToStr(totalRooms));
 
     (* map tiles *)
@@ -228,31 +262,19 @@ end;
 procedure loadDungeonLevel(lvl: byte);
 var
   dfileName: string;
-  RootNode, ParentNode, Tile, NextNode, Blocks, Visible, Occupied,
-  Discovered, GlyphNode: TDOMNode;
+  RootNode, Tile, NextNode, Blocks, Visible, Occupied, Discovered, GlyphNode: TDOMNode;
   Doc: TXMLDocument;
-  r, c, i: integer;
+  r, c: integer;
 begin
-  logAction('>universe.loadDungeonLevel');
   dfileName := globalUtils.saveDirectory + PathDelim + 'd_' +
     IntToStr(uniqueID) + '_f' + IntToStr(lvl) + '.dat';
   try
-    logAction('- Opening ' + dfileName);
     (* Read in dat file from disk *)
     ReadXMLFile(Doc, dfileName);
-
-    logAction('- Read XML file');
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('levelData');
-    logAction('- Found levelData node');
-    ParentNode := RootNode.FirstChild.NextSibling;
-
-    logAction('- Retrieving first child of levelData');
-
     (* Number of rooms in current level *)
     totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
-
-    logAction('- totalRooms: ' + IntToStr(totalRooms));
 
     (* Map tile data *)
     Tile := RootNode.NextSibling;

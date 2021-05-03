@@ -102,20 +102,18 @@ procedure newGame;
 begin
   (* Game state = game running *)
   gameState := stGame;
+  killer := 'empty';
   playerTurn := 0;
   (* Initialise the game world and create 1st cave *)
   universe.dlistLength := 0;
   (* first map type is always a cave *)
-  map.mapType := 2;
-  {$IFDEF DEBUG}
-  { Logging }
-  logging.logAction('>reached main.NewGame');
-  logging.logAction(' Creating new dungeon of type ' + IntToStr(map.mapType));
-  {$ENDIF}
+  map.mapType := tCave;
   (* map type is a cave with tunnels *)
   universe.createNewDungeon(map.mapType);
+  (* Create the Player *)
+  entities.spawnPlayer;
   (* Spawn game entities *)
-  entities.spawnNPCs;
+  universe.spawnDenizens;
 
   { prepare changes to the screen }
   LockScreenUpdate;
@@ -131,24 +129,38 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+
+  logAction('Total number of NPC''s: ' + IntToStr(entities.npcAmount));
 end;
 
 procedure gameLoop;
+var
+  deleteMe: byte;
 begin
   { prepare changes to the screen }
   LockScreenUpdate;
-
   (* BEGIN DRAWING TO THE BUFFER *)
 
+  (* move NPC's *)
+  entities.NPCgameLoop;
   (* draw map through the camera *)
   camera.drawMap;
+  (* Update health display to show damage *)
+  ui.updateHealth;
 
   (* FINISH DRAWING TO THE BUFFER *)
-
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+
+  entities.occupyUpdate;
+  logAction('----------------');
+  logAction('Entity positions');
+  for deleteMe := 0 to entities.npcAmount do
+  begin
+   logAction(entityList[deleteMe].race + ', X:'+IntToStr(entityList[deleteMe].posX)+' , Y;'+IntToStr(entityList[deleteMe].posY));
+  end;
 end;
 
 end.

@@ -43,8 +43,8 @@ begin
     glyphColour := 'brown';
     maxHP := randomRange(4, 6);
     currentHP := maxHP;
-    attack := randomRange(entityList[0].attack - 2, entityList[0].attack + 3);
-    defence := randomRange(entityList[0].defence - 2, entityList[0].defence + 2);
+    attack := randomRange(entityList[0].attack - 2, entityList[0].attack + 1);
+    defence := randomRange(entityList[0].defence - 2, entityList[0].defence + 1);
     weaponDice := 0;
     weaponAdds := 0;
     xpReward := maxHP;
@@ -55,7 +55,7 @@ begin
     targetX := 0;
     targetY := 0;
     inView := False;
-    blocks := False;
+    blocks := True;
     discovered := False;
     weaponEquipped := False;
     armourEquipped := False;

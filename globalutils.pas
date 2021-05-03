@@ -26,13 +26,17 @@ const
 
 var
   (* Turn counter *)
-  playerTurn: integer; { TODO : Move this to the Player unit }
+  playerTurn: integer;
   dungeonArray: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
   (* Number of rooms in the current dungeon *)
   currentDgnTotalRooms: smallint;
+  (* Name of entity or item that killed the player *)
+  killer: shortstring;
 
 (* Select random number from a range *)
 function randomRange(fromNumber, toNumber: smallint): smallint;
+(* Simulate dice rolls *)
+function rollDice(numberOfDice: byte): smallint;
 
 implementation
 
@@ -42,6 +46,24 @@ var
 begin
   p := toNumber - fromNumber;
   Result := random(p + 1) + fromNumber;
+end;
+
+function rollDice(numberOfDice: byte): smallint;
+var
+  i: byte;
+  x: smallint;
+begin
+  x := 0; // initialise variable
+  if (numberOfDice = 0) then
+    Result := 0
+  else
+  begin
+    for i := 0 to numberOfDice do
+    begin
+      x := Random(6) + 1;
+    end;
+    Result := x;
+  end;
 end;
 
 end.
