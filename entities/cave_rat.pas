@@ -256,16 +256,16 @@ begin
     else
     begin
       if (damageAmount = 1) then
-        ui.bufferMessage('The cave rat slightly wounds you')
+        ui.displayMessage('The cave rat slightly wounds you')
       else
-        ui.bufferMessage('The cave rat bites you, inflicting ' +
+        ui.displayMessage('The cave rat bites you, inflicting ' +
           IntToStr(damageAmount) + ' damage');
       (* Update health display to show damage *)
       ui.updateHealth;
     end;
   end
   else
-    ui.bufferMessage('The cave rat attacks but misses');
+    ui.displayMessage('The cave rat attacks but misses');
 end;
 
 end.

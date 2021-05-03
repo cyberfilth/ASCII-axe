@@ -173,7 +173,7 @@ begin
     (* Else if tile does not contain player, check for another entity *)
     else if (map.isOccupied(newX, newY) = True) then
     begin
-      ui.bufferMessage('The bat flies into ' + getCreatureName(newX, newY));
+      ui.displayMessage('The bat flies into ' + getCreatureName(newX, newY));
       entities.moveNPC(id, spx, spy);
     end
     (* if map is unoccupied, move to that tile *)
@@ -262,16 +262,16 @@ begin
     else
     begin
       if (damageAmount = 1) then
-        ui.bufferMessage('The bat slightly wounds you')
+        ui.displayMessage('The bat slightly wounds you')
       else
-        ui.bufferMessage('The bat bites you, inflicting ' +
+        ui.displayMessage('The bat bites you, inflicting ' +
           IntToStr(damageAmount) + ' damage');
       (* Update health display to show damage *)
       ui.updateHealth;
     end;
   end
   else
-    ui.bufferMessage('The bat attacks but misses');
+    ui.displayMessage('The bat attacks but misses');
 end;
 
 end.

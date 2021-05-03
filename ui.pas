@@ -173,6 +173,8 @@ end;
 procedure bufferMessage(message: string);
 begin
   buffer := buffer + message + '. ';
+  if (Length(buffer) >= 45) then
+    displayMessage(buffer);
 end;
 
 procedure writeBufferedMessages;
