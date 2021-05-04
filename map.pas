@@ -246,12 +246,12 @@ begin
         if (hiDef = 1) then
         begin
           mapDisplay[r][c].GlyphColour := 'brown';
-          mapDisplay[r][c].Glyph := Chr(219);
+          mapDisplay[r][c].Glyph := Chr(177);
         end
         else
         begin
           mapDisplay[r][c].GlyphColour := 'brown';
-          mapDisplay[r][c].Glyph := Chr(177);
+          mapDisplay[r][c].Glyph := Chr(176);
         end;
       end;
     end;

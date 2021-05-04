@@ -19,6 +19,11 @@ ascii_axe
 # Lazarus local files (user-specific info)
 *.lps
 
+# FP IDE local files
+fp.cfg
+fp.dsk
+fp.ini
+
 # Lazarus backups and unit output folders.
 # These can be changed by user in Lazarus/project options.
 backup/
@@ -47,3 +52,6 @@ axesData/
 
 # Notes and logs
 *.txt
+
+# Commandline tools
+!tidyUp.sh
