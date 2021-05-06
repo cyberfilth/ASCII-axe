@@ -1,0 +1,134 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AddChild	universe.pas	/^Function AddChild(Node: TDOMNode; ChildName: String): TDomNode;$/;"	f
+AddElement	universe.pas	/^Procedure AddElement(Node: TDOMNode; Name, Value: String);$/;"	p
+Creature.entityTakeTurn	entities.pas	/^procedure Creature.entityTakeTurn(i: smallint);$/;"	p
+NPCgameLoop	entities.pas	/^procedure NPCgameLoop;$/;"	p
+NPCpicker	entities/npc_lookup.pas	/^procedure NPCpicker(i: byte; dungeon: dungeonTerrain);$/;"	p
+TextOut	ui.pas	/^procedure TextOut(X, Y: word; textcol: shortstring; const S: string);$/;"	p
+ascendStairs	map.pas	/^procedure ascendStairs;$/;"	p
+beginLogging	logging.pas	/^procedure beginLogging;$/;"	p
+blockORnot	dungeons/cave.pas	/^function blockORnot(x, y: integer): Tbkinds;$/;"	f
+bufferMessage	ui.pas	/^procedure bufferMessage(message: string);$/;"	p
+calcDistances	dungeons/cave.pas	/^procedure calcDistances(x, y: smallint);$/;"	p
+canMove	map.pas	/^function canMove(checkX, checkY: smallint): boolean;$/;"	f
+canSee	map.pas	/^function canSee(checkX, checkY: smallint): boolean;$/;"	f
+chasePlayer	entities/blood_bat.pas	/^procedure chasePlayer(id, spx, spy: smallint);$/;"	p
+chasePlayer	entities/cave_rat.pas	/^procedure chasePlayer(id, spx, spy: smallint);$/;"	p
+clearStatusBar	ui.pas	/^procedure clearStatusBar;$/;"	p
+combat	entities/blood_bat.pas	/^procedure combat(id: smallint);$/;"	p
+combat	entities/cave_rat.pas	/^procedure combat(id: smallint);$/;"	p
+combat	entities/green_fungus.pas	/^procedure combat(idOwner, idTarget: smallint);$/;"	p
+combat	player/combat_resolver.pas	/^procedure combat(npcID: smallint);$/;"	p
+combatCheck	player/player.pas	/^function combatCheck(x, y: smallint): boolean;$/;"	f
+containsItem	backup/items.pas	/^function containsItem(x, y: smallint): boolean;$/;"	f
+containsItem	items.pas	/^function containsItem(x, y: smallint): boolean;$/;"	f
+createAleTankard	items/ale_tankard.pas	/^procedure createAleTankard(uniqueid, itmx, itmy: smallint);$/;"	p
+createBloodBat	entities/blood_bat.pas	/^procedure createBloodBat(uniqueid, npcx, npcy: smallint);$/;"	p
+createBloodbat	entities/blood_bat.pas	/^procedure createBloodbat(uniqueid, npcx, npcy: smallint);$/;"	p
+createCaveRat	entities/cave_rat.pas	/^procedure createCaveRat(uniqueid, npcx, npcy: smallint);$/;"	p
+createGreenFungus	entities/green_fungus.pas	/^procedure createGreenFungus(uniqueid, npcx, npcy: smallint);$/;"	p
+createNewDungeon	universe.pas	/^Procedure createNewDungeon(levelType: dungeonTerrain);$/;"	p
+createPlayer	player/player.pas	/^procedure createPlayer;$/;"	p
+descendStairs	map.pas	/^procedure descendStairs;$/;"	p
+digCave	dungeons/cave.pas	/^procedure digCave(floorNumber: byte);$/;"	p
+dispenseItem	items/backup/item_lookup.pas	/^procedure dispenseItem;$/;"	p
+dispenseItem	items/item_lookup.pas	/^procedure dispenseItem;$/;"	p
+displayGameScreen	screens/scrgame.pas	/^procedure displayGameScreen;$/;"	p
+displayMessage	ui.pas	/^procedure displayMessage(message: string);$/;"	p
+displayTitleScreen	screens/scrtitle.pas	/^procedure displayTitleScreen(yn: byte);$/;"	p
+drawEntities	camera.pas	/^procedure drawEntities;$/;"	p
+drawItemsOnMap	backup/items.pas	/^procedure drawItemsOnMap(id: byte);$/;"	p
+drawItemsOnMap	items.pas	/^procedure drawItemsOnMap(id: byte);$/;"	p
+drawLine	vision/fov.pas	/^procedure drawLine(x1, y1, x2, y2: smallint; hiDef: byte);$/;"	p
+drawMap	camera.pas	/^procedure drawMap;$/;"	p
+drawSidepanel	screens/scrgame.pas	/^procedure drawSidepanel;$/;"	p
+drawTile	map.pas	/^procedure drawTile(c, r: smallint; hiDef: byte);$/;"	p
+entityTakeTurn	entities.pas	/^    procedure entityTakeTurn(i: smallint);$/;"	p
+escapePlayer	entities/blood_bat.pas	/^procedure escapePlayer(id, spx, spy: smallint);$/;"	p
+escapePlayer	entities/cave_rat.pas	/^procedure escapePlayer(id, spx, spy: smallint);$/;"	p
+exitApplication	backup/main.pas	/^procedure exitApplication;$/;"	p
+exitApplication	main.pas	/^procedure exitApplication;$/;"	p
+exitMessage	ui.pas	/^procedure exitMessage;$/;"	p
+exitPrompt	ui.pas	/^procedure exitPrompt;$/;"	p
+fieldOfView	vision/fov.pas	/^procedure fieldOfView(centreX, centreY, radius: smallint; hiDef: byte);$/;"	p
+fillWithWalls	dungeons/cave.pas	/^procedure fillWithWalls;$/;"	p
+gameLoop	backup/main.pas	/^procedure gameLoop;$/;"	p
+gameLoop	main.pas	/^procedure gameLoop;$/;"	p
+gameOver	player/player.pas	/^procedure gameOver;$/;"	p
+generate	dungeons/cave.pas	/^procedure generate(idNumber: smallint; totalDepth: byte);$/;"	p
+generateName	plot_gen.pas	/^procedure generateName;$/;"	p
+getCreatureHP	entities.pas	/^function getCreatureHP(x, y: smallint): smallint;$/;"	f
+getCreatureID	entities.pas	/^function getCreatureID(x, y: smallint): smallint;$/;"	f
+getCreatureMaxHP	entities.pas	/^function getCreatureMaxHP(x, y: smallint): smallint;$/;"	f
+getCreatureName	entities.pas	/^function getCreatureName(x, y: smallint): shortstring;$/;"	f
+getItemDescription	backup/items.pas	/^function getItemDescription(x, y: smallint): shortstring;$/;"	f
+getItemDescription	items.pas	/^function getItemDescription(x, y: smallint): shortstring;$/;"	f
+getItemName	backup/items.pas	/^function getItemName(x, y: smallint): shortstring;$/;"	f
+getItemName	items.pas	/^function getItemName(x, y: smallint): shortstring;$/;"	f
+getTrollDate	plot_gen.pas	/^procedure getTrollDate;$/;"	p
+getX	camera.pas	/^function getX(Xcoord: smallint): smallint;$/;"	f
+getY	camera.pas	/^function getY(Ycoord: smallint): smallint;$/;"	f
+hasPlayer	map.pas	/^function hasPlayer(checkX, checkY: smallint): boolean;$/;"	f
+inView	vision/los.pas	/^function inView(x1, y1, x2, y2, visRange: smallint): boolean;$/;"	f
+increaseHealth	player/player.pas	/^procedure increaseHealth(amount: smallint);$/;"	p
+initialise	backup/main.pas	/^procedure initialise;$/;"	p
+initialise	main.pas	/^procedure initialise;$/;"	p
+initialiseItems	backup/items.pas	/^procedure initialiseItems;$/;"	p
+initialiseItems	items.pas	/^procedure initialiseItems;$/;"	p
+isCreatureVisible	entities.pas	/^function isCreatureVisible(x, y: smallint): boolean;$/;"	f
+isNextToPlayer	entities/blood_bat.pas	/^function isNextToPlayer(spx, spy: smallint): boolean;$/;"	f
+isNextToPlayer	entities/cave_rat.pas	/^function isNextToPlayer(spx, spy: smallint): boolean;$/;"	f
+isNextToPlayer	entities/green_fungus.pas	/^function isNextToPlayer(spx, spy: smallint): boolean;$/;"	f
+isOccupied	map.pas	/^function isOccupied(checkX, checkY: smallint): boolean;$/;"	f
+killEntity	entities.pas	/^procedure killEntity(id: smallint);$/;"	p
+loadDungeonLevel	universe.pas	/^Procedure loadDungeonLevel(lvl: byte);$/;"	p
+logAction	logging.pas	/^procedure logAction(textString: string);$/;"	p
+lookupUse	items/backup/item_lookup.pas	/^procedure lookupUse(x: smallint; equipped: boolean);$/;"	p
+lookupUse	items/item_lookup.pas	/^procedure lookupUse(x: smallint; equipped: boolean);$/;"	p
+moveNPC	entities.pas	/^procedure moveNPC(id, newX, newY: smallint);$/;"	p
+movePlayer	player/player.pas	/^procedure movePlayer(dir: word);$/;"	p
+newGame	backup/main.pas	/^procedure newGame;$/;"	p
+newGame	main.pas	/^procedure newGame;$/;"	p
+occupy	map.pas	/^procedure occupy(x, y: smallint);$/;"	p
+occupyUpdate	entities.pas	/^procedure occupyUpdate;$/;"	p
+pickUp	player/player.pas	/^procedure pickUp;$/;"	p
+processStatus	player/player.pas	/^procedure processStatus;$/;"	p
+randomRange	globalutils.pas	/^function randomRange(fromNumber, toNumber: smallint): smallint;$/;"	f
+randomTileFill	dungeons/cave.pas	/^procedure randomTileFill;$/;"	p
+rangeok	dungeons/cave.pas	/^  function rangeok(x, y: smallint): boolean;$/;"	f
+redrawItems	backup/items.pas	/^procedure redrawItems;$/;"	p
+redrawItems	items.pas	/^procedure redrawItems;$/;"	p
+redrawMapDisplay	entities.pas	/^procedure redrawMapDisplay(id: byte);$/;"	p
+rollDice	globalutils.pas	/^function rollDice(numberOfDice: byte): smallint;$/;"	f
+saveDungeonLevel	universe.pas	/^Procedure saveDungeonLevel;$/;"	p
+screenBlank	ui.pas	/^procedure screenBlank;$/;"	p
+setSeed	backup/main.pas	/^procedure setSeed;$/;"	p
+setSeed	main.pas	/^procedure setSeed;$/;"	p
+setaround	dungeons/cave.pas	/^  procedure setaround(x, y: smallint; d: smallint);$/;"	p
+setupKeyboard	keyboardinput.pas	/^procedure setupKeyboard;$/;"	p
+setupMap	map.pas	/^procedure setupMap;$/;"	p
+setupScreen	ui.pas	/^procedure setupScreen(yn: byte);$/;"	p
+shutdownKeyboard	keyboardinput.pas	/^procedure shutdownKeyboard;$/;"	p
+shutdownScreen	ui.pas	/^procedure shutdownScreen;$/;"	p
+spawnDenizens	universe.pas	/^Procedure spawnDenizens;$/;"	p
+spawnPlayer	entities.pas	/^procedure spawnPlayer;$/;"	p
+takeTurn	entities/blood_bat.pas	/^procedure takeTurn(id, spx, spy: smallint);$/;"	p
+takeTurn	entities/cave_rat.pas	/^procedure takeTurn(id, spx, spy: smallint);$/;"	p
+takeTurn	entities/green_fungus.pas	/^procedure takeTurn(id, spx, spy: smallint);$/;"	p
+unoccupy	map.pas	/^procedure unoccupy(x, y: smallint);$/;"	p
+updateAttack	ui.pas	/^procedure updateAttack;$/;"	p
+updateDefence	ui.pas	/^procedure updateDefence;$/;"	p
+updateHealth	ui.pas	/^procedure updateHealth;$/;"	p
+updateXP	ui.pas	/^procedure updateXP;$/;"	p
+useItem	items/ale_tankard.pas	/^procedure useItem;$/;"	p
+waitForInput	keyboardinput.pas	/^procedure waitForInput;$/;"	p
+wander	entities/blood_bat.pas	/^procedure wander(id, spx, spy: smallint);$/;"	p
+wander	entities/cave_rat.pas	/^procedure wander(id, spx, spy: smallint);$/;"	p
+withinBounds	map.pas	/^function withinBounds(x, y: smallint): boolean;$/;"	f
+writeBufferedMessages	ui.pas	/^procedure writeBufferedMessages;$/;"	p
+writeNewDungeonLevel	universe.pas	/^Procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;$/;"	p
