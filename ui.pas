@@ -69,6 +69,7 @@ begin
     'brown': tint := $06;
     'grey': tint := $07;
     'darkGrey': tint := $08;
+    'cyanBGblackTXT': tint := $30;
     'brownBlock': tint := $66;
     'lightCyan': tint := LightCyan;
     'yellow': tint := Yellow;
