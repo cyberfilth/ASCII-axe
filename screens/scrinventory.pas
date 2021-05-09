@@ -16,7 +16,6 @@ var
   x, y: byte;
   letter: char;
 begin
-  screenBlank;
   { Header }
   TextOut(10, 2, 'cyan', chr(218));
   for x := 11 to 69 do
@@ -34,7 +33,7 @@ begin
   TextOut(3, 23, 'cyanBGblackTXT', ' D - Drop menu ');
   TextOut(20, 23, 'cyanBGblackTXT', ' Q - Quaff/drink menu ');
   TextOut(44, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
-  TextOut(66, 23, 'cyanBGblackTXT', ' ESC - Exit ');
+  TextOut(66, 23, 'cyanBGblackTXT', ' X - Exit ');
 
   { Display items in inventory }
   y := 6;

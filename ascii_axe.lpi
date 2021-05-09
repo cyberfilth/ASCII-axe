@@ -214,6 +214,7 @@
       <Unit26>
         <Filename Value="screens\scrinventory.pas"/>
         <IsPartOfProject Value="True"/>
+        <UnitName Value="scrInventory"/>
       </Unit26>
     </Units>
   </ProjectOptions>

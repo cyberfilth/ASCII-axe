@@ -5,7 +5,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player, map;
+  Keyboard, player, player_inventory, map;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -34,7 +34,7 @@ procedure waitForInput;
 var
   Keypress: TKeyEvent;
 begin
-  { Title menu }
+  { ---------------------------------   Title menu }
   while gameState = stTitle do
   begin
     Keypress := GetKeyEvent;
@@ -62,11 +62,27 @@ begin
       #27: { Escape key - Cancel }
       begin
         gameState := stGame;
-        ui.clearStatusBar;
+        main.returnToGameScreen;
       end;
     end;
   end;
-  { Gameplay controls }
+
+  { ---------------------------------    In the Inventory menu }
+  while gameState = stInventory do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
+    case GetKeyEventChar(Keypress) of
+      'D': ;//main.newGame;
+      'x', 'X': { Exit menu }
+      begin
+        gameState := stGame;
+        main.returnToGameScreen;
+      end;
+    end;
+  end;
+
+  { ---------------------------------    Gameplay controls }
   while gameState = stGame do
   begin
     Keypress := GetKeyEvent;
@@ -145,6 +161,11 @@ begin
       begin
         map.descendStairs;
         main.gameLoop;
+      end;
+      'i', 'I': { Inventory }
+      begin
+        main.gameState := stInventory;
+        player_inventory.showInventory;
       end;
       #27: { Escape key - Quit }
       begin

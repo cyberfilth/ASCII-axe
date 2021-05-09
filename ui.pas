@@ -33,6 +33,8 @@ procedure displayMessage(message: string);
 procedure bufferMessage(message: string);
 (* Write buffered message to the message log *)
 procedure writeBufferedMessages;
+(* Restore message window after showing a menu *)
+procedure restoreMessages;
 (* Update Experience points display *)
 procedure updateXP;
 (* Update player health display *)
@@ -170,7 +172,6 @@ begin
   end;
 end;
 
-{ TODO : If buffered message is longer than a certain length, flush the buffer with writeBuffer procedure }
 procedure bufferMessage(message: string);
 begin
   buffer := buffer + message + '. ';
@@ -183,6 +184,16 @@ begin
   if (buffer <> '') then
     displayMessage(buffer);
   buffer := '';
+end;
+
+procedure restoreMessages;
+begin
+  (* Display each line, gradually getting darker *)
+  TextOut(1, 21, 'white', messageArray[1]);
+  TextOut(1, 22, 'lightGrey', messageArray[2]);
+  TextOut(1, 23, 'grey', messageArray[3]);
+  TextOut(1, 24, 'darkGrey', messageArray[4]);
+  TextOut(1, 25, 'darkGrey', messageArray[5]);
 end;
 
 procedure updateXP;
