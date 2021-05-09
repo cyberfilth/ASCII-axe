@@ -7,7 +7,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle,
+  SysUtils, video, keyboard, scrTitle, logging,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -18,6 +18,8 @@ var
   x, y: smallint;
   messageArray: array[1..7] of string = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
   buffer: string;
+  (* Status effects *)
+  poisonStatusSet: boolean;
 
 (* Write to the screen *)
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
@@ -27,6 +29,8 @@ procedure screenBlank;
 procedure setupScreen(yn: byte);
 (* Shutdown the video unit *)
 procedure shutdownScreen;
+(* Display status effects *)
+procedure displayStatusEffect(onoff: byte; effectType: shortstring);
 (* Write text to the message log *)
 procedure displayMessage(message: string);
 (* Store all messages from players turn *)
@@ -130,6 +134,18 @@ begin
   ClearScreen;
   DoneVideo;
   DoneKeyboard;
+end;
+
+procedure displayStatusEffect(onoff: byte; effectType: shortstring);
+begin
+  { POISON }
+  if (effectType = 'poison') then
+  begin
+    if (onoff = 1) then
+      TextOut(5, 20, 'green', '[Poisoned]')
+    else if (onoff = 0) then
+      TextOut(5, 20, 'black', '          ');
+  end;
 end;
 
 procedure displayMessage(message: string);

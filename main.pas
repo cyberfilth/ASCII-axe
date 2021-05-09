@@ -11,7 +11,7 @@ interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov
+  universe, fov, player
   {$IFDEF DEBUG}, logging
   {$ENDIF};
 
@@ -140,6 +140,8 @@ var
 begin
   (* move NPC's *)
   entities.NPCgameLoop;
+  (* Process status effects *)
+  player.processStatus;
   (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
   (* Redraw all NPC'S *)
@@ -168,25 +170,17 @@ begin
 
   { prepare changes to the screen }
   LockScreenUpdate;
-  (* BEGIN DRAWING TO THE BUFFER *)
-  (* draw map through the camera *)
-  camera.drawMap;
-  (* FINISH DRAWING TO THE BUFFER *)
-  { Write those changes to the screen }
-  UnlockScreenUpdate;
-  { only redraws the parts that have been updated }
-  UpdateScreen(False);
 
+  (* BEGIN DRAWING TO THE BUFFER *)
 
   entities.occupyUpdate;
   (* Update health display to show damage *)
   ui.updateHealth;
-  { prepare changes to the screen }
-  LockScreenUpdate;
-  (* BEGIN DRAWING TO THE BUFFER *)
   (* draw map through the camera *)
   camera.drawMap;
+
   (* FINISH DRAWING TO THE BUFFER *)
+
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }

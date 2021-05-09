@@ -127,10 +127,10 @@ begin
       end;
     end
     else
-    begin // if attack causes slight damage
+    begin { if attack causes slight damage }
       if (damageAmount = 1) then
       begin
-        if (idTarget = 0) then // if target is the player
+        if (idTarget = 0) then { if target is the player }
         begin
           ui.writeBufferedMessages;
           ui.displayMessage('The fungus slightly wounds you');

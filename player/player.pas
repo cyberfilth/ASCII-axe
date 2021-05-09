@@ -152,12 +152,33 @@ begin
     else
       Dec(entities.entityList[0].tmrDrunk);
   end;
+
   (* Poison *)
   if (entities.entityList[0].stsPoison = True) then
   begin
-
+    if (ui.poisonStatusSet = False) then
+    begin
+      (* Update UI *)
+      ui.displayStatusEffect(1, 'poison');
+      ui.poisonStatusSet := True;
+    end;
+    if (entities.entityList[0].tmrPoison <= 0) then
+    begin
+      entities.entityList[0].tmrPoison := 0;
+      entities.entityList[0].stsPoison := False;
+      (* Update UI *)
+      ui.displayStatusEffect(0, 'poison');
+      ui.poisonStatusSet := False;
+    end
+    else
+    begin
+      Dec(entityList[0].currentHP);
+      Dec(entityList[0].tmrPoison);
+      updateHealth;
+    end;
   end;
 end;
+
 
 function combatCheck(x, y: smallint): boolean;
   { TODO : Replace this with a check to see if the tile is occupied }
