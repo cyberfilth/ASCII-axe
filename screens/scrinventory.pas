@@ -9,13 +9,14 @@ procedure displayInventoryScreen;
 implementation
 
 uses
-  ui;
+  ui, player_inventory;
 
 procedure displayInventoryScreen;
 var
-  x, y: byte;
+  x, y, invItem: byte;
   letter: char;
 begin
+  invItem := 0;
   { Header }
   TextOut(10, 2, 'cyan', chr(218));
   for x := 11 to 69 do
@@ -39,8 +40,9 @@ begin
   y := 6;
   for letter := 'a' to 'j' do
   begin
-    TextOut(10, y, 'cyan', '[' + letter + ']  <empty slot>');
+    TextOut(10, y, 'cyan', '[' + letter + ']  '+player_inventory.inventory[invItem].Name);
     Inc(y);
+    Inc(invItem);
   end;
 end;
 

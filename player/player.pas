@@ -6,7 +6,7 @@ unit player;
 interface
 
 uses
-  SysUtils, plot_gen, combat_resolver;
+  SysUtils, player_inventory, plot_gen, combat_resolver, items;
 
 (* Create player character *)
 procedure createPlayer;
@@ -68,7 +68,7 @@ begin
   (* Occupy tile *)
   map.occupy(entityList[0].posX, entityList[0].posY);
   (* set up inventory *)
-
+  player_inventory.initialiseInventory;
   (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 end;
@@ -177,8 +177,25 @@ begin
 end;
 
 procedure pickUp;
+var
+  i: smallint;
 begin
-
+  for i := 1 to itemAmount do
+  begin
+    if (entities.entityList[0].posX = itemList[i].posX) and
+      (entities.entityList[0].posY = itemList[i].posY) and
+      (itemList[i].onMap = True) then
+    begin
+      if (player_inventory.addToInventory(i) = True) then
+        Inc(entities.entityList[0].moveCount)
+      else
+        ui.displayMessage('Your inventory is full');
+    end
+    else if (entities.entityList[0].posX = itemList[i].posX) and
+      (entities.entityList[0].posY = itemList[i].posY) and
+      (itemList[i].onMap = False) then
+      ui.displayMessage('There is nothing on the ground here');
+  end;
 end;
 
 procedure increaseHealth(amount: smallint);

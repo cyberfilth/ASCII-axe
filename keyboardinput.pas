@@ -167,6 +167,11 @@ begin
         main.gameState := stInventory;
         player_inventory.showInventory;
       end;
+      ',','g','G': { Get item }
+      begin
+        player.pickUp;
+        main.gameLoop;
+      end;
       #27: { Escape key - Quit }
       begin
         gameState := stQuitMenu;
