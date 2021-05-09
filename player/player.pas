@@ -31,14 +31,14 @@ uses
 procedure createPlayer;
 begin
   plot_gen.generateName;
-  // Add Player to the list of creatures
+  { Add Player to the list of creatures }
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
   with entities.entityList[0] do
   begin
     npcID := 0;
     race := plot_gen.playerName;
-    description := 'your character';
+    description := plot_gen.playerTitle;
     glyph := '@';
     glyphColour := 'yellow';
     maxHP := 20;

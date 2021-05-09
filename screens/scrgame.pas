@@ -67,7 +67,7 @@ begin
 
   (* Write stat titles *)
   TextOut(60, 2, 'cyan', entities.entityList[0].race);
-  TextOut(60, 3, 'cyan', 'the Worthless');
+  TextOut(60, 3, 'cyan', 'The ' + entities.entityList[0].description);
   TextOut(60, 5, 'cyan', 'Experience:');
   TextOut(60, 6, 'cyan', 'Health:');
   TextOut(60, 8, 'cyan', 'Attack:');

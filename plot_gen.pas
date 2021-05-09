@@ -18,8 +18,25 @@ const
     'Harvestmoon', 'Ghostmoon', 'Stormlight');
 
 var
-  playerName, trollDate: string;
+  playerName, playerTitle, trollDate: string;
   Year, Month, Day, WDay: word;
+  titles: array[0..96] of string = ('Abominable', 'Amorous',
+    'Afflicted', 'Ailing', 'Breathless', 'Broken', 'Bullish', 'Craggy',
+    'Bearded', 'Bony', 'Beastly', 'Drunken', 'Bitter', 'Fetid', 'Fierce',
+    'Fiery', 'Bold', 'Filthy', 'Craven', 'Fishy', 'Crooked', 'Flexible',
+    'Crusty', 'Forgetful', 'Brutal', 'Foul', 'Disturbed', 'Forgettable',
+    'Burly', 'Fragrant', 'Dramatic', 'Frisky', 'Gallant', 'Green',
+    'Delectable', 'Cold', 'Grey', 'Cursed', 'Grumpy', 'Grubby', 'Dark',
+    'Hairless', 'Hairy', 'Heathen', 'Defiant', 'Jaded', 'Knobbly',
+    'Indecent', 'Detestable', 'Dreaded', 'Jumpy', 'Aromatic', 'Wrinkled',
+    'Wild', 'Unsmiling', 'Warty', 'Towering', 'Valiant', 'Sweaty',
+    'Sour', 'Vain', 'Unseemly', 'Swarthy', 'Tragic', 'Strange', 'Stout',
+    'Stony', 'Stormy', 'Shameless', 'Stalwart', 'Quiet', 'Sleepy',
+    'Pure', 'Prickly', 'Scarred', 'Pimply', 'Pale', 'Savage', 'Ornate',
+    'Simple', 'Silly', 'Salty', 'Rotund', 'Miserable', 'Scrappy',
+    'Ragged', 'Lanky', 'Scowly', 'Hardy', 'Harsh', 'Gruesome', 'Gross',
+    'Grisly', 'Goodly', 'Gloomy', 'Nocturnal', 'Fair');
+
   firstSyllable: array[0..73] of
   string = ('A', 'Ag', 'Ar', 'Ara', 'Anu', 'Bal', 'Bil', 'Boro',
     'Bern', 'Bra', 'Cas', 'Cere', 'Co', 'Con', 'Cor', 'Dag', 'Doo',
@@ -39,7 +56,7 @@ var
     'rin', 'rum', 'rus', 'rut', 'sekh', 'sha', 'thos', 'thur', 'toa',
     'tu', 'tur', 'tred', 'varl', 'wain', 'wan', 'win', 'wise', 'ya');
 
-  aquilonianMaleFirst: array[1..188] of
+  aquilonianMaleFirst: array[0..187] of
   string = ('Abant', 'Abantiad', 'Ac', 'Acris', 'Act', 'Alc', 'Alcid',
     'Am', 'Andr', 'Andr', 'Arct', 'Arct', 'Arp', 'Asclep', 'Atab',
     'Atab', 'Attal', 'Auf', 'Aufid', 'Bal', 'Balend', 'Barr', 'Barr',
@@ -65,7 +82,7 @@ var
     'Serv', 'Sur', 'Thesp', 'Troc', 'Troc', 'Tul', 'Valann', 'Valer',
     'Vil', 'Volm', 'Volm', 'Volman', 'Zet');
 
-  aquilonianMaleLast: array[1..100] of
+  aquilonianMaleLast: array[0..99] of
   string = ('a', 'i', 'o', 'as', 'el', 'er', 'es', 'ic', 'in', 'io',
     'is', 'on', 'os', 'us', 'yc', 'ago', 'ald', 'ana', 'ana', 'eas',
     'ell', 'ell', 'eri', 'eus', 'eus', 'ian', 'ias', 'ias', 'ion',
@@ -80,7 +97,7 @@ var
     'ostas', 'arioin', 'audius', 'edides', 'ervius', 'espius', 'itheus',
     'onicus', 'antides');
 
-  aquilonianFemaleFirst: array[1..98] of
+  aquilonianFemaleFirst: array[0..97] of
   string = ('Adam', 'Aeg', 'Al', 'Alb', 'Albion', 'Alc', 'Alcim',
     'Anger', 'Arac', 'Arac', 'Aracel', 'Arian', 'Ariann', 'Balb',
     'Bith', 'Bolb', 'Cair', 'Cairist', 'Call', 'Card', 'Carm', 'Cat',
@@ -94,7 +111,7 @@ var
     'Pell', 'Ph', 'Ren', 'Rh', 'Ros', 'Ros', 'Sal', 'Salv', 'Sec',
     'Suad', 'Teth', 'Tim', 'Tryph', 'Val', 'Vern', 'Vig', 'Vimand', 'Vir', 'Zel');
 
-  aquilonianFemaleLast: array[1..100] of
+  aquilonianFemaleLast: array[0..99] of
   string = ('a', 'e', 'ea', 'ia', 'ia', 'ya', 'ys', 'ana', 'ana',
     'are', 'are', 'ata', 'ata', 'ede', 'ede', 'eia', 'eia', 'eis',
     'eis', 'ele', 'ele', 'ena', 'ena', 'ene', 'ene', 'era', 'era',
@@ -110,6 +127,8 @@ var
 
 (* Generate a name for the player *)
 procedure generateName;
+(* Generate a title or honorfic for the player *)
+procedure generateTitle;
 (* Get the current date and display it in the in-game calendar *)
 procedure getTrollDate;
 
@@ -122,6 +141,12 @@ begin
   a := Random(73);
   b := Random(62);
   playerName := firstSyllable[a] + secondSyllable[b];
+  generateTitle;
+end;
+
+procedure generateTitle;
+begin
+  playerTitle:= titles[Random(96)];
 end;
 
 procedure getTrollDate;
@@ -148,4 +173,3 @@ begin
 end;
 
 end.
-
