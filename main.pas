@@ -16,7 +16,7 @@ uses
   {$ENDIF};
 
 type
-  gameStatus = (stTitle, stGame, stInventory, stQuitMenu, stGameOver);
+  gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuitMenu, stGameOver);
 
 var
   (* State machine for game menus / controls *)

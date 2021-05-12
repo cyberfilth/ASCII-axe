@@ -21,6 +21,8 @@ procedure titleInput(Keypress: TKeyEvent);
 procedure quitInput(Keypress: TKeyEvent);
 (* Input in INVENTORY MENU state *)
 procedure inventoryInput(Keypress: TKeyEvent);
+(* Input in the DROP MENU state *)
+procedure dropInput(Keypress: TKeyEvent);
 (* Input in GAME state *)
 procedure gameInput(Keypress: TKeyEvent);
 
@@ -39,7 +41,6 @@ begin
   DoneKeyBoard;
 end;
 
-(* 0 = titlescreen, 1 = game running, 2 = inventory screen, 3 = Quit menu, 4 = Game Over *)
 procedure waitForInput;
 var
   Keypress: TKeyEvent;
@@ -65,6 +66,14 @@ begin
     Keypress := TranslateKeyEvent(Keypress);
     inventoryInput(Keypress);
   end;
+  { ---------------------------------    In the Drop item menu }
+  while gameState = stDropMenu do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
+    dropInput(Keypress);
+  end;
+
   { ---------------------------------    Gameplay controls }
   while gameState = stGame do
   begin
@@ -105,7 +114,22 @@ end;
 procedure inventoryInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
-    'D': ;//main.newGame;
+    'D':
+    begin
+      gameState := stDropMenu;
+      player_inventory.drop;
+    end;
+    'x', 'X': { Exit menu }
+    begin
+      gameState := stGame;
+      main.returnToGameScreen;
+    end;
+  end;
+end;
+
+procedure dropInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
     'x', 'X': { Exit menu }
     begin
       gameState := stGame;
