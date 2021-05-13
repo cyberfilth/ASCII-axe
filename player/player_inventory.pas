@@ -112,6 +112,7 @@ begin
       inventory[i].inInventory := True;
       ui.displayMessage('You pick up the ' + inventory[i].Name);
       (* Remove the item from list of items on the map *)
+      { Requires FPC3.2.0 or higher }
       Delete(itemList, 1, 1);
       Dec(itemAmount);
       Result := True;
