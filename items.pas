@@ -62,7 +62,6 @@ begin
   itemAmount := 0;
   { initialise array }
   SetLength(itemList, 0);
-//  for i := 1 to 50 do
     item_lookup.dispenseItem;
 end;
 

@@ -111,6 +111,9 @@ begin
       inventory[i].glyphColour := itemList[itemNumber].glyphColour;
       inventory[i].inInventory := True;
       ui.displayMessage('You pick up the ' + inventory[i].Name);
+      (* Remove the item from list of items on the map *)
+      Delete(itemList, 1, 1);
+      Dec(itemAmount);
       Result := True;
       exit;
     end;

@@ -135,6 +135,8 @@ begin
       gameState := stGame;
       main.returnToGameScreen;
     end;
+    { List of inventory slots }
+
   end;
 end;
 
