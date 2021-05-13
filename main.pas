@@ -231,6 +231,7 @@ begin
   camera.drawMap;
   (* Redraw message log *)
   ui.restoreMessages;
+  ui.writeBufferedMessages;
 
   (* FINISH DRAWING TO THE BUFFER *)
   { Write those changes to the screen }

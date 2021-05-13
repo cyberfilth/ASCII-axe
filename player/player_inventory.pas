@@ -7,7 +7,7 @@ unit player_inventory;
 interface
 
 uses
-  SysUtils, video, entities, items, ui, globalutils, logging;
+  SysUtils, video, entities, items, ui;
 
 type
   InvMenuStatus = (mnuMain, mnuDrop, mnuQuaff, mnuWearWield);
@@ -35,14 +35,14 @@ procedure initialiseInventory;
 procedure loadEquippedItems;
 (* Add to inventory *)
 function addToInventory(itemNumber: smallint): boolean;
+(* Remove from inventory *)
+function removeFromInventory(itemNumber: smallint): boolean;
 (* Display the inventory screen *)
 procedure showInventory;
-(* Show hint at bottom of screen *)
-procedure showHint(message: shortstring);
-(* Accept menu input *)
-procedure menu(selection: shortstring);
 (* Drop menu *)
 procedure drop;
+(* Drop selected item *)
+procedure dropSelection(selection: byte);
 (* Quaff menu *)
 //procedure quaff(quaffItem: char);
 (* Wear / Wield menu *)
@@ -51,7 +51,7 @@ procedure drop;
 implementation
 
 uses
-  main, KeyboardInput, scrInventory;
+  KeyboardInput, scrInventory;
 
 procedure initialiseInventory;
 var
@@ -121,40 +121,63 @@ begin
   end;
 end;
 
+function removeFromInventory(itemNumber: smallint): boolean;
+begin
+  Result := False;
+  (* Check if there is already an item on the floor here *)
+  if (items.containsItem(entityList[0].posX, entityList[0].posY) = False) then
+  begin
+    (* Add item to game map *)
+    Inc(items.itemAmount);
+    SetLength(items.itemList, items.itemAmount);
+    items.listLength := length(items.itemList);
+    SetLength(items.itemList, items.listLength + 1);
+    with items.itemList[items.listLength] do
+    begin
+      itemID := items.itemAmount;
+      itemName := inventory[itemNumber].Name;
+      itemDescription := inventory[itemNumber].description;
+      itemType := inventory[itemNumber].itemType;
+      useID := 1;
+      glyph := inventory[itemNumber].glyph;
+      glyphColour := inventory[itemNumber].glyphColour;
+      inView := True;
+      posX := entities.entityList[0].posX;
+      posY := entities.entityList[0].posY;
+      onMap := True;
+      discovered := True;
+      ui.bufferMessage('You drop the ' + itemName);
+    end;
+    (* Remove from inventory *)
+    inventory[itemNumber].Name := 'Empty';
+    inventory[itemNumber].equipped := False;
+    inventory[itemNumber].description := 'x';
+    inventory[itemNumber].itemType := 'x';
+    inventory[itemNumber].glyph := 'x';
+    inventory[itemNumber].glyphColour := 'x';
+    inventory[itemNumber].inInventory := False;
+    inventory[itemNumber].useID := 0;
+    Result := True;
+    (* Redraw the Drop menu *)
+    drop;
+  end
+  else
+    ui.bufferMessage('There is no room here');
+end;
+
 procedure showInventory;
 begin
   { prepare changes to the screen }
   LockScreenUpdate;
   (* Clear the screen *)
   ui.screenBlank;
-
   (* Draw the game screen *)
   scrInventory.displayInventoryScreen;
-
-
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-
   keyboardinput.waitForInput;
-end;
-
-
-procedure showHint(message: shortstring);
-begin
-
-end;
-
-{ REFACTOR ALL OF THE BELOW ONCE THE INVENTORY IS RUNNING WITHOUT BUGS
-
-  Start off with just the main inventory screen, test it with an earlier iteration
-  of the title screen. }
-
-
-procedure menu(selection: shortstring);
-begin
-
 end;
 
 procedure drop;
@@ -171,6 +194,14 @@ begin
   { only redraws the parts that have been updated }
   UpdateScreen(False);
   keyboardinput.waitForInput;
+end;
+
+procedure dropSelection(selection: byte);
+begin
+  (* Check that the slot is not empty *)
+  if not (inventory[selection].Name = 'Empty') then
+    removeFromInventory(selection);
+  { TODO : The 'if not' condition causes a stack trace. Will need to investigate. }
 end;
 
 procedure wield(wieldItem: char);

@@ -7,7 +7,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle, logging,
+  SysUtils, video, keyboard, scrTitle,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -88,10 +88,10 @@ begin
   end;
   P := ((X - 1) + (Y - 1) * ScreenWidth);
   M := Length(S);
-  if P + M > longint(ScreenWidth) * ScreenHeight then
-    M := longint(ScreenWidth) * ScreenHeight - P;
+  if P + M > Int64(ScreenWidth) * ScreenHeight then
+    M := Int64(ScreenWidth) * ScreenHeight - P;
   for I := 1 to M do
-    VideoBuf^[longint(P + I) - 1] := Ord(S[i]) + (tint shl 8);
+    VideoBuf^[Int64(P + I) - 1] := Ord(S[i]) + (tint shl 8);
 end;
 
 procedure screenBlank;

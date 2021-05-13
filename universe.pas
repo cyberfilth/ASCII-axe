@@ -8,7 +8,7 @@ Unit universe;
 Interface
 
 Uses 
-SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, logging;
+SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave;
 
 Type 
   dungeonTerrain = (tCave, tDungeon);

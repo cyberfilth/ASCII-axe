@@ -56,8 +56,6 @@ procedure redrawItems;
 implementation
 
 procedure initialiseItems;
-var
-  i: byte;
 begin
   itemAmount := 0;
   { initialise array }

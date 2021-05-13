@@ -5,9 +5,6 @@ unit ale_tankard;
 
 interface
 
-uses
-  map;
-
 (* Create a tankard of ale *)
 procedure createAleTankard(uniqueid, itmx, itmy: smallint);
 (* Drink Ale *)

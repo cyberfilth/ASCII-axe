@@ -136,7 +136,16 @@ begin
       main.returnToGameScreen;
     end;
     { List of inventory slots }
-
+    'a': player_inventory.dropSelection(0);
+    'b': player_inventory.dropSelection(1);
+    'c': player_inventory.dropSelection(2);
+    'd': player_inventory.dropSelection(3);
+    'e': player_inventory.dropSelection(4);
+    'f': player_inventory.dropSelection(5);
+    'g': player_inventory.dropSelection(6);
+    'h': player_inventory.dropSelection(7);
+    'i': player_inventory.dropSelection(8);
+    'j': player_inventory.dropSelection(9);
   end;
 end;
 
