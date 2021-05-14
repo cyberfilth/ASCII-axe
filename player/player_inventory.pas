@@ -122,32 +122,32 @@ begin
 end;
 
 function removeFromInventory(itemNumber: smallint): boolean;
+var
+  newItem: item;
 begin
   Result := False;
   (* Check if there is already an item on the floor here *)
   if (items.containsItem(entityList[0].posX, entityList[0].posY) = False) then
+    { Create an item }
   begin
-    (* Add item to game map *)
+    newItem.itemID := items.itemAmount;
+    newItem.itemName := inventory[itemNumber].Name;
+    newItem.itemDescription := inventory[itemNumber].description;
+    newItem.itemType := inventory[itemNumber].itemType;
+    newItem.useID := 1;
+    newItem.glyph := inventory[itemNumber].glyph;
+    newItem.glyphColour := inventory[itemNumber].glyphColour;
+    newItem.inView := True;
+    newItem.posX := entities.entityList[0].posX;
+    newItem.posY := entities.entityList[0].posY;
+    newItem.onMap := True;
+    newItem.discovered := True;
+
+    { Place item on the game map }
     Inc(items.itemAmount);
-    SetLength(items.itemList, items.itemAmount);
-    items.listLength := length(items.itemList);
-    SetLength(items.itemList, items.listLength + 1);
-    with items.itemList[items.listLength] do
-    begin
-      itemID := items.itemAmount;
-      itemName := inventory[itemNumber].Name;
-      itemDescription := inventory[itemNumber].description;
-      itemType := inventory[itemNumber].itemType;
-      useID := 1;
-      glyph := inventory[itemNumber].glyph;
-      glyphColour := inventory[itemNumber].glyphColour;
-      inView := True;
-      posX := entities.entityList[0].posX;
-      posY := entities.entityList[0].posY;
-      onMap := True;
-      discovered := True;
-      ui.bufferMessage('You drop the ' + itemName);
-    end;
+    Insert(newitem, itemList, itemAmount);
+    ui.bufferMessage('You drop the ' + newItem.itemName);
+
     (* Remove from inventory *)
     inventory[itemNumber].Name := 'Empty';
     inventory[itemNumber].equipped := False;
