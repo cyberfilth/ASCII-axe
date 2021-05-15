@@ -221,8 +221,6 @@ begin
   if (inventory[selection].inInventory = True) and
     (inventory[selection].itemType = itmDrink) then
   begin
-    //ui.writeBufferedMessages;
-    ui.displayMessage('You quaff the ' + inventory[selection].Name);
     item_lookup.lookupUse(inventory[selection].useID, False);
     (* Increase turn counter for this action *)
     Inc(entityList[0].moveCount);
