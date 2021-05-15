@@ -7,7 +7,7 @@ unit item_lookup;
 interface
 
 uses
-  globalUtils, universe, map, entities,
+  universe, entities, globalUtils, map,
   { List of items }
   ale_tankard;
 
@@ -26,23 +26,22 @@ var
   r, c: smallint;
 begin
   (* Choose random location on the map *)
-//  repeat
-  //  r := globalutils.randomRange(3, (MAXROWS - 3));
-    //c := globalutils.randomRange(3, (MAXCOLUMNS - 3));
+  repeat
+    r := globalutils.randomRange(3, (MAXROWS - 3));
+    c := globalutils.randomRange(3, (MAXCOLUMNS - 3));
     (* choose a location that is not a wall or occupied *)
- // until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False);
-
+  until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False);
   Inc(items.itemAmount);
   SetLength(items.itemList, items.itemAmount);
 
-  ale_tankard.createAleTankard(itemAmount, entities.entityList[0].posX + 1, entities.entityList[0].posY);
-
+  ale_tankard.createAleTankard(itemAmount, c, r);
 end;
 
 procedure lookupUse(x: smallint; equipped: boolean);
 begin
-
+  case x of
+    1: ale_tankard.useItem;
+  end;
 end;
 
 end.
-

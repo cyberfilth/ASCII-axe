@@ -10,11 +10,13 @@ procedure drawOutline;
 procedure displayInventoryScreen;
 (* Show the drop menu *)
 procedure displayDropMenu;
+(* Show the quaff menu *)
+procedure displayQuaffMenu;
 
 implementation
 
 uses
-  ui, player_inventory;
+  ui, player_inventory, items;
 
 procedure drawOutline;
 begin
@@ -33,7 +35,7 @@ end;
 
 procedure displayInventoryScreen;
 var
-  x, y, invItem: byte;
+  y, invItem: byte;
   letter: char;
 begin
   invItem := 0;
@@ -65,7 +67,7 @@ end;
 
 procedure displayDropMenu;
 var
-  x, y, invItem: byte;
+  y, invItem: byte;
   letter: char;
 begin
   invItem := 0;
@@ -91,6 +93,42 @@ begin
       TextOut(10, y, 'darkGrey', '[' + letter + ']  ' +
         player_inventory.inventory[invItem].Name)
     { Items that can be dropped }
+    else
+      TextOut(10, y, 'cyan', '[' + letter + ']  ' +
+        player_inventory.inventory[invItem].Name);
+    Inc(y);
+    Inc(invItem);
+  end;
+end;
+
+procedure displayQuaffMenu;
+var
+  y, invItem: byte;
+  letter: char;
+begin
+  invItem := 0;
+  drawOutline;
+  { Inventory title }
+  TextOut(15, 3, 'cyan', 'Select drink to quaff');
+  { Footer menu }
+  TextOut(5, 23, 'cyanBGblackTXT', ' a-j Select item ');
+  TextOut(24, 23, 'cyanBGblackTXT', ' D - Drop item ');
+  TextOut(43, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
+  TextOut(65, 23, 'cyanBGblackTXT', ' X - Exit ');
+
+  { Display items in inventory }
+  y := 6;
+  for letter := 'a' to 'j' do
+  begin
+    { Empty slots }
+    if (player_inventory.inventory[invItem].Name = 'Empty') then
+      TextOut(10, y, 'darkGrey', '[' + letter + ']  ' + chr(174) +
+        ' empty slot ' + chr(175))
+    { Non-drinkable items }
+    else if (player_inventory.inventory[invItem].itemType <> itmDrink) then
+      TextOut(10, y, 'darkGrey', '[' + letter + ']  ' +
+        player_inventory.inventory[invItem].Name)
+    { Items that can be drunk }
     else
       TextOut(10, y, 'cyan', '[' + letter + ']  ' +
         player_inventory.inventory[invItem].Name);

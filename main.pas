@@ -16,7 +16,7 @@ uses
   {$ENDIF};
 
 type
-  gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuitMenu, stGameOver);
+  gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu, stQuitMenu, stGameOver);
 
 var
   (* State machine for game menus / controls *)
@@ -144,9 +144,6 @@ begin
   player.processStatus;
   (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
-  (* Redraw all NPC'S *)
-  for i := 1 to entities.npcAmount do
-    entities.redrawMapDisplay(i);
 
   (* Redraw all items *)
   for i := 1 to items.itemAmount do
@@ -167,6 +164,10 @@ begin
       items.itemList[i].inView := False;
       map.drawTile(itemList[i].posX, itemList[i].posY, 0);
     end;
+
+  (* Redraw all NPC'S *)
+  for i := 1 to entities.npcAmount do
+    entities.redrawMapDisplay(i);
 
   { prepare changes to the screen }
   LockScreenUpdate;

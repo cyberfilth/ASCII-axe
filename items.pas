@@ -9,17 +9,19 @@ interface
 uses
   globalutils, map, universe, item_lookup;
 
+(* Item types = drink, weapon, armour *)
 type
-  (* Item types = drink, weapon, armour, missile *)
+  tItem = (itmDrink, itmWeapon, itmArmour, itmEmptySlot);
 
-  (* Store information about items *)
+(* Store information about items *)
+type
   Item = record
     (* Unique ID *)
     itemID: smallint;
     (* Item name & description *)
     itemName, itemDescription: shortstring;
     (* drink, weapon, armour, missile *)
-    itemType: shortstring;
+    itemType: tItem;
     (* Used for lookup table *)
     useID: smallint;
     (* Position on game map *)
@@ -60,7 +62,7 @@ begin
   itemAmount := 0;
   { initialise array }
   SetLength(itemList, 0);
-    item_lookup.dispenseItem;
+  item_lookup.dispenseItem;
 end;
 
 procedure drawItemsOnMap(id: byte);
@@ -68,10 +70,10 @@ begin
   (* Redraw all items on the map display *)
   if (itemList[id].inView = True) then
   begin
-  map.mapDisplay[itemList[id].posY, itemList[id].posX].glyphColour :=
-    itemList[id].glyphColour;
-  map.mapDisplay[itemList[id].posY, itemList[id].posX].glyph :=
-    itemList[id].glyph;
+    map.mapDisplay[itemList[id].posY, itemList[id].posX].glyphColour :=
+      itemList[id].glyphColour;
+    map.mapDisplay[itemList[id].posY, itemList[id].posX].glyph :=
+      itemList[id].glyph;
   end;
 end;
 

@@ -23,6 +23,8 @@ procedure quitInput(Keypress: TKeyEvent);
 procedure inventoryInput(Keypress: TKeyEvent);
 (* Input in the DROP MENU state *)
 procedure dropInput(Keypress: TKeyEvent);
+(* Input in the QUAFF MENU state *)
+procedure quaffInput(Keypress: TKeyEvent);
 (* Input in GAME state *)
 procedure gameInput(Keypress: TKeyEvent);
 
@@ -73,6 +75,13 @@ begin
     Keypress := TranslateKeyEvent(Keypress);
     dropInput(Keypress);
   end;
+  { ---------------------------------    In the Quaff menu }
+  while gameState = stQuaffMenu do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
+    quaffInput(Keypress);
+  end;
 
   { ---------------------------------    Gameplay controls }
   while gameState = stGame do
@@ -119,6 +128,11 @@ begin
       gameState := stDropMenu;
       player_inventory.drop;
     end;
+     'Q':
+    begin
+      gameState := stQuaffMenu;
+      player_inventory.quaff;
+    end;
     'x', 'X': { Exit menu }
     begin
       gameState := stGame;
@@ -146,6 +160,28 @@ begin
     'h': player_inventory.dropSelection(7);
     'i': player_inventory.dropSelection(8);
     'j': player_inventory.dropSelection(9);
+  end;
+end;
+
+procedure quaffInput(Keypress: TKeyEvent);
+begin
+   case GetKeyEventChar(Keypress) of
+    'x', 'X': { Exit menu }
+    begin
+      gameState := stGame;
+      main.returnToGameScreen;
+    end;
+    { List of inventory slots }
+    'a': player_inventory.quaffSelection(0);
+    'b': player_inventory.quaffSelection(1);
+    'c': player_inventory.quaffSelection(2);
+    'd': player_inventory.quaffSelection(3);
+    'e': player_inventory.quaffSelection(4);
+    'f': player_inventory.quaffSelection(5);
+    'g': player_inventory.quaffSelection(6);
+    'h': player_inventory.quaffSelection(7);
+    'i': player_inventory.quaffSelection(8);
+    'j': player_inventory.quaffSelection(9);
   end;
 end;
 
@@ -230,6 +266,11 @@ begin
     begin
       main.gameState := stInventory;
       player_inventory.showInventory;
+    end;
+    'd', 'D': { Drop menu }
+    begin
+      main.gameState := stDropMenu;
+      player_inventory.drop;
     end;
     ',', 'g', 'G': { Get item }
     begin

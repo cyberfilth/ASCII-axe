@@ -7,18 +7,14 @@ unit player_inventory;
 interface
 
 uses
-  SysUtils, video, entities, items, ui;
-
-type
-  InvMenuStatus = (mnuMain, mnuDrop, mnuQuaff, mnuWearWield);
+  SysUtils, video, entities, items, item_lookup, ui;
 
 type
   (* Items in inventory *)
   Equipment = record
     id, useID: smallint;
-    Name, description, itemType: shortstring;
-    glyph: shortstring;
-    glyphColour: shortstring;
+    Name, description, glyph, glyphColour: shortstring;
+    itemType: tItem;
     (* Is the item still in the inventory *)
     inInventory: boolean;
     (* Is the item being worn or wielded *)
@@ -27,7 +23,6 @@ type
 
 var
   inventory: array[0..9] of Equipment;
-  InvMenuState: InvMenuStatus;
 
 (* Initialise empty player inventory *)
 procedure initialiseInventory;
@@ -44,7 +39,9 @@ procedure drop;
 (* Drop selected item *)
 procedure dropSelection(selection: byte);
 (* Quaff menu *)
-//procedure quaff(quaffItem: char);
+procedure quaff;
+(* Drink selected item *)
+procedure quaffSelection(selection: byte);
 (* Wear / Wield menu *)
 //procedure wield(wieldItem: char);
 
@@ -63,7 +60,7 @@ begin
     inventory[i].Name := 'Empty';
     inventory[i].equipped := False;
     inventory[i].description := 'x';
-    inventory[i].itemType := 'x';
+    inventory[i].itemType := itmEmptySlot;
     inventory[i].glyph := 'x';
     inventory[i].glyphColour := 'x';
     inventory[i].inInventory := False;
@@ -152,7 +149,7 @@ begin
     inventory[itemNumber].Name := 'Empty';
     inventory[itemNumber].equipped := False;
     inventory[itemNumber].description := 'x';
-    inventory[itemNumber].itemType := 'x';
+    inventory[itemNumber].itemType := itmEmptySlot;
     inventory[itemNumber].glyph := 'x';
     inventory[itemNumber].glyphColour := 'x';
     inventory[itemNumber].inInventory := False;
@@ -188,7 +185,6 @@ begin
   ui.screenBlank;
   (* Draw the game screen *)
   scrInventory.displayDropMenu;
-  InvMenuState := mnuDrop;
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
@@ -199,9 +195,49 @@ end;
 procedure dropSelection(selection: byte);
 begin
   (* Check that the slot is not empty *)
-  if not (inventory[selection].Name = 'Empty') then
+  if (inventory[selection].inInventory = True) then
     removeFromInventory(selection);
   { TODO : The 'if not' condition causes a stack trace. Will need to investigate. }
+end;
+
+procedure quaff;
+begin
+  { prepare changes to the screen }
+  LockScreenUpdate;
+  (* Clear the screen *)
+  ui.screenBlank;
+  (* Draw the game screen *)
+  scrInventory.displayQuaffMenu;
+  { Write those changes to the screen }
+  UnlockScreenUpdate;
+  { only redraws the parts that have been updated }
+  UpdateScreen(False);
+  keyboardinput.waitForInput;
+end;
+
+procedure quaffSelection(selection: byte);
+begin
+  (* Check that the slot is not empty *)
+  if (inventory[selection].inInventory = True) and
+    (inventory[selection].itemType = itmDrink) then
+  begin
+    //ui.writeBufferedMessages;
+    ui.displayMessage('You quaff the ' + inventory[selection].Name);
+    item_lookup.lookupUse(inventory[selection].useID, False);
+    (* Increase turn counter for this action *)
+    Inc(entityList[0].moveCount);
+    (* Remove from inventory *)
+    inventory[selection].Name := 'Empty';
+    inventory[selection].equipped := False;
+    inventory[selection].description := 'x';
+    inventory[selection].itemType := itmEmptySlot;
+    inventory[selection].glyph := 'x';
+    inventory[selection].glyphColour := 'x';
+    inventory[selection].inInventory := False;
+    inventory[selection].useID := 0;
+    (* Redraw the Quaff menu *)
+    quaff;
+  end;
 end;
 
 procedure wield(wieldItem: char);

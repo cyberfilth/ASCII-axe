@@ -17,7 +17,7 @@ var
 function getX(Xcoord: smallint): smallint;
 function getY(Ycoord: smallint): smallint;
 procedure drawMap;
-procedure drawEntities;
+procedure drawPlayer;
 
 implementation
 
@@ -72,29 +72,19 @@ begin
       TextOut(c, r, gCol, map.mapDisplay[r + getY(pY)][c + getX(pX)].Glyph);
     end;
   end;
-  drawEntities;
+  drawPlayer;
 end;
 
-procedure drawEntities;
+procedure drawPlayer;
 var
-  (* Entity coordinates & counter *)
   entX, entY: smallint;
   (* Glyph colour *)
   gCol: shortstring;
 begin
-  (* Loop through all entities *)
-  //for i := 0 to entities.npcAmount do
-  //begin
-  //  (* If the entity is in view of the player, and not dead, draw them *)
-  //  if (entities.entityList[i].inView = True) and
-  //    (entities.entityList[i].isDead = False) then
-  //  begin
-      gCol := entities.entityList[0].glyphColour;
-       entX := entities.entityList[0].posX;
-       entY := entities.entityList[0].posY;
-       TextOut(entX - getX(entX), entY - getY(entY), gCol, entities.entityList[0].glyph);
-  //  end;
-  //end;
+  gCol := entities.entityList[0].glyphColour;
+  entX := entities.entityList[0].posX;
+  entY := entities.entityList[0].posY;
+  TextOut(entX - getX(entX), entY - getY(entY), gCol, entities.entityList[0].glyph);
 end;
 
 end.
