@@ -43,7 +43,7 @@ procedure quaff;
 (* Drink selected item *)
 procedure quaffSelection(selection: byte);
 (* Wear / Wield menu *)
-//procedure wield(wieldItem: char);
+procedure wield;
 
 implementation
 
@@ -238,7 +238,7 @@ begin
   end;
 end;
 
-procedure wield(wieldItem: char);
+procedure wield;
 begin
 end;
 

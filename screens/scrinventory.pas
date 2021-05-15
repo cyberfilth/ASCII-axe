@@ -12,6 +12,8 @@ procedure displayInventoryScreen;
 procedure displayDropMenu;
 (* Show the quaff menu *)
 procedure displayQuaffMenu;
+(* Show the wear / wield menu *)
+procedure displayWieldMenu;
 
 implementation
 
@@ -111,10 +113,10 @@ begin
   { Inventory title }
   TextOut(15, 3, 'cyan', 'Select drink to quaff');
   { Footer menu }
-  TextOut(5, 23, 'cyanBGblackTXT', ' a-j Select item ');
-  TextOut(24, 23, 'cyanBGblackTXT', ' D - Drop item ');
-  TextOut(43, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
-  TextOut(65, 23, 'cyanBGblackTXT', ' X - Exit ');
+  TextOut(6, 23, 'cyanBGblackTXT', ' a-j Select item ');
+  TextOut(25, 23, 'cyanBGblackTXT', ' D - Drop item ');
+  TextOut(42, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
+  TextOut(64, 23, 'cyanBGblackTXT', ' X - Exit ');
 
   { Display items in inventory }
   y := 6;
@@ -135,6 +137,11 @@ begin
     Inc(y);
     Inc(invItem);
   end;
+end;
+
+procedure displayWieldMenu;
+begin
+
 end;
 
 end.

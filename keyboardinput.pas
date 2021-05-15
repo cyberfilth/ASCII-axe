@@ -123,12 +123,12 @@ end;
 procedure inventoryInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
-    'D':
+    'D': { Drop menu }
     begin
       gameState := stDropMenu;
       player_inventory.drop;
     end;
-     'Q':
+     'Q': { Quaff menu }
     begin
       gameState := stQuaffMenu;
       player_inventory.quaff;
@@ -148,6 +148,11 @@ begin
     begin
       gameState := stGame;
       main.returnToGameScreen;
+    end;
+    'Q': { Quaff menu }
+    begin
+      gameState := stQuaffMenu;
+      player_inventory.quaff;
     end;
     { List of inventory slots }
     'a': player_inventory.dropSelection(0);
@@ -170,6 +175,11 @@ begin
     begin
       gameState := stGame;
       main.returnToGameScreen;
+    end;
+    'D': { Drop menu }
+    begin
+      gameState := stDropMenu;
+      player_inventory.drop;
     end;
     { List of inventory slots }
     'a': player_inventory.quaffSelection(0);
