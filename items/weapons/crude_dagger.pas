@@ -24,7 +24,7 @@ begin
     itemID := uniqueid;
     itemName := 'crude dagger';
     itemDescription := 'adds 1D6+2 to attack';
-    itemType := 'weapon';
+    itemType := itmWeapon;
     useID := 2;
     glyph := '|';
     glyphColour := 'lightGrey';
@@ -45,7 +45,7 @@ begin
     entityList[0].weaponEquipped := True;
     Inc(entityList[0].weaponDice);
     Inc(entityList[0].weaponAdds, 2);
-    ui.bufferMessage('The dagger adds 1D6+2 to your attack');
+    ui.displayMessage('You equip the crude dagger. The dagger adds 1D6+2 to your attack');
     ui.updateWeapon('Crude dagger');
     ui.writeBufferedMessages;
   end
@@ -55,6 +55,7 @@ begin
     entityList[0].weaponEquipped := False;
     Dec(entityList[0].weaponDice);
     Dec(entityList[0].weaponAdds, 2);
+    ui.displayMessage('You unequip the crude dagger.');
     ui.updateWeapon('none');
     ui.writeBufferedMessages;
   end;

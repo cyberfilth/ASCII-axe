@@ -168,6 +168,11 @@ begin
       gameState := stQuaffMenu;
       player_inventory.quaff;
     end;
+    'W': { Wear / Wield menu }
+    begin
+      gameState := stWearWield;
+      player_inventory.wield;
+    end;
     { List of inventory slots }
     'a': player_inventory.dropSelection(0);
     'b': player_inventory.dropSelection(1);
@@ -194,6 +199,11 @@ begin
     begin
       gameState := stDropMenu;
       player_inventory.drop;
+    end;
+    'W': { Wear / Wield menu }
+    begin
+      gameState := stWearWield;
+      player_inventory.wield;
     end;
     { List of inventory slots }
     'a': player_inventory.quaffSelection(0);
@@ -228,16 +238,16 @@ begin
       player_inventory.quaff;
     end;
     { List of inventory slots }
-    'a': player_inventory.quaffSelection(0);
-    'b': player_inventory.quaffSelection(1);
-    'c': player_inventory.quaffSelection(2);
-    'd': player_inventory.quaffSelection(3);
-    'e': player_inventory.quaffSelection(4);
-    'f': player_inventory.quaffSelection(5);
-    'g': player_inventory.quaffSelection(6);
-    'h': player_inventory.quaffSelection(7);
-    'i': player_inventory.quaffSelection(8);
-    'j': player_inventory.quaffSelection(9);
+    'a': player_inventory.wearWieldSelection(0);
+    'b': player_inventory.wearWieldSelection(1);
+    'c': player_inventory.wearWieldSelection(2);
+    'd': player_inventory.wearWieldSelection(3);
+    'e': player_inventory.wearWieldSelection(4);
+    'f': player_inventory.wearWieldSelection(5);
+    'g': player_inventory.wearWieldSelection(6);
+    'h': player_inventory.wearWieldSelection(7);
+    'i': player_inventory.wearWieldSelection(8);
+    'j': player_inventory.wearWieldSelection(9);
   end;
 end;
 
@@ -332,6 +342,11 @@ begin
     begin
       main.gameState := stQuaffMenu;
       player_inventory.quaff;
+    end;
+    'w', 'W': { Wear / Wield menu }
+    begin
+      gameState := stWearWield;
+      player_inventory.wield;
     end;
     ',', 'g', 'G': { Get item }
     begin

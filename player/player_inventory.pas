@@ -40,10 +40,12 @@ procedure drop;
 procedure dropSelection(selection: byte);
 (* Quaff menu *)
 procedure quaff;
-(* Drink selected item *)
+(* Quaff selected item *)
 procedure quaffSelection(selection: byte);
 (* Wear / Wield menu *)
 procedure wield;
+(* Wear / Wield selected item *)
+procedure wearWieldSelection(selection: byte);
 
 implementation
 
@@ -51,6 +53,7 @@ uses
   KeyboardInput, scrInventory;
 
 procedure initialiseInventory;
+
 var
   i: byte;
 begin
@@ -69,6 +72,7 @@ begin
 end;
 
 procedure loadEquippedItems;
+
 var
   i: smallint;
 begin
@@ -89,6 +93,7 @@ end;
 
 (* Returns TRUE if successfully added, FALSE if the inventory is full *)
 function addToInventory(itemNumber: smallint): boolean;
+
 var
   i: smallint;
 begin
@@ -119,6 +124,7 @@ begin
 end;
 
 function removeFromInventory(itemNumber: smallint): boolean;
+
 var
   newItem: item;
 begin
@@ -240,7 +246,7 @@ end;
 
 procedure wield;
 begin
-    { prepare changes to the screen }
+  { prepare changes to the screen }
   LockScreenUpdate;
   (* Clear the screen *)
   ui.screenBlank;
@@ -251,6 +257,43 @@ begin
   { only redraws the parts that have been updated }
   UpdateScreen(False);
   keyboardinput.waitForInput;
+end;
+
+procedure wearWieldSelection(selection: byte);
+begin
+  (* Check that the slot is not empty *)
+  if (inventory[selection].inInventory = True) then
+  begin
+    (* Check that the selected item is armour or a weapon *)
+    if (inventory[selection].itemType = itmWeapon) or
+      (inventory[selection].itemType = itmArmour) then
+    begin
+      (* If the item is an unequipped weapon, and the player already has a weapon equipped
+         prompt the player to unequip their weapon first *)
+
+      (* If the item is unworn armour, and the player is already wearing armour
+         prompt the player to unequip their armour first *)
+
+      (* Check whether the item is already equipped or not *)
+      if (inventory[selection].equipped = False) then
+      begin
+        (* Equip *)
+        inventory[selection].equipped := True;
+        item_lookup.lookupUse(inventory[selection].useID, False);
+      end
+      else
+      begin
+        (* Unequip *)
+        inventory[selection].equipped := False;
+        item_lookup.lookupUse(inventory[selection].useID, True);
+      end;
+      { Increment turn counter }
+      Inc(entityList[0].moveCount);
+      wield;
+    end;
+
+  end;
+  // else slot is empty
 end;
 
 end.

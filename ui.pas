@@ -47,6 +47,8 @@ procedure updateHealth;
 procedure updateAttack;
 (* Update player defence value *)
 procedure updateDefence;
+(* Display equipped weapon *)
+procedure updateWeapon(weaponName: shortstring);
 (* Display Quit Game confirmation *)
 procedure exitPrompt;
 (* Clears the status bar message *)
@@ -296,6 +298,11 @@ begin
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
   TextOut(69, 9, 'cyan', IntToStr(entities.entityList[0].defence));
+end;
+
+procedure updateWeapon(weaponName: shortstring);
+begin
+
 end;
 
 procedure exitPrompt;

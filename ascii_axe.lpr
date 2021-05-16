@@ -17,7 +17,7 @@ program ascii_axe;
 {$ENDIF}
 
 uses
-  main;
+main;
 
 begin
   (* Initialise the display, keyboard and game variables *)
