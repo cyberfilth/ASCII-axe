@@ -240,6 +240,17 @@ end;
 
 procedure wield;
 begin
+    { prepare changes to the screen }
+  LockScreenUpdate;
+  (* Clear the screen *)
+  ui.screenBlank;
+  (* Draw the game screen *)
+  scrInventory.displayWieldMenu;
+  { Write those changes to the screen }
+  UnlockScreenUpdate;
+  { only redraws the parts that have been updated }
+  UpdateScreen(False);
+  keyboardinput.waitForInput;
 end;
 
 end.

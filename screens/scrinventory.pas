@@ -140,8 +140,48 @@ begin
 end;
 
 procedure displayWieldMenu;
+var
+  y, invItem: byte;
+  letter: char;
 begin
+  invItem := 0;
+  drawOutline;
+  { Inventory title }
+  TextOut(15, 3, 'cyan', 'Select weapon / armour');
+  { Footer menu }
+  TextOut(8, 23, 'cyanBGblackTXT', ' a-j Select item ');
+  TextOut(27, 23, 'cyanBGblackTXT', ' D - Drop item ');
+  TextOut(44, 23, 'cyanBGblackTXT', ' Q - Quaff menu ');
+  TextOut(62, 23, 'cyanBGblackTXT', ' X - Exit ');
 
+  { Display items in inventory }
+  y := 6;
+  for letter := 'a' to 'j' do
+  begin
+    { Empty slots }
+    if (player_inventory.inventory[invItem].Name = 'Empty') then
+      TextOut(10, y, 'darkGrey', '[' + letter + ']  ' + chr(174) +
+        ' empty slot ' + chr(175))
+    { if not a weapon or armour }
+    else if (player_inventory.inventory[invItem].itemType <> itmWeapon) or
+      (player_inventory.inventory[invItem].itemType <> itmArmour) then
+      TextOut(10, y, 'darkGrey', '[' + letter + ']  ' +
+        player_inventory.inventory[invItem].Name)
+    { Items that can be wielded or worn }
+    else
+    begin
+      (* Show equipped items *)
+      if (player_inventory.inventory[invItem].equipped = True) then
+        TextOut(10, y, 'cyan', '[' + letter + ']  ' + '[equipped] ' +
+          player_inventory.inventory[invItem].Name)
+      else
+        (* Show non-equipped items *)
+        TextOut(10, y, 'cyan', '[' + letter + ']  ' +
+          player_inventory.inventory[invItem].Name);
+    end;
+    Inc(y);
+    Inc(invItem);
+  end;
 end;
 
 end.

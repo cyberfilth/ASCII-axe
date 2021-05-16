@@ -15,16 +15,18 @@ procedure setupKeyboard;
 procedure shutdownKeyboard;
 (* Take input from player *)
 procedure waitForInput;
-(* Input in TITLE MENU state *)
+(* Input in TITLE Menu state *)
 procedure titleInput(Keypress: TKeyEvent);
-(* Input for QUIT MENU state *)
+(* Input for QUIT Menu state *)
 procedure quitInput(Keypress: TKeyEvent);
-(* Input in INVENTORY MENU state *)
+(* Input in INVENTORY Menu state *)
 procedure inventoryInput(Keypress: TKeyEvent);
-(* Input in the DROP MENU state *)
+(* Input in the DROP Menu state *)
 procedure dropInput(Keypress: TKeyEvent);
-(* Input in the QUAFF MENU state *)
+(* Input in the QUAFF Menu state *)
 procedure quaffInput(Keypress: TKeyEvent);
+(* Input in the WEAR / WIELD Menu state *)
+procedure wearWieldInput(Keypress: TKeyEvent);
 (* Input in GAME state *)
 procedure gameInput(Keypress: TKeyEvent);
 
@@ -82,6 +84,13 @@ begin
     Keypress := TranslateKeyEvent(Keypress);
     quaffInput(Keypress);
   end;
+  { ---------------------------------    In the Wear / Wield menu }
+  while gameState = stWearWield do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
+    wearWieldInput(Keypress);
+  end;
 
   { ---------------------------------    Gameplay controls }
   while gameState = stGame do
@@ -128,10 +137,15 @@ begin
       gameState := stDropMenu;
       player_inventory.drop;
     end;
-     'Q': { Quaff menu }
+    'Q': { Quaff menu }
     begin
       gameState := stQuaffMenu;
       player_inventory.quaff;
+    end;
+    'W': { Wear / Wield menu }
+    begin
+      gameState := stWearWield;
+      player_inventory.wield;
     end;
     'x', 'X': { Exit menu }
     begin
@@ -170,7 +184,7 @@ end;
 
 procedure quaffInput(Keypress: TKeyEvent);
 begin
-   case GetKeyEventChar(Keypress) of
+  case GetKeyEventChar(Keypress) of
     'x', 'X': { Exit menu }
     begin
       gameState := stGame;
@@ -180,6 +194,38 @@ begin
     begin
       gameState := stDropMenu;
       player_inventory.drop;
+    end;
+    { List of inventory slots }
+    'a': player_inventory.quaffSelection(0);
+    'b': player_inventory.quaffSelection(1);
+    'c': player_inventory.quaffSelection(2);
+    'd': player_inventory.quaffSelection(3);
+    'e': player_inventory.quaffSelection(4);
+    'f': player_inventory.quaffSelection(5);
+    'g': player_inventory.quaffSelection(6);
+    'h': player_inventory.quaffSelection(7);
+    'i': player_inventory.quaffSelection(8);
+    'j': player_inventory.quaffSelection(9);
+  end;
+end;
+
+procedure wearWieldInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
+    'x', 'X': { Exit menu }
+    begin
+      gameState := stGame;
+      main.returnToGameScreen;
+    end;
+    'D': { Drop menu }
+    begin
+      gameState := stDropMenu;
+      player_inventory.drop;
+    end;
+    'Q': { Quaff menu }
+    begin
+      gameState := stQuaffMenu;
+      player_inventory.quaff;
     end;
     { List of inventory slots }
     'a': player_inventory.quaffSelection(0);
@@ -281,6 +327,11 @@ begin
     begin
       main.gameState := stDropMenu;
       player_inventory.drop;
+    end;
+    'q', 'Q': { Quaff menu }
+    begin
+      main.gameState := stQuaffMenu;
+      player_inventory.quaff;
     end;
     ',', 'g', 'G': { Get item }
     begin
