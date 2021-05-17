@@ -25,6 +25,7 @@ begin
     itemName := 'crude dagger';
     itemDescription := 'adds 1D6+2 to attack';
     itemType := itmWeapon;
+    itemMaterial := matIron;
     useID := 2;
     glyph := '|';
     glyphColour := 'lightGrey';
@@ -56,7 +57,7 @@ begin
     Dec(entityList[0].weaponDice);
     Dec(entityList[0].weaponAdds, 2);
     ui.displayMessage('You unequip the crude dagger.');
-     ui.equippedWeapon := 'No weapon equipped';
+    ui.equippedWeapon := 'No weapon equipped';
     ui.writeBufferedMessages;
   end;
 end;

@@ -9,9 +9,11 @@ interface
 uses
   globalutils, map, universe, item_lookup;
 
-(* Item types = drink, weapon, armour *)
 type
   tItem = (itmDrink, itmWeapon, itmArmour, itmEmptySlot);
+
+type
+  tMaterial = (matSteel, matIron, matWood, matEmpty);
 
 (* Store information about items *)
 type
@@ -22,6 +24,8 @@ type
     itemName, itemDescription: shortstring;
     (* drink, weapon, armour, missile *)
     itemType: tItem;
+    (* Item material *)
+    itemMaterial: tMaterial;
     (* Used for lookup table *)
     useID: smallint;
     (* Position on game map *)

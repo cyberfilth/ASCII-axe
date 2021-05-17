@@ -15,6 +15,7 @@ type
     id, useID: smallint;
     Name, description, glyph, glyphColour: shortstring;
     itemType: tItem;
+    itemMaterial: tMaterial;
     (* Is the item still in the inventory *)
     inInventory: boolean;
     (* Is the item being worn or wielded *)
@@ -64,6 +65,7 @@ begin
     inventory[i].equipped := False;
     inventory[i].description := 'x';
     inventory[i].itemType := itmEmptySlot;
+    inventory[i].itemMaterial := matEmpty;
     inventory[i].glyph := 'x';
     inventory[i].glyphColour := 'x';
     inventory[i].inInventory := False;
@@ -93,7 +95,6 @@ end;
 
 (* Returns TRUE if successfully added, FALSE if the inventory is full *)
 function addToInventory(itemNumber: smallint): boolean;
-
 var
   i: smallint;
 begin
@@ -108,6 +109,7 @@ begin
       inventory[i].Name := itemList[itemNumber].itemname;
       inventory[i].description := itemList[itemNumber].itemDescription;
       inventory[i].itemType := itemList[itemNumber].itemType;
+      inventory[i].itemMaterial := itemList[itemNumber].itemMaterial;
       inventory[i].useID := itemList[itemNumber].useID;
       inventory[i].glyph := itemList[itemNumber].glyph;
       inventory[i].glyphColour := itemList[itemNumber].glyphColour;
@@ -124,7 +126,6 @@ begin
 end;
 
 function removeFromInventory(itemNumber: smallint): boolean;
-
 var
   newItem: item;
 begin
@@ -137,6 +138,7 @@ begin
     newItem.itemName := inventory[itemNumber].Name;
     newItem.itemDescription := inventory[itemNumber].description;
     newItem.itemType := inventory[itemNumber].itemType;
+    newItem.itemMaterial := inventory[itemNumber].itemMaterial;
     newItem.useID := 1;
     newItem.glyph := inventory[itemNumber].glyph;
     newItem.glyphColour := inventory[itemNumber].glyphColour;
@@ -156,6 +158,7 @@ begin
     inventory[itemNumber].equipped := False;
     inventory[itemNumber].description := 'x';
     inventory[itemNumber].itemType := itmEmptySlot;
+    inventory[itemNumber].itemMaterial := matEmpty;
     inventory[itemNumber].glyph := 'x';
     inventory[itemNumber].glyphColour := 'x';
     inventory[itemNumber].inInventory := False;
@@ -235,6 +238,7 @@ begin
     inventory[selection].equipped := False;
     inventory[selection].description := 'x';
     inventory[selection].itemType := itmEmptySlot;
+    inventory[selection].itemMaterial := matEmpty;
     inventory[selection].glyph := 'x';
     inventory[selection].glyphColour := 'x';
     inventory[selection].inInventory := False;

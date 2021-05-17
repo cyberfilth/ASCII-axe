@@ -25,6 +25,7 @@ begin
     itemName := 'tankard of ale';
     itemDescription := 'restores 5 health points';
     itemType := itmDrink;
+    itemMaterial := matSteel;
     useID := 1;
     glyph := '!';
     glyphColour := 'lightCyan';
