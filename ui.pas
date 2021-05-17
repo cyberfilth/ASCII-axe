@@ -73,6 +73,7 @@ begin
     'blue': tint := $01;
     'green': tint := $02;
     'cyan': tint := $03;
+    'reversedCyan': tint := ($03 shl 4);
     'red': tint := $04;
     'magenta': tint := $05;
     'brown': tint := $06;

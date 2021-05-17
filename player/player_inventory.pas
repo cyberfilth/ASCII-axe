@@ -206,12 +206,15 @@ begin
     { prepare changes to the screen }
     LockScreenUpdate;
     (* Clear the name & description lines *)
-    TextOut(6, 20, 'black', '                                                                 ');
-    TextOut(6, 21, 'black', '                                                                 ');
+    TextOut(6, 20, 'black',
+      '                                                                 ');
+    TextOut(6, 21, 'black',
+      '                                                                 ');
     { name }
-    TextOut(6, 20, 'cyan', AnsiProperCase(inventory[selection].Name, StdWordDelims) + material);
+    TextOut(6, 20, 'cyan', AnsiProperCase(inventory[selection].Name,
+      StdWordDelims) + material);
     { description }
-    TextOut(6, 21, 'cyan', inventory[selection].description);
+    TextOut(7, 21, 'cyan', chr(16) + ' ' + inventory[selection].description);
     { Write those changes to the screen }
     UnlockScreenUpdate;
     { only redraws the parts that have been updated }
@@ -308,12 +311,20 @@ begin
     begin
       (* If the item is an unequipped weapon, and the player already has a weapon equipped
          prompt the player to unequip their weapon first *)
+      if (inventory[selection].equipped = False) and
+        (inventory[selection].itemType = itmWeapon) and
+        (entityList[0].weaponEquipped = True) then
+        TextOut(6, 21, 'cyan', 'You must first unequip the weapon you already hold')
 
       (* If the item is unworn armour, and the player is already wearing armour
          prompt the player to unequip their armour first *)
+      else if (inventory[selection].equipped = False) and
+        (inventory[selection].itemType = itmArmour) and
+        (entityList[0].armourEquipped = True) then
+        TextOut(6, 21, 'cyan', 'You must first remove the armour you already wear')
 
       (* Check whether the item is already equipped or not *)
-      if (inventory[selection].equipped = False) then
+      else if (inventory[selection].equipped = False) then
       begin
         (* Equip *)
         inventory[selection].equipped := True;
@@ -329,9 +340,7 @@ begin
       Inc(entityList[0].moveCount);
       wield;
     end;
-
   end;
-  // else slot is empty
 end;
 
 end.
