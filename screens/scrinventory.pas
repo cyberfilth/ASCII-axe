@@ -44,7 +44,7 @@ begin
   { draw outline }
   drawOutline;
   { Inventory title }
-  TextOut(15, 3, 'cyan', 'Inventory slots');
+  TextOut(15, 3, 'cyan', 'Inventory - Select a slot to examine item');
 
   { Footer menu }
   TextOut(6, 23, 'cyanBGblackTXT', ' D - Drop item ');

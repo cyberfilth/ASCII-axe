@@ -152,6 +152,17 @@ begin
       gameState := stGame;
       main.returnToGameScreen;
     end;
+    { List of inventory slots }
+    'a': player_inventory.examineInventory(0);
+    'b': player_inventory.examineInventory(1);
+    'c': player_inventory.examineInventory(2);
+    'd': player_inventory.examineInventory(3);
+    'e': player_inventory.examineInventory(4);
+    'f': player_inventory.examineInventory(5);
+    'g': player_inventory.examineInventory(6);
+    'h': player_inventory.examineInventory(7);
+    'i': player_inventory.examineInventory(8);
+    'j': player_inventory.examineInventory(9);
   end;
 end;
 

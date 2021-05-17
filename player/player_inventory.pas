@@ -7,7 +7,7 @@ unit player_inventory;
 interface
 
 uses
-  SysUtils, video, entities, items, item_lookup, ui;
+  SysUtils, StrUtils, video, entities, items, item_lookup, ui;
 
 type
   (* Items in inventory *)
@@ -35,6 +35,8 @@ function addToInventory(itemNumber: smallint): boolean;
 function removeFromInventory(itemNumber: smallint): boolean;
 (* Display the inventory screen *)
 procedure showInventory;
+(* Display more information about an item *)
+procedure examineInventory(selection: byte);
 (* Drop menu *)
 procedure drop;
 (* Drop selected item *)
@@ -184,6 +186,38 @@ begin
   { only redraws the parts that have been updated }
   UpdateScreen(False);
   keyboardinput.waitForInput;
+end;
+
+procedure examineInventory(selection: byte);
+var
+  material: shortstring;
+begin
+  (* Check that the slot is not empty *)
+  if (inventory[selection].inInventory = True) then
+  begin
+    (* Get the item material *)
+    material := '';
+    if (inventory[selection].itemMaterial = matIron) then
+      material := ' [iron]';
+    if (inventory[selection].itemMaterial = matSteel) then
+      material := ' [steel]';
+    if (inventory[selection].itemMaterial = matWood) then
+      material := ' [wooden]';
+    { prepare changes to the screen }
+    LockScreenUpdate;
+    (* Clear the name & description lines *)
+    TextOut(6, 20, 'black', '                                                                 ');
+    TextOut(6, 21, 'black', '                                                                 ');
+    { name }
+    TextOut(6, 20, 'cyan', AnsiProperCase(inventory[selection].Name, StdWordDelims) + material);
+    { description }
+    TextOut(6, 21, 'cyan', inventory[selection].description);
+    { Write those changes to the screen }
+    UnlockScreenUpdate;
+    { only redraws the parts that have been updated }
+    UpdateScreen(False);
+    keyboardinput.waitForInput;
+  end;
 end;
 
 procedure drop;

@@ -30,6 +30,8 @@ backup/
 *.bak
 lib/
 
+axesData/
+
 # compiler-generated binaries (safe to delete)
 *.dcu
 *.~*~
