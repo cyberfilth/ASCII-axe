@@ -18,6 +18,7 @@ var
   x, y: smallint;
   messageArray: array[1..7] of string = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
   buffer: string;
+  equippedWeapon: shortstring;
   (* Status effects *)
   poisonStatusSet: boolean;
 
@@ -48,7 +49,7 @@ procedure updateAttack;
 (* Update player defence value *)
 procedure updateDefence;
 (* Display equipped weapon *)
-procedure updateWeapon(weaponName: shortstring);
+procedure updateWeapon;
 (* Display Quit Game confirmation *)
 procedure exitPrompt;
 (* Clears the status bar message *)
@@ -90,10 +91,10 @@ begin
   end;
   P := ((X - 1) + (Y - 1) * ScreenWidth);
   M := Length(S);
-  if P + M > Int64(ScreenWidth) * ScreenHeight then
-    M := Int64(ScreenWidth) * ScreenHeight - P;
+  if P + M > int64(ScreenWidth) * ScreenHeight then
+    M := int64(ScreenWidth) * ScreenHeight - P;
   for I := 1 to M do
-    VideoBuf^[Int64(P + I) - 1] := Ord(S[i]) + (tint shl 8);
+    VideoBuf^[int64(P + I) - 1] := Ord(S[i]) + (tint shl 8);
 end;
 
 procedure screenBlank;
@@ -300,9 +301,15 @@ begin
   TextOut(69, 9, 'cyan', IntToStr(entities.entityList[0].defence));
 end;
 
-procedure updateWeapon(weaponName: shortstring);
+procedure updateWeapon;
 begin
-
+  (* Paint over previous weapon *)
+  TextOut(59, 16, 'black', '                     '); { 21 characters }
+  (* Display equipped weapon *)
+  if (equippedWeapon = 'No weapon equipped') then
+    TextOut(59, 16, 'darkGrey', equippedWeapon)
+  else
+    TextOut(59, 16, 'cyan', equippedWeapon);
 end;
 
 procedure exitPrompt;

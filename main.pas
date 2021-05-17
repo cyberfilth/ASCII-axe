@@ -116,6 +116,7 @@ begin
   universe.spawnDenizens;
   (* Drop items *)
   items.initialiseItems;
+  ui.equippedWeapon:='No weapon equipped';
 
   { prepare changes to the screen }
   LockScreenUpdate;
