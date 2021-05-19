@@ -164,5 +164,4 @@ begin
     ui.displayMessage('The fungus lashes out at you but misses');
 end;
 
-
 end.

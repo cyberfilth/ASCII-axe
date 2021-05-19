@@ -210,9 +210,10 @@ begin
       '                                                                 ');
     TextOut(6, 21, 'black',
       '                                                                 ');
+    { glyph }
+    TextOut(6, 20, inventory[selection].glyphColour, inventory[selection].glyph);
     { name }
-    TextOut(6, 20, 'cyan', AnsiProperCase(inventory[selection].Name,
-      StdWordDelims) + material);
+    TextOut(8, 20, 'lightCyan', AnsiProperCase(inventory[selection].Name, StdWordDelims) + material);
     { description }
     TextOut(7, 21, 'cyan', chr(16) + ' ' + inventory[selection].description);
     { Write those changes to the screen }

@@ -11,7 +11,9 @@ uses
   { List of items }
   ale_tankard,
   { List of weapons }
-  crude_dagger;
+  crude_dagger,
+  { List of armour }
+  leather_armour1;
 
 (* Choose an item and call the generate code directly *)
 procedure dispenseItem;
@@ -41,7 +43,7 @@ begin
   Inc(items.itemAmount);
   SetLength(items.itemList, items.itemAmount);
 
-  crude_dagger.createDagger(itemAmount, entities.entityList[0].posX + 1, entities.entityList[0].posY);
+  leather_armour1.createLeatherArmour(itemAmount, entities.entityList[0].posX + 1, entities.entityList[0].posY);
 end;
 
 procedure lookupUse(x: smallint; equipped: boolean);
@@ -49,6 +51,7 @@ begin
   case x of
     1: ale_tankard.useItem;
     2: crude_dagger.useItem(equipped);
+    3: leather_armour1.useItem(equipped);
   end;
 end;
 

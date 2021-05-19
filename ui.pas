@@ -18,7 +18,7 @@ var
   x, y: smallint;
   messageArray: array[1..7] of string = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
   buffer: string;
-  equippedWeapon: shortstring;
+  equippedWeapon, equippedArmour: shortstring;
   (* Status effects *)
   poisonStatusSet: boolean;
 
@@ -50,6 +50,8 @@ procedure updateAttack;
 procedure updateDefence;
 (* Display equipped weapon *)
 procedure updateWeapon;
+(* Display equipped armour *)
+procedure updateArmour;
 (* Display Quit Game confirmation *)
 procedure exitPrompt;
 (* Clears the status bar message *)
@@ -69,22 +71,23 @@ var
 begin
   tint := $07;
   case textcol of
-    'black': tint := $00;
-    'blue': tint := $01;
-    'green': tint := $02;
-    'cyan': tint := $03;
-    'reversedCyan': tint := ($03 shl 4);
-    'red': tint := $04;
-    'magenta': tint := $05;
-    'brown': tint := $06;
+    'black': tint := video.Black;
+    'blue': tint := video.Blue;
+    'green': tint := video.Green;
+    'greenBlink': tint := video.Green + video.Blink;
+    'cyan': tint := video.Cyan;
+    'cyanBGblackTXT': tint := ($03 shl 4);
+    'red': tint := video.Red;
+    'magenta': tint := video.Magenta;
+    'lightMagenta': tint := video.LightMagenta;
+    'brown': tint := video.Brown;
     'grey': tint := $07;
-    'darkGrey': tint := $08;
-    'cyanBGblackTXT': tint := $30;
+    'darkGrey': tint := video.DarkGray;
     'brownBlock': tint := $66;
-    'lightCyan': tint := LightCyan;
-    'yellow': tint := Yellow;
-    'lightGrey': tint := LightGray;
-    'white': tint := White;
+    'lightCyan': tint := video.LightCyan;
+    'yellow': tint := video.Yellow;
+    'lightGrey': tint := video.LightGray;
+    'white': tint := video.White;
     'DgreyBGblack': tint := $80;
     'LgreyBGblack': tint := $70;
     else
@@ -305,12 +308,23 @@ end;
 procedure updateWeapon;
 begin
   (* Paint over previous weapon *)
-  TextOut(59, 16, 'black', '                     '); { 21 characters }
+  TextOut(59, 17, 'black', '                     '); { 21 characters }
   (* Display equipped weapon *)
-  if (equippedWeapon = 'No weapon equipped') then
-    TextOut(59, 16, 'darkGrey', equippedWeapon)
+  if (equippedWeapon <> 'No weapon equipped') then
+    TextOut(59, 17, 'cyan', equippedWeapon)
   else
-    TextOut(59, 16, 'cyan', equippedWeapon);
+    TextOut(59, 17, 'darkGrey', equippedWeapon);
+end;
+
+procedure updateArmour;
+begin
+  (* Paint over previous armour *)
+  TextOut(59, 18, 'black', '                     '); { 21 characters }
+   (* Display equipped armour *)
+  if (equippedArmour <> 'No armour worn') then
+    TextOut(59, 18, 'cyan', equippedArmour)
+  else
+    TextOut(59, 18, 'darkGrey', equippedArmour);
 end;
 
 procedure exitPrompt;

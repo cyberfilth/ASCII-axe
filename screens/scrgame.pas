@@ -77,6 +77,7 @@ begin
   ui.updateAttack;
   ui.updateDefence;
   ui.updateWeapon;
+  ui.updateArmour;
 end;
 
 procedure displayGameScreen;

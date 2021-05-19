@@ -1,4 +1,5 @@
-(* A crude dagger *)
+(* A crude, iron dagger *)
+
 unit crude_dagger;
 
 {$mode fpc}{$H+}
@@ -27,7 +28,7 @@ begin
     itemType := itmWeapon;
     itemMaterial := matIron;
     useID := 2;
-    glyph := '|';
+    glyph := chr(24);
     glyphColour := 'lightGrey';
     inView := False;
     posX := itmx;

@@ -16,7 +16,8 @@ uses
   {$ENDIF};
 
 type
-  gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu, stWearWield, stQuitMenu, stGameOver);
+  gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
+    stWearWield, stQuitMenu, stGameOver);
 
 var
   (* State machine for game menus / controls *)
@@ -116,7 +117,8 @@ begin
   universe.spawnDenizens;
   (* Drop items *)
   items.initialiseItems;
-  ui.equippedWeapon:='No weapon equipped';
+  ui.equippedWeapon := 'No weapon equipped';
+  ui.equippedArmour := 'No armour worn';
 
   { prepare changes to the screen }
   LockScreenUpdate;

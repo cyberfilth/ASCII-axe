@@ -13,7 +13,7 @@ type
   tItem = (itmDrink, itmWeapon, itmArmour, itmEmptySlot);
 
 type
-  tMaterial = (matSteel, matIron, matWood, matEmpty);
+  tMaterial = (matSteel, matIron, matWood, matLeather, matEmpty);
 
 (* Store information about items *)
 type
