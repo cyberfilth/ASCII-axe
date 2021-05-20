@@ -20,22 +20,24 @@ const
 var
   playerName, playerTitle, trollDate: string;
   Year, Month, Day, WDay: word;
-  titles: array[0..96] of string = ('Abominable', 'Amorous',
-    'Afflicted', 'Ailing', 'Breathless', 'Broken', 'Bullish', 'Craggy',
-    'Bearded', 'Bony', 'Beastly', 'Drunken', 'Bitter', 'Fetid', 'Fierce',
-    'Fiery', 'Bold', 'Filthy', 'Craven', 'Fishy', 'Crooked', 'Flexible',
-    'Crusty', 'Forgetful', 'Brutal', 'Foul', 'Disturbed', 'Forgettable',
-    'Burly', 'Fragrant', 'Dramatic', 'Frisky', 'Gallant', 'Green',
-    'Delectable', 'Cold', 'Grey', 'Cursed', 'Grumpy', 'Grubby', 'Dark',
-    'Hairless', 'Hairy', 'Heathen', 'Defiant', 'Jaded', 'Knobbly',
-    'Indecent', 'Detestable', 'Dreaded', 'Jumpy', 'Aromatic', 'Wrinkled',
-    'Wild', 'Unsmiling', 'Warty', 'Towering', 'Valiant', 'Sweaty',
-    'Sour', 'Vain', 'Unseemly', 'Swarthy', 'Tragic', 'Strange', 'Stout',
+  titles: array[0..108] of string = ('Abominable', 'Amorous', 'Afflicted',
+    'Ailing', 'Breathless', 'Broken', 'Bullish', 'Craggy', 'Bearded',
+    'Bony', 'Beastly', 'Drunken', 'Bitter', 'Fetid', 'Fierce', 'Fiery',
+    'Bold', 'Filthy', 'Craven', 'Fishy', 'Crooked', 'Flexible', 'Crusty',
+    'Forgetful', 'Brutal', 'Foul', 'Disturbed', 'Forgettable', 'Burly',
+    'Fragrant', 'Dramatic', 'Frisky', 'Gallant', 'Green', 'Delectable',
+    'Cold', 'Grey', 'Cursed', 'Grumpy', 'Grubby', 'Dark', 'Hairless',
+    'Hairy', 'Heathen', 'Defiant', 'Jaded', 'Knobbly', 'Indecent',
+    'Detestable', 'Dreaded', 'Jumpy', 'Aromatic', 'Wrinkled', 'Wild',
+    'Unsmiling', 'Warty', 'Towering', 'Valiant', 'Sweaty', 'Sour',
+    'Vain', 'Unseemly', 'Swarthy', 'Tragic', 'Strange', 'Stout',
     'Stony', 'Stormy', 'Shameless', 'Stalwart', 'Quiet', 'Sleepy',
     'Pure', 'Prickly', 'Scarred', 'Pimply', 'Pale', 'Savage', 'Ornate',
     'Simple', 'Silly', 'Salty', 'Rotund', 'Miserable', 'Scrappy',
     'Ragged', 'Lanky', 'Scowly', 'Hardy', 'Harsh', 'Gruesome', 'Gross',
-    'Grisly', 'Goodly', 'Gloomy', 'Nocturnal', 'Fair');
+    'Grisly', 'Goodly', 'Gloomy', 'Nocturnal', 'Fair', 'Chiseled', 'Insatiable',
+    'Destructive', 'Dreadful', 'Musical', 'Frightful', 'Oily', 'Rascal',
+    'Remorseless', 'Squinty', 'Silvery', 'Thirsty');
 
   firstSyllable: array[0..73] of
   string = ('A', 'Ag', 'Ar', 'Ara', 'Anu', 'Bal', 'Bil', 'Boro',
@@ -146,7 +148,7 @@ end;
 
 procedure generateTitle;
 begin
-  playerTitle:= titles[Random(96)];
+  playerTitle := titles[Random(108)];
 end;
 
 procedure getTrollDate;
