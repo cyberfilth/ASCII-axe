@@ -102,7 +102,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="29">
+    <Units Count="30">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -224,6 +224,11 @@
         <Filename Value="items\armour\leather_armour1.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit28>
+      <Unit29>
+        <Filename Value="screens\scrrip.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="scrRIP"/>
+      </Unit29>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

@@ -27,6 +27,8 @@ procedure dropInput(Keypress: TKeyEvent);
 procedure quaffInput(Keypress: TKeyEvent);
 (* Input in the WEAR / WIELD Menu state *)
 procedure wearWieldInput(Keypress: TKeyEvent);
+(* Input in the GAME OVER state *)
+procedure RIPInput(Keypress: TKeyEvent);
 (* Input in GAME state *)
 procedure gameInput(Keypress: TKeyEvent);
 
@@ -56,7 +58,14 @@ begin
     Keypress := TranslateKeyEvent(Keypress);
     titleInput(Keypress);
   end;
-  { Prompt to quit game }
+  { ------------------------------------  Game Over screen }
+  while gameState = stGameOver do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
+    RIPInput(Keypress);
+  end;
+  { ----------------------------------     Prompt to quit game }
   while gameState = stQuitMenu do
   begin
     Keypress := GetKeyEvent;
@@ -91,7 +100,6 @@ begin
     Keypress := TranslateKeyEvent(Keypress);
     wearWieldInput(Keypress);
   end;
-
   { ---------------------------------    Gameplay controls }
   while gameState = stGame do
   begin
@@ -259,6 +267,16 @@ begin
     'h': player_inventory.wearWieldSelection(7);
     'i': player_inventory.wearWieldSelection(8);
     'j': player_inventory.wearWieldSelection(9);
+  end;
+end;
+
+procedure RIPInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
+    'x', 'X': { Exit menu }
+    begin
+      main.exitApplication;
+    end;
   end;
 end;
 

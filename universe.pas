@@ -1,19 +1,19 @@
 (* Store each dungeon, its levels and related info *)
 
-Unit universe;
+unit universe;
 
 {$mode objfpc}{$H+}
 {$modeswitch UnicodeStrings}
 
-Interface
+interface
 
-Uses 
-SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave;
+uses
+  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, logging;
 
-Type 
+type
   dungeonTerrain = (tCave, tDungeon);
 
-Var 
+var
   (* Number of dungeons *)
   dlistLength, uniqueID: smallint;
   (* Info about current dungeon *)
@@ -24,33 +24,35 @@ Var
   (* Is it possible to leave the current dungeon *)
   canExitDungeon: boolean;
   (* Used when a dungeon is first generated *)
-  currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] Of shortstring;
+  currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
 
 (* Creates a dungeon of a specified type *)
-Procedure createNewDungeon(levelType: dungeonTerrain);
+procedure createNewDungeon(levelType: dungeonTerrain);
 (* Spawn creatures based on dungeon type and player level *)
-Procedure spawnDenizens;
+procedure spawnDenizens;
 (* Write a newly generate level of a dungeon to disk *)
-Procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
-                               dtype: dungeonTerrain);
+procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
+  dtype: dungeonTerrain);
 (* Write explored dungeon level to disk *)
-Procedure saveDungeonLevel;
+procedure saveDungeonLevel;
 (* Read dungeon level from disk *)
-Procedure loadDungeonLevel(lvl: byte);
+procedure loadDungeonLevel(lvl: byte);
+(* Delete saved game files *)
+procedure deleteGameData;
 
-Implementation
+implementation
 
-Uses 
-map, npc_lookup, entities;
+uses
+  map, npc_lookup, entities;
 
-Procedure createNewDungeon(levelType: dungeonTerrain);
-Begin
+procedure createNewDungeon(levelType: dungeonTerrain);
+begin
   r := 1;
   c := 1;
   (* Increment the number of dungeons *)
   Inc(dlistLength);
   (* First dungeon is locked when you enter *)
-  If (dlistLength = 1) Then
+  if (dlistLength = 1) then
     canExitDungeon := False;
   (* Dungeons unique ID number becomes the highest dungeon amount number *)
   uniqueID := dlistLength;
@@ -61,81 +63,81 @@ Begin
   currentDepth := 1;
 
   (* generate the dungeon *)
-  Case levelType Of 
+  case levelType of
     tCave: cave.generate(dlistLength, totalDepth);
     tDungeon: ;
     //bitmask_dungeon.generate;
-  End;
+  end;
 
   (* Copy the 1st floor of the current dungeon to the game map *)
   map.setupMap;
-End;
+end;
 
-Procedure spawnDenizens;
+procedure spawnDenizens;
 
-Var 
+var
   { Number of NPC's to create }
   NPCnumber, i: byte;
-Begin
+begin
   { Based on number of rooms in current level, dungeon type & dungeon level }
   NPCnumber := totalRooms;  { player level is considered when generating the NPCs }
   entities.npcAmount := NPCnumber;
-  Case dungeonType Of 
+  case dungeonType of
     tDungeon: ;
     tCave: { Cave }
-           Begin
+    begin
       (* Number of NPC's = total number of rooms + floor level *)
-             NPCnumber := (totalRooms + currentDepth);
+      NPCnumber := (totalRooms + currentDepth);
       (* Create the NPC's *);
-             For i := 1 To NPCnumber Do
-               Begin
+      for i := 1 to NPCnumber do
+      begin
         { create an encounter table: Monster type: Dungeon type: floor number }
         { NPC generation will take the Player level into account when creating stats }
-                 npc_lookup.NPCpicker(i, tCave);
-               End;
-           End;
-  End;
-End;
+        npc_lookup.NPCpicker(i, tCave);
+      end;
+    end;
+  end;
+end;
 
-Procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
-                               dtype: dungeonTerrain);
+procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
+  dtype: dungeonTerrain);
 
-Var 
+var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
   dfileName, Value: string;
 
-Procedure AddElement(Node: TDOMNode; Name, Value: String);
+  procedure AddElement(Node: TDOMNode; Name, Value: string);
 
-Var 
-  NameNode, ValueNode: TDomNode;
-Begin
+  var
+    NameNode, ValueNode: TDomNode;
+  begin
     { creates future Node/Name }
-  NameNode := Doc.CreateElement(Name);
+    NameNode := Doc.CreateElement(Name);
     { creates future Node/Name/Value }
-  ValueNode := Doc.CreateTextNode(Value);
+    ValueNode := Doc.CreateTextNode(Value);
     { place value in place }
-  NameNode.Appendchild(ValueNode);
+    NameNode.Appendchild(ValueNode);
     { place Name in place }
-  Node.Appendchild(NameNode);
-End;
+    Node.Appendchild(NameNode);
+  end;
 
-Function AddChild(Node: TDOMNode; ChildName: String): TDomNode;
+  function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
 
-Var 
-  ChildNode: TDomNode;
-Begin
-  ChildNode := Doc.CreateElement(ChildName);
-  Node.AppendChild(ChildNode);
-  Result := ChildNode;
-End;
+  var
+    ChildNode: TDomNode;
+  begin
+    ChildNode := Doc.CreateElement(ChildName);
+    Node.AppendChild(ChildNode);
+    Result := ChildNode;
+  end;
 
-Begin
+begin
   id_int := 0;
   dfileName := globalUtils.saveDirectory + PathDelim + 'd_' +
-               IntToStr(idNumber) + '_f' + IntToStr(lvlNum) + '.dat';
-  Try
+    IntToStr(idNumber) + '_f' + IntToStr(lvlNum) + '.dat';
+  try
     { Create a document }
     Doc := TXMLDocument.Create;
     { Create a root node }
@@ -154,77 +156,77 @@ Begin
     AddElement(datanode, 'totalRooms', IntToStr(totalRooms));
 
     (* map tiles *)
-    For r := 1 To MAXROWS Do
-      Begin
-        For c := 1 To MAXCOLUMNS Do
-          Begin
-            Inc(id_int);
-            DataNode := AddChild(RootNode, 'map_tiles');
-            TDOMElement(dataNode).SetAttribute('id', IntToStr(id_int));
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        Inc(id_int);
+        DataNode := AddChild(RootNode, 'map_tiles');
+        TDOMElement(dataNode).SetAttribute('id', IntToStr(id_int));
         { if dungeon type is a cave }
-            If (dType = tCave) Then
-              Begin
-                If (cave.terrainArray[r][c] = '*') Then
-                  AddElement(datanode, 'Blocks', BoolToStr(True))
-                Else
-                  AddElement(datanode, 'Blocks', BoolToStr(False));
-              End;
-            AddElement(datanode, 'Visible', BoolToStr(False));
-            AddElement(datanode, 'Occupied', BoolToStr(False));
-            AddElement(datanode, 'Discovered', BoolToStr(False));
+        if (dType = tCave) then
+        begin
+          if (cave.terrainArray[r][c] = '*') then
+            AddElement(datanode, 'Blocks', BoolToStr(True))
+          else
+            AddElement(datanode, 'Blocks', BoolToStr(False));
+        end;
+        AddElement(datanode, 'Visible', BoolToStr(False));
+        AddElement(datanode, 'Occupied', BoolToStr(False));
+        AddElement(datanode, 'Discovered', BoolToStr(False));
         { if dungeon type is a cave }
-            If (dType = tCave) Then
-              Begin
-                AddElement(datanode, 'Glyph', cave.terrainArray[r][c]);
-              End;
-          End;
-      End;
+        if (dType = tCave) then
+        begin
+          AddElement(datanode, 'Glyph', cave.terrainArray[r][c]);
+        end;
+      end;
+    end;
     (* Save XML *)
     WriteXMLFile(Doc, dfileName);
-  Finally
+  finally
     { free memory }
     Doc.Free;
-End;
-End;
+  end;
+end;
 
-Procedure saveDungeonLevel;
+procedure saveDungeonLevel;
 
-Var 
+var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
   dfileName, Value: string;
 
-Procedure AddElement(Node: TDOMNode; Name, Value: String);
+  procedure AddElement(Node: TDOMNode; Name, Value: string);
 
-Var 
-  NameNode, ValueNode: TDomNode;
-Begin
+  var
+    NameNode, ValueNode: TDomNode;
+  begin
     { creates future Node/Name }
-  NameNode := Doc.CreateElement(Name);
+    NameNode := Doc.CreateElement(Name);
     { creates future Node/Name/Value }
-  ValueNode := Doc.CreateTextNode(Value);
+    ValueNode := Doc.CreateTextNode(Value);
     { place value in place }
-  NameNode.Appendchild(ValueNode);
+    NameNode.Appendchild(ValueNode);
     { place Name in place }
-  Node.Appendchild(NameNode);
-End;
+    Node.Appendchild(NameNode);
+  end;
 
-Function AddChild(Node: TDOMNode; ChildName: String): TDomNode;
+  function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
 
-Var 
-  ChildNode: TDomNode;
-Begin
-  ChildNode := Doc.CreateElement(ChildName);
-  Node.AppendChild(ChildNode);
-  Result := ChildNode;
-End;
+  var
+    ChildNode: TDomNode;
+  begin
+    ChildNode := Doc.CreateElement(ChildName);
+    Node.AppendChild(ChildNode);
+    Result := ChildNode;
+  end;
 
-Begin
+begin
   id_int := 0;
   dfileName := (globalUtils.saveDirectory + PathDelim + 'd_' +
-               IntToStr(uniqueID) + '_f' + IntToStr(currentDepth) + '.dat');
-  Try
+    IntToStr(uniqueID) + '_f' + IntToStr(currentDepth) + '.dat');
+  try
     { Create a document }
     Doc := TXMLDocument.Create;
     { Create a root node }
@@ -243,39 +245,39 @@ Begin
     AddElement(datanode, 'totalRooms', IntToStr(totalRooms));
 
     (* map tiles *)
-    For r := 1 To MAXROWS Do
-      Begin
-        For c := 1 To MAXCOLUMNS Do
-          Begin
-            Inc(id_int);
-            DataNode := AddChild(RootNode, 'map_tiles');
-            TDOMElement(dataNode).SetAttribute('id', IntToStr(maparea[r][c].id));
-            AddElement(datanode, 'Blocks', BoolToStr(map.maparea[r][c].Blocks));
-            AddElement(datanode, 'Visible', BoolToStr(map.maparea[r][c].Visible));
-            AddElement(datanode, 'Occupied', BoolToStr(map.maparea[r][c].Occupied));
-            AddElement(datanode, 'Discovered', BoolToStr(map.maparea[r][c].Discovered));
-            AddElement(datanode, 'Glyph', map.maparea[r][c].Glyph);
-          End;
-      End;
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        Inc(id_int);
+        DataNode := AddChild(RootNode, 'map_tiles');
+        TDOMElement(dataNode).SetAttribute('id', IntToStr(maparea[r][c].id));
+        AddElement(datanode, 'Blocks', BoolToStr(map.maparea[r][c].Blocks));
+        AddElement(datanode, 'Visible', BoolToStr(map.maparea[r][c].Visible));
+        AddElement(datanode, 'Occupied', BoolToStr(map.maparea[r][c].Occupied));
+        AddElement(datanode, 'Discovered', BoolToStr(map.maparea[r][c].Discovered));
+        AddElement(datanode, 'Glyph', map.maparea[r][c].Glyph);
+      end;
+    end;
     (* Save XML *)
     WriteXMLFile(Doc, dfileName);
-  Finally
+  finally
     { free memory }
     Doc.Free;
-End;
-End;
+  end;
+end;
 
-Procedure loadDungeonLevel(lvl: byte);
+procedure loadDungeonLevel(lvl: byte);
 
-Var 
+var
   dfileName: string;
   RootNode, Tile, NextNode, Blocks, Visible, Occupied, Discovered, GlyphNode: TDOMNode;
   Doc: TXMLDocument;
   r, c: integer;
-Begin
+begin
   dfileName := globalUtils.saveDirectory + PathDelim + 'd_' +
-               IntToStr(uniqueID) + '_f' + IntToStr(lvl) + '.dat';
-  Try
+    IntToStr(uniqueID) + '_f' + IntToStr(lvl) + '.dat';
+  try
     (* Read in dat file from disk *)
     ReadXMLFile(Doc, dfileName);
     (* Retrieve the nodes *)
@@ -285,31 +287,50 @@ Begin
 
     (* Map tile data *)
     Tile := RootNode.NextSibling;
-    For r := 1 To MAXROWS Do
-      Begin
-        For c := 1 To MAXCOLUMNS Do
-          Begin
-            map.maparea[r][c].id := StrToInt(Tile.Attributes.Item[0].NodeValue);
-            Blocks := Tile.FirstChild;
-            map.maparea[r][c].Blocks := StrToBool(Blocks.TextContent);
-            Visible := Blocks.NextSibling;
-            map.maparea[r][c].Visible := StrToBool(Visible.TextContent);
-            Occupied := Visible.NextSibling;
-            map.maparea[r][c].Occupied := StrToBool(Occupied.TextContent);
-            Discovered := Occupied.NextSibling;
-            map.maparea[r][c].Discovered := StrToBool(Discovered.TextContent);
-            GlyphNode := Discovered.NextSibling;
+    for r := 1 to MAXROWS do
+    begin
+      for c := 1 to MAXCOLUMNS do
+      begin
+        map.maparea[r][c].id := StrToInt(Tile.Attributes.Item[0].NodeValue);
+        Blocks := Tile.FirstChild;
+        map.maparea[r][c].Blocks := StrToBool(Blocks.TextContent);
+        Visible := Blocks.NextSibling;
+        map.maparea[r][c].Visible := StrToBool(Visible.TextContent);
+        Occupied := Visible.NextSibling;
+        map.maparea[r][c].Occupied := StrToBool(Occupied.TextContent);
+        Discovered := Occupied.NextSibling;
+        map.maparea[r][c].Discovered := StrToBool(Discovered.TextContent);
+        GlyphNode := Discovered.NextSibling;
         (* Convert String to Char *)
-            map.maparea[r][c].Glyph := GlyphNode.TextContent[1];
-            NextNode := Tile.NextSibling;
-            Tile := NextNode;
-          End;
-      End;
-  Finally
+        map.maparea[r][c].Glyph := GlyphNode.TextContent[1];
+        NextNode := Tile.NextSibling;
+        Tile := NextNode;
+      end;
+    end;
+  finally
     (* free memory *)
     Doc.Free;
     currentDepth := lvl;
-End;
-End;
+  end;
+end;
 
-End.
+procedure deleteGameData;
+var
+  datFiles: TSearchRec;
+begin
+  logAction('> deleteGameData');
+  { Change into axesData directory }
+  ChDir(globalutils.saveDirectory);
+  { Delete all .dat files in directory }
+  if FindFirst('*.dat', faAnyFile, datFiles) = 0 then
+  begin
+    repeat
+      with datFiles do
+        DeleteFile(datFiles.Name);
+    until FindNext(datFiles) <> 0;
+    FindClose(datFiles);
+  end;
+  logAction('> deleteGameData - Game Data deleted');
+end;
+
+end.

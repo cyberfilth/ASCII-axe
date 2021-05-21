@@ -6,7 +6,7 @@ unit player;
 interface
 
 uses
-  SysUtils, player_inventory, plot_gen, combat_resolver, items;
+  SysUtils, player_inventory, plot_gen, combat_resolver, items, logging;
 
 (* Create player character *)
 procedure createPlayer;
@@ -20,13 +20,11 @@ function combatCheck(x, y: smallint): boolean;
 procedure pickUp;
 (*Increase Health, no more than maxHP *)
 procedure increaseHealth(amount: smallint);
-(* Display game over screen *)
-procedure gameOver;
 
 implementation
 
 uses
-  map, fov, ui, entities;
+  main, universe, map, fov, ui, entities;
 
 procedure createPlayer;
 begin
@@ -232,11 +230,6 @@ begin
   end
   else
     ui.bufferMessage('You are already at full health');
-end;
-
-procedure gameOver;
-begin
-
 end;
 
 end.

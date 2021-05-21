@@ -105,7 +105,7 @@ var
 begin
   entityList[id].isDead := True;
   entityList[id].glyph := '%';
-  entityList[id].blocks := False; // For destroyed barrels
+  entityList[id].blocks := False;
   map.unoccupy(entityList[id].posX, entityList[id].posY);
   { Green Fungus }
   if (entityList[id].race = 'Green Fungus') then

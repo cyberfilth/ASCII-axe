@@ -5,15 +5,12 @@
 unit main;
 
 {$mode objfpc}{$H+}
-{$IFOPT D+} {$DEFINE DEBUG} {$ENDIF}
 
 interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player
-  {$IFDEF DEBUG}, logging
-  {$ENDIF};
+  universe, fov, player, scrRIP, logging;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -29,6 +26,7 @@ procedure exitApplication;
 procedure newGame;
 procedure gameLoop;
 procedure returnToGameScreen;
+procedure gameOver;
 
 implementation
 
@@ -81,9 +79,7 @@ begin
   { Initialise keyboard unit }
   keyboardinput.setupKeyboard;
   { Begin log file }
-  {$IFDEF DEBUG}
   logging.beginLogging;
-  {$ENDIF}
   { wait for keyboard input }
   keyboardinput.waitForInput;
 end;
@@ -97,7 +93,7 @@ begin
   ui.shutdownScreen;
   (* Clear screen and display author message *)
   ui.exitMessage;
-  Halt;
+  Exit;
 end;
 
 procedure newGame;
@@ -134,13 +130,21 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-
+  logAction('Starting new game');
 end;
 
 procedure gameLoop;
 var
   i: byte;
 begin
+  (* Check for player death at start of game loop *)
+  if (entityList[0].currentHP <= 0) then
+  begin
+    gameState := stGameOver;
+    logAction('Player dead at start of game loop');
+    logAction('Loading gameOver procedure');
+    gameOver;
+  end;
   (* move NPC's *)
   entities.NPCgameLoop;
   (* Process status effects *)
@@ -189,6 +193,14 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+  (* Check for player death at end of game loop *)
+  if (entityList[0].currentHP <= 0) then
+  begin
+    gameState := stGameOver;
+    logAction('Player dead at end of game loop');
+    logAction('Loading gameOver procedure');
+    gameOver;
+  end;
 end;
 
 procedure returnToGameScreen;
@@ -242,6 +254,16 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+end;
+
+procedure gameOver;
+begin
+  logAction('> gameOver');
+  logAction('Killer: ' + globalUtils.killer);
+ // universe.deleteGameData;
+  logAction('Loading RIP screen');
+  scrRIP.displayRIPscreen;
+  KeyboardInput.waitForInput;
 end;
 
 end.

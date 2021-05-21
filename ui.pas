@@ -357,6 +357,7 @@ begin
   ClrScr;
   writeln('Random seed: ' + IntToStr(RandSeed));
   writeln('Axes, Armour & Ale - Chris Hawkins');
+  Exit;
 end;
 
 end.
