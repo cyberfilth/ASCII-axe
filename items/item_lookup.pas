@@ -7,7 +7,7 @@ unit item_lookup;
 interface
 
 uses
-  entities, globalUtils, map,
+  entities,
   { List of items }
   ale_tankard,
   { List of weapons }

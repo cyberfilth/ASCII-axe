@@ -62,7 +62,7 @@ procedure exitMessage;
 implementation
 
 uses
-  entities, KeyboardInput;
+  entities, KeyboardInput, main;
 
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 var
@@ -95,7 +95,7 @@ begin
   end;
   P := ((X - 1) + (Y - 1) * ScreenWidth);
   M := Length(S);
-  if P + M > int64(ScreenWidth) * ScreenHeight then
+  if ((P + M) > (int64(ScreenWidth) * ScreenHeight)) then
     M := int64(ScreenWidth) * ScreenHeight - P;
   for I := 1 to M do
     VideoBuf^[int64(P + I) - 1] := Ord(S[i]) + (tint shl 8);
@@ -232,6 +232,13 @@ procedure updateHealth;
 var
   healthPercentage, bars, i: byte;
 begin
+  (* If player is dead, exit game *)
+  if (entities.entityList[0].currentHP <= 0) then
+  begin
+    main.gameState := stGameOver;
+    main.gameOver;
+    Exit;
+  end;
   (* Paint over previous stats *)
   TextOut(68, 6, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
@@ -320,7 +327,7 @@ procedure updateArmour;
 begin
   (* Paint over previous armour *)
   TextOut(59, 18, 'black', '                     '); { 21 characters }
-   (* Display equipped armour *)
+  (* Display equipped armour *)
   if (equippedArmour <> 'No armour worn') then
     TextOut(59, 18, 'cyan', equippedArmour)
   else
@@ -357,7 +364,7 @@ begin
   ClrScr;
   writeln('Random seed: ' + IntToStr(RandSeed));
   writeln('Axes, Armour & Ale - Chris Hawkins');
-  Exit;
+  Halt;
 end;
 
 end.

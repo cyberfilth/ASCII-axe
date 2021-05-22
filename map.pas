@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils, universe, ui, logging;
+  SysUtils, globalUtils, universe, ui;
 
 type
   (* Tiles that make up the game world *)

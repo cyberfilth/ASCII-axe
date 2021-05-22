@@ -27,7 +27,7 @@ procedure combat(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui, los;
+  entities, globalutils, ui;
 
 procedure createCaveRat(uniqueid, npcx, npcy: smallint);
 var

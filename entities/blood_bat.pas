@@ -27,7 +27,7 @@ procedure combat(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui, los;
+  entities, globalutils, ui;
 
 procedure createBloodbat(uniqueid, npcx, npcy: smallint);
 var

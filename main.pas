@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, scrRIP, logging;
+  universe, fov, player, scrRIP;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -79,7 +79,7 @@ begin
   { Initialise keyboard unit }
   keyboardinput.setupKeyboard;
   { Begin log file }
-  logging.beginLogging;
+  { logging.beginLogging; }
   { wait for keyboard input }
   keyboardinput.waitForInput;
 end;
@@ -130,7 +130,6 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-  logAction('Starting new game');
 end;
 
 procedure gameLoop;
@@ -141,8 +140,6 @@ begin
   if (entityList[0].currentHP <= 0) then
   begin
     gameState := stGameOver;
-    logAction('Player dead at start of game loop');
-    logAction('Loading gameOver procedure');
     gameOver;
   end;
   (* move NPC's *)
@@ -197,8 +194,6 @@ begin
   if (entityList[0].currentHP <= 0) then
   begin
     gameState := stGameOver;
-    logAction('Player dead at end of game loop');
-    logAction('Loading gameOver procedure');
     gameOver;
   end;
 end;
@@ -258,12 +253,8 @@ end;
 
 procedure gameOver;
 begin
-  logAction('> gameOver');
-  logAction('Killer: ' + globalUtils.killer);
- // universe.deleteGameData;
-  logAction('Loading RIP screen');
   scrRIP.displayRIPscreen;
-  KeyboardInput.waitForInput;
+
 end;
 
 end.

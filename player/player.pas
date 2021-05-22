@@ -6,7 +6,7 @@ unit player;
 interface
 
 uses
-  SysUtils, player_inventory, plot_gen, combat_resolver, items, logging;
+  SysUtils, player_inventory, plot_gen, combat_resolver, items;
 
 (* Create player character *)
 procedure createPlayer;
@@ -24,7 +24,7 @@ procedure increaseHealth(amount: smallint);
 implementation
 
 uses
-  main, universe, map, fov, ui, entities;
+  map, fov, ui, entities;
 
 procedure createPlayer;
 begin

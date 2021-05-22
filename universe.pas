@@ -8,7 +8,7 @@ unit universe;
 interface
 
 uses
-  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave, logging;
+  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave;
 
 type
   dungeonTerrain = (tCave, tDungeon);
@@ -318,7 +318,6 @@ procedure deleteGameData;
 var
   datFiles: TSearchRec;
 begin
-  logAction('> deleteGameData');
   { Change into axesData directory }
   ChDir(globalutils.saveDirectory);
   { Delete all .dat files in directory }
@@ -330,7 +329,6 @@ begin
     until FindNext(datFiles) <> 0;
     FindClose(datFiles);
   end;
-  logAction('> deleteGameData - Game Data deleted');
 end;
 
 end.
