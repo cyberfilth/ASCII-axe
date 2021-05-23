@@ -104,7 +104,8 @@ end;
 
 function canMove(checkX, checkY: smallint): boolean;
 begin
-  if (withinBounds(checkX, checkY) = True) and (maparea[checkY][checkX].Blocks = False) then
+  if (withinBounds(checkX, checkY) = True) and
+    (maparea[checkY][checkX].Blocks = False) then
     Result := True
   else
     Result := False;
@@ -180,6 +181,8 @@ begin
         drawTile(c, r, 0);
       end;
     end;
+    (* Clear NPC's from current floor and spawn new ones *)
+    entities.newFloorNPCs;
     { Display Field of View }
     fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
       entities.entityList[0].visionRange, 1);

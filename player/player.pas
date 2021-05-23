@@ -67,6 +67,8 @@ begin
   map.occupy(entityList[0].posX, entityList[0].posY);
   (* set up inventory *)
   player_inventory.initialiseInventory;
+  ui.equippedWeapon := 'No weapon equipped';
+  ui.equippedArmour := 'No armour worn';
   (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 end;

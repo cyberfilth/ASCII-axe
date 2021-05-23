@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, scrRIP;
+  universe, fov, player, scrRIP, plot_gen;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -78,22 +78,26 @@ begin
   end;
   { Initialise keyboard unit }
   keyboardinput.setupKeyboard;
-  { Begin log file }
-  { logging.beginLogging; }
   { wait for keyboard input }
   keyboardinput.waitForInput;
 end;
 
 procedure exitApplication;
 begin
-  gameState := stGameOver;
-  { Shutdown keyboard unit }
-  keyboardinput.shutdownKeyboard;
-  { Shutdown video unit }
-  ui.shutdownScreen;
-  (* Clear screen and display author message *)
-  ui.exitMessage;
-  Exit;
+  try
+    gameState := stGameOver;
+    { Shutdown keyboard unit }
+    keyboardinput.shutdownKeyboard;
+    { Shutdown video unit }
+    ui.shutdownScreen;
+    (* Clear screen and display author message *)
+    ui.exitMessage;
+    (* Clear arrays *)
+    entityList := nil;
+    itemList := nil;
+  finally
+    halt;
+  end;
 end;
 
 procedure newGame;
@@ -113,8 +117,6 @@ begin
   universe.spawnDenizens;
   (* Drop items *)
   items.initialiseItems;
-  ui.equippedWeapon := 'No weapon equipped';
-  ui.equippedArmour := 'No armour worn';
 
   { prepare changes to the screen }
   LockScreenUpdate;
@@ -125,7 +127,11 @@ begin
 
   (* draw map through the camera *)
   camera.drawMap;
-  ui.displayMessage('Welcome message here...');
+
+  (* Generate the welcome message *)
+  plot_gen.getTrollDate;
+  ui.displayMessage('Good Luck...');
+  ui.displayMessage('You enter the cave on ' + plot_gen.trollDate);
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }

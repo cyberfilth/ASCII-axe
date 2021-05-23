@@ -172,7 +172,7 @@
         <IsPartOfProject Value="True"/>
       </Unit15>
       <Unit16>
-        <Filename Value="entities\cave_rat.pas"/>
+        <Filename Value="entities\giant_cave_rat.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit16>
       <Unit17>

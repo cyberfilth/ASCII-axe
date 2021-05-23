@@ -11,7 +11,7 @@ interface
 uses
   ui, map, globalUtils,
   { List of creatures }
-  cave_rat, blood_bat, green_fungus;
+  cave_rat, giant_cave_rat, blood_bat, green_fungus;
 
 type
   (* Store information about NPC's *)
@@ -81,6 +81,8 @@ function isCreatureVisible(x, y: smallint): boolean;
 procedure occupyUpdate;
 (* Update the map display to show all NPC's *)
 procedure redrawMapDisplay(id: byte);
+(* Fill new level with NPC's *)
+procedure newFloorNPCs;
 (* Call Creatures.takeTurn procedure *)
 procedure NPCgameLoop;
 
@@ -88,7 +90,7 @@ procedure NPCgameLoop;
 implementation
 
 uses
-  player;
+  player, universe;
 
 procedure spawnPlayer;
 begin
@@ -247,6 +249,14 @@ begin
   end;
 end;
 
+procedure newFloorNPCs;
+begin
+  (* Clear the current NPC amount *)
+  npcAmount := 1;
+  SetLength(entityList, 1);
+  universe.spawnDenizens;
+end;
+
 procedure NPCgameLoop;
 var
   i: smallint;
@@ -262,6 +272,8 @@ procedure Creature.entityTakeTurn(i: smallint);
 begin
   if (entityList[i].race = 'Cave Rat') then
     cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY)
+  else if (entityList[i].race = 'Giant Rat') then
+    giant_cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY)
   else if (entityList[i].race = 'Blood Bat') then
     blood_bat.takeTurn(i, entityList[i].posX, entityList[i].posY)
   else if (entityList[i].race = 'Green Fungus') then

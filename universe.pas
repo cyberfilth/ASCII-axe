@@ -80,7 +80,7 @@ var
   NPCnumber, i: byte;
 begin
   { Based on number of rooms in current level, dungeon type & dungeon level }
-  NPCnumber := totalRooms;  { player level is considered when generating the NPCs }
+  NPCnumber := totalRooms + currentDepth;  { player level is considered when generating the NPCs }
   entities.npcAmount := NPCnumber;
   case dungeonType of
     tDungeon: ;

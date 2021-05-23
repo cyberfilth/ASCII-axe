@@ -9,12 +9,12 @@ interface
 uses
   globalUtils, universe, map,
   { List of creatures }
-  cave_rat, blood_bat, green_fungus;
+  cave_rat, giant_cave_rat, blood_bat, green_fungus;
 
 const
   (* Array of creatures found in a cave, ordered by cave level *)
   caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
-  caveNPC2: array[1..4] of string = ('caveRat', 'giantRat', 'fungus', 'caveBear');
+  caveNPC2: array[1..4] of string = ('caveRat', 'giantRat', 'giantRat', 'giantRat');
 
 
 (* randomly choose a creature and call the generate code directly *)
@@ -61,6 +61,7 @@ begin
     'caveRat': cave_rat.createCaveRat(i, c, r);
     'bloodBat': blood_bat.createBloodBat(i, c, r);
     'greenFungus': green_fungus.createGreenFungus(i, c, r);
+    'giantRat': giant_cave_rat.createGiantCaveRat(i, c, r);
   end;
 end;
 
