@@ -12,7 +12,11 @@ uses
 (* Create a blood bat *)
 procedure createBloodBat(uniqueid, npcx, npcy: smallint);
 (* Take a turn *)
-procedure takeTurn(id, spx, spy: smallint);
+procedure takeTurn(id: smallint);
+(* Decision tree for Neutral state *)
+procedure decisionNeutral(id: smallint);
+(* Decision tree for Hostile state *)
+procedure decisionHostile(id: smallint);
 (* Move in a random direction *)
 procedure wander(id, spx, spy: smallint);
 (* Chase the player *)
@@ -27,14 +31,14 @@ procedure combat(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui;
+  entities, globalutils, ui, los;
 
 procedure createBloodbat(uniqueid, npcx, npcy: smallint);
 var
-  attitude: byte;
+  mood: byte;
 begin
   (* Detemine hostility *)
-  attitude := randomRange(1, 3);
+  mood := randomRange(1, 3);
   (* Add a blood bat to the list of creatures *)
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
@@ -58,10 +62,10 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
-    if (attitude = 1) then
-      hostile := True
+    if (mood = 1) then
+      state := stateHostile
     else
-      hostile := False;
+      state := stateNeutral;
     discovered := False;
     weaponEquipped := False;
     armourEquipped := False;
@@ -78,32 +82,56 @@ begin
 end;
 
 
-procedure takeTurn(id, spx, spy: smallint);
-var
-  decision: smallint;
+procedure takeTurn(id: smallint);
 begin
-  decision := 0;
-  entities.moveNPC(id, spx, spy);
-  map.occupy(spx, spy);
-
-  (* Is the NPC hostile *)
-  if (entityList[id].hostile = True) then
-  begin
-    (* Can the NPC see the player *)
-    if (entityList[id].inView = True) then
-    begin
-      decision := globalutils.randomRange(1, 2);
-      if (decision = 1) then
-        chasePlayer(id, spx, spy)
-      else
-        wander(id, spx, spy);
-    end
+  case entityList[id].state of
+    stateNeutral: decisionNeutral(id);
+    stateHostile: decisionHostile(id);
     else
-      wander(id, spx, spy);
-  end
-  else
-    wander(id, spx, spy);
+      decisionNeutral(id);
+  end;
 end;
+
+procedure decisionNeutral(id: smallint);
+var
+  stopAndSmellFlowers: byte;
+begin
+  stopAndSmellFlowers := globalutils.randomRange(1, 2);
+  if (stopAndSmellFlowers = 1) then
+    { Either wander randomly }
+    wander(id, entityList[id].posX, entityList[id].posY)
+  else
+    { or stay in place }
+    entities.moveNPC(id, entityList[id].posX, entityList[id].posY);
+end;
+
+procedure decisionHostile(id: smallint);
+var
+  stopAndSmellFlowers: byte;
+begin
+  { Randomly decide whether to wander or attack }
+  stopAndSmellFlowers := globalutils.randomRange(1, 2);
+  if (stopAndSmellFlowers = 1) then
+    wander(id, entityList[id].posX, entityList[id].posY)
+
+  { If NPC can see the player }
+  else if (los.inView(entityList[id].posX, entityList[id].posY,
+    entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) then
+  begin
+    { If next to the player }
+    if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
+      { Attack the Player }
+      combat(id)
+    else
+      { Chase the player }
+      chasePlayer(id, entityList[id].posX, entityList[id].posY);
+  end
+
+  { If player not in sight }
+  else
+    wander(id, entityList[id].posX, entityList[id].posY);
+end;
+
 
 procedure wander(id, spx, spy: smallint);
 var

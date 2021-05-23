@@ -14,8 +14,10 @@ uses
   cave_rat, giant_cave_rat, blood_bat, green_fungus;
 
 type
-  (* Store information about NPC's *)
+  attitudes = (stateNeutral, stateHostile, stateEscape);
 
+type
+  (* Store information about NPC's *)
   { Creature }
   Creature = record
     (* Unique ID *)
@@ -41,8 +43,8 @@ type
     discovered: boolean;
     (* Some entities block movement, i.e. barrels *)
     blocks: boolean;
-    (* Is the NPC initially hostile *)
-    hostile: boolean;
+    (* NPC finite state *)
+    state: attitudes;
     (* Is a weapon equipped *)
     weaponEquipped: boolean;
     (* Is Armour equipped *)
@@ -271,13 +273,13 @@ end;
 procedure Creature.entityTakeTurn(i: smallint);
 begin
   if (entityList[i].race = 'Cave Rat') then
-    cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY)
+    cave_rat.takeTurn(i)
   else if (entityList[i].race = 'Giant Rat') then
-    giant_cave_rat.takeTurn(i, entityList[i].posX, entityList[i].posY)
+    giant_cave_rat.takeTurn(i)
   else if (entityList[i].race = 'Blood Bat') then
-    blood_bat.takeTurn(i, entityList[i].posX, entityList[i].posY)
+    blood_bat.takeTurn(i)
   else if (entityList[i].race = 'Green Fungus') then
-    green_fungus.takeTurn(i, entityList[i].posX, entityList[i].posY);
+    green_fungus.takeTurn(i);
 
   occupyUpdate;
 end;

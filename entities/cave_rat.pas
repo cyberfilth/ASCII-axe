@@ -12,7 +12,13 @@ uses
 (* Create a cave rat *)
 procedure createCaveRat(uniqueid, npcx, npcy: smallint);
 (* Take a turn *)
-procedure takeTurn(id, spx, spy: smallint);
+procedure takeTurn(id: smallint);
+(* Decision tree for Neutral state *)
+procedure decisionNeutral(id: smallint);
+(* Decision tree for Hostile state *)
+procedure decisionHostile(id: smallint);
+(* Decision tree for Escape state *)
+procedure decisionEscape(id: smallint);
 (* Move in a random direction *)
 procedure wander(id, spx, spy: smallint);
 (* Chase the player *)
@@ -27,14 +33,14 @@ procedure combat(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui;
+  entities, globalutils, ui, los;
 
 procedure createCaveRat(uniqueid, npcx, npcy: smallint);
 var
-  attitude: byte;
+  mood: byte;
 begin
   (* Detemine hostility *)
-  attitude := randomRange(1, 2);
+  mood := randomRange(1, 2);
   (* Add a cave rat to the list of creatures *)
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
@@ -58,10 +64,10 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
-    if (attitude = 1) then
-      hostile := True
+    if (mood = 1) then
+      state := stateHostile
     else
-      hostile := False;
+      state := stateNeutral;
     discovered := False;
     weaponEquipped := False;
     armourEquipped := False;
@@ -78,31 +84,83 @@ begin
 end;
 
 
-procedure takeTurn(id, spx, spy: smallint);
-var
-  decision: smallint;
+procedure takeTurn(id: smallint);
 begin
-  decision := 0;
-  entities.moveNPC(id, spx, spy);
-  map.occupy(spx, spy);
-
-  (* Can the NPC see the player *)
-  if (entityList[id].inView = True) then
-  begin
-    decision := globalutils.randomRange(1, 2);
-    if (decision = 1) then
-      chasePlayer(id, spx, spy)
+  case entityList[id].state of
+    stateNeutral: decisionNeutral(id);
+    stateHostile: decisionHostile(id);
+    stateEscape: decisionEscape(id);
     else
-      entities.moveNPC(id, spx, spy);
-  end
+      decisionNeutral(id);
+  end;
+end;
+
+procedure decisionNeutral(id: smallint);
+var
+  stopAndSmellFlowers: byte;
+begin
+  stopAndSmellFlowers := globalutils.randomRange(1, 2);
+  if (stopAndSmellFlowers = 1) then
+    { Either wander randomly }
+    wander(id, entityList[id].posX, entityList[id].posY)
   else
-    wander(id, spx, spy);
+    { or stay in place }
+    entities.moveNPC(id, entityList[id].posX, entityList[id].posY);
+end;
+
+procedure decisionHostile(id: smallint);
+begin
+  { If health is below 25%, escape }
+  if (entityList[id].currentHP < (entityList[id].maxHP div 4)) then
+  begin
+    entityList[id].state := stateEscape;
+    escapePlayer(id, entityList[id].posX, entityList[id].posY);
+  end
+
+  { If NPC can see the player }
+  else if (los.inView(entityList[id].posX, entityList[id].posY,
+    entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) then
+  begin
+    { If next to the player }
+    if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
+      { Attack the Player }
+      combat(id)
+    else
+      { Chase the player }
+      chasePlayer(id, entityList[id].posX, entityList[id].posY);
+  end
+
+  { If not injured and player not in sight }
+  else
+    wander(id, entityList[id].posX, entityList[id].posY);
+end;
+
+procedure decisionEscape(id: smallint);
+begin
+  { Check if player is in sight }
+  if (los.inView(entityList[id].posX, entityList[id].posY, entityList[0].posX,
+    entityList[0].posY, entityList[id].visionRange) = True) then
+    { If the player is in sight, run away }
+    escapePlayer(id, entityList[id].posX, entityList[id].posY)
+
+  { If the player is not in sight }
+  else
+  begin
+    { Heal if health is below 50% }
+    if (entityList[id].currentHP < (entityList[id].maxHP div 2)) then
+      Inc(entityList[id].currentHP, 3)
+    else
+      { Reset state to Neutral and wander }
+      wander(id, entityList[id].posX, entityList[id].posY);
+  end;
 end;
 
 procedure wander(id, spx, spy: smallint);
 var
   direction, attempts, testx, testy: smallint;
 begin
+  { Set NPC state }
+  entityList[id].state := stateNeutral;
   attempts := 0;
   testx := 0;
   testy := 0;

@@ -12,7 +12,7 @@ uses
 (* Create fungus *)
 procedure createGreenFungus(uniqueid, npcx, npcy: smallint);
 (* Take a turn *)
-procedure takeTurn(id, spx, spy: smallint);
+procedure takeTurn(id: smallint);
 (* Check if player is next to NPC *)
 function isNextToPlayer(spx, spy: smallint): boolean;
 (* Fungus attacks *)
@@ -48,7 +48,7 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
-    hostile := True;
+    state := stateHostile;
     discovered := False;
     weaponEquipped := False;
     armourEquipped := False;
@@ -64,16 +64,17 @@ begin
   map.occupy(npcx, npcy);
 end;
 
-procedure takeTurn(id, spx, spy: smallint);
+procedure takeTurn(id: smallint);
 begin
   (* Can the NPC see the player *)
-  if (los.inView(spx, spy, entities.entityList[0].posX, entities.entityList[0].posY,
+  if (los.inView(entityList[id].posX, entityList[id].posY,
+    entities.entityList[0].posX, entities.entityList[0].posY,
     entities.entityList[id].visionRange) = True) then
   begin
-    if (isNextToPlayer(spx, spy) = True) then
+    if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
       combat(id, 0);
   end;
-  entities.moveNPC(id, spx, spy);
+  entities.moveNPC(id, entityList[id].posX, entityList[id].posY);
 end;
 
 function isNextToPlayer(spx, spy: smallint): boolean;

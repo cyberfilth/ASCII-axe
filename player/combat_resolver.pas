@@ -28,7 +28,7 @@ var
   damageAmount: smallint;
 begin
   (* Attacking an NPC automatically makes it hostile *)
-  entities.entityList[npcID].hostile := True;
+  entities.entityList[npcID].state := stateHostile;
 
   damageAmount :=
     (globalutils.randomRange(1, entityList[0].attack) + { Base attack }
