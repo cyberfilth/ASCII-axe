@@ -152,6 +152,8 @@ begin
           drawTile(c, r, 0);
         end;
       end;
+      { Display current floor }
+      ui.displayMessage('You ascend to level ' + IntToStr(universe.currentDepth));
       { Display Field of View }
       fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
         entities.entityList[0].visionRange, 1);
@@ -183,6 +185,8 @@ begin
     end;
     (* Clear NPC's from current floor and spawn new ones *)
     entities.newFloorNPCs;
+    { Display current floor }
+      ui.displayMessage('You descend to level ' + IntToStr(universe.currentDepth));
     { Display Field of View }
     fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
       entities.entityList[0].visionRange, 1);
