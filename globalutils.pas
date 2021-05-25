@@ -21,7 +21,7 @@ const
   (* Save game directory *)
   saveDirectory = 'axesData';
   (* Save game file *)
-  saveFile = 'saveGame.xml';
+  saveFile = 'saveGame.dat';
 
 
 var

@@ -121,13 +121,13 @@ end;
 procedure quitInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
-    'q', 'Q': { quit }
+    'q', 'Q': { Save and Quit }
     begin
       main.exitApplication;
     end;
-    'x', 'X':
+    'x', 'X': { Exit to main menu, quit without saving }
     begin
-      gameState := stGame;
+      { TODO : Add pop-up window }
     end;
     #27: { Escape key - Cancel }
     begin

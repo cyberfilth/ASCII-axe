@@ -8,7 +8,7 @@ unit universe;
 interface
 
 uses
-  SysUtils, DOM, XMLWrite, XMLRead, globalutils, cave;
+  SysUtils, DOM, XMLWrite, XMLRead, TypInfo, globalutils, cave;
 
 type
   dungeonTerrain = (tCave, tDungeon);
@@ -25,6 +25,8 @@ var
   canExitDungeon: boolean;
   (* Used when a dungeon is first generated *)
   currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
+  (* Flag to show if this level has been visited before *)
+  levelVisited: boolean;
 
 (* Creates a dungeon of a specified type *)
 procedure createNewDungeon(levelType: dungeonTerrain);
@@ -39,11 +41,13 @@ procedure saveDungeonLevel;
 procedure loadDungeonLevel(lvl: byte);
 (* Delete saved game files *)
 procedure deleteGameData;
+(* Save game state to file *)
+procedure saveGame;
 
 implementation
 
 uses
-  map, npc_lookup, entities;
+  map, npc_lookup, entities, items, player_inventory;
 
 procedure createNewDungeon(levelType: dungeonTerrain);
 begin
@@ -66,7 +70,6 @@ begin
   case levelType of
     tCave: cave.generate(dlistLength, totalDepth);
     tDungeon: ;
-    //bitmask_dungeon.generate;
   end;
 
   (* Copy the 1st floor of the current dungeon to the game map *)
@@ -74,13 +77,13 @@ begin
 end;
 
 procedure spawnDenizens;
-
 var
   { Number of NPC's to create }
   NPCnumber, i: byte;
 begin
   { Based on number of rooms in current level, dungeon type & dungeon level }
-  NPCnumber := totalRooms + currentDepth;  { player level is considered when generating the NPCs }
+  NPCnumber := totalRooms + currentDepth;
+  { player level is considered when generating the NPCs }
   entities.npcAmount := NPCnumber;
   case dungeonType of
     tDungeon: ;
@@ -109,7 +112,6 @@ var
   dfileName, Value: string;
 
   procedure AddElement(Node: TDOMNode; Name, Value: string);
-
   var
     NameNode, ValueNode: TDomNode;
   begin
@@ -150,6 +152,8 @@ begin
     AddElement(datanode, 'dungeonID', IntToStr(idNumber));
     AddElement(datanode, 'title', title);
     AddElement(datanode, 'floor', IntToStr(lvlNum));
+    AddElement(datanode, 'levelVisited', BoolToStr(False));
+    AddElement(datanode, 'itemsOnThisFloor', IntToStr(0));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
     WriteStr(Value, dungeonType);
     AddElement(datanode, 'mapType', Value);
@@ -181,7 +185,8 @@ begin
         end;
       end;
     end;
-    (* Save XML *)
+
+    (* Save XML as a .dat file *)
     WriteXMLFile(Doc, dfileName);
   finally
     { free memory }
@@ -190,7 +195,6 @@ begin
 end;
 
 procedure saveDungeonLevel;
-
 var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
@@ -213,7 +217,6 @@ var
   end;
 
   function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
-
   var
     ChildNode: TDomNode;
   begin
@@ -239,6 +242,8 @@ begin
     AddElement(datanode, 'dungeonID', IntToStr(uniqueID));
     AddElement(datanode, 'title', title);
     AddElement(datanode, 'floor', IntToStr(currentDepth));
+    AddElement(datanode, 'levelVisited', BoolToStr(True));
+    AddElement(datanode, 'itemsOnThisFloor', IntToStr(items.itemAmount));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
     WriteStr(Value, dungeonType);
     AddElement(datanode, 'mapType', Value);
@@ -259,6 +264,28 @@ begin
         AddElement(datanode, 'Glyph', map.maparea[r][c].Glyph);
       end;
     end;
+
+    (* Items on the map *)
+    for i := 1 to items.itemAmount do
+    begin
+      DataNode := AddChild(RootNode, 'Items');
+      TDOMElement(dataNode).SetAttribute('itemID', IntToStr(itemList[i].itemID));
+      AddElement(DataNode, 'Name', itemList[i].itemName);
+      AddElement(DataNode, 'description', itemList[i].itemDescription);
+      WriteStr(Value, itemList[i].itemType);
+      AddElement(DataNode, 'itemType', Value);
+      WriteStr(Value, itemList[i].itemMaterial);
+      AddElement(DataNode, 'itemMaterial', Value);
+      AddElement(DataNode, 'useID', IntToStr(itemList[i].useID));
+      AddElement(DataNode, 'glyph', itemList[i].glyph);
+      AddElement(DataNode, 'glyphColour', itemList[i].glyphColour);
+      AddElement(DataNode, 'inView', BoolToStr(itemList[i].inView));
+      AddElement(DataNode, 'posX', IntToStr(itemList[i].posX));
+      AddElement(DataNode, 'posY', IntToStr(itemList[i].posY));
+      AddElement(DataNode, 'onMap', BoolToStr(itemList[i].onMap));
+      AddElement(DataNode, 'discovered', BoolToStr(itemList[i].discovered));
+    end;
+
     (* Save XML *)
     WriteXMLFile(Doc, dfileName);
   finally
@@ -271,9 +298,10 @@ procedure loadDungeonLevel(lvl: byte);
 
 var
   dfileName: string;
-  RootNode, Tile, NextNode, Blocks, Visible, Occupied, Discovered, GlyphNode: TDOMNode;
+  RootNode, Tile, ItemsNode, ParentNode, NextNode, Blocks, Visible,
+  Occupied, Discovered, GlyphNode: TDOMNode;
   Doc: TXMLDocument;
-  r, c: integer;
+  r, c, itemsOnThisFloor: integer;
 begin
   dfileName := globalUtils.saveDirectory + PathDelim + 'd_' +
     IntToStr(uniqueID) + '_f' + IntToStr(lvl) + '.dat';
@@ -284,6 +312,10 @@ begin
     RootNode := Doc.DocumentElement.FindNode('levelData');
     (* Number of rooms in current level *)
     totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
+    (* Has this level been explored already *)
+    levelVisited := StrToBool(RootNode.FindNode('levelVisited').TextContent);
+    (* Number of items on current level *)
+    items.itemAmount := StrToInt(RootNode.FindNode('itemsOnThisFloor').TextContent);
 
     (* Map tile data *)
     Tile := RootNode.NextSibling;
@@ -307,6 +339,41 @@ begin
         Tile := NextNode;
       end;
     end;
+
+    (* Load items on this level if already visited *)
+    if (levelVisited = True) then
+    begin
+      (* Items on the map *)
+      SetLength(items.itemList, 1);
+      ItemsNode := Doc.DocumentElement.FindNode('Items');
+      for i := 1 to items.itemAmount do
+      begin
+        items.listLength := length(items.itemList);
+        SetLength(items.itemList, items.listLength + 1);
+        items.itemList[i].itemID := StrToInt(ItemsNode.Attributes.Item[0].NodeValue);
+        items.itemList[i].itemName := ItemsNode.FindNode('Name').TextContent;
+        items.itemList[i].itemDescription :=
+          ItemsNode.FindNode('description').TextContent;
+        items.itemList[i].itemType :=
+          tItem(GetEnumValue(Typeinfo(tItem),
+          ItemsNode.FindNode('itemType').TextContent));
+        items.itemList[i].itemMaterial :=
+          tMaterial(GetEnumValue(Typeinfo(tMaterial),
+          ItemsNode.FindNode('itemMaterial').TextContent));
+        items.itemList[i].useID := StrToInt(ItemsNode.FindNode('useID').TextContent);
+        items.itemList[i].glyph :=
+          char(widechar(ItemsNode.FindNode('glyph').TextContent[1]));
+        items.itemList[i].glyphColour := ItemsNode.FindNode('glyphColour').TextContent;
+        items.itemList[i].inView := StrToBool(ItemsNode.FindNode('inView').TextContent);
+        items.itemList[i].posX := StrToInt(ItemsNode.FindNode('posX').TextContent);
+        items.itemList[i].posY := StrToInt(ItemsNode.FindNode('posY').TextContent);
+        items.itemList[i].onMap := StrToBool(ItemsNode.FindNode('onMap').TextContent);
+        items.itemList[i].discovered :=
+          StrToBool(ItemsNode.FindNode('discovered').TextContent);
+        ParentNode := ItemsNode.NextSibling;
+        ItemsNode := ParentNode;
+      end;
+    end;
   finally
     (* free memory *)
     Doc.Free;
@@ -328,6 +395,91 @@ begin
         DeleteFile(datFiles.Name);
     until FindNext(datFiles) <> 0;
     FindClose(datFiles);
+  end;
+end;
+
+procedure saveGame;
+var
+  Doc: TXMLDocument;
+  RootNode, dataNode: TDOMNode;
+  dfileName, Value: string;
+
+  procedure AddElement(Node: TDOMNode; Name, Value: string);
+  var
+    NameNode, ValueNode: TDomNode;
+  begin
+    { creates future Node/Name }
+    NameNode := Doc.CreateElement(Name);
+    { creates future Node/Name/Value }
+    ValueNode := Doc.CreateTextNode(Value);
+    { place value in place }
+    NameNode.Appendchild(ValueNode);
+    { place Name in place }
+    Node.Appendchild(NameNode);
+  end;
+
+  function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
+  var
+    ChildNode: TDomNode;
+  begin
+    ChildNode := Doc.CreateElement(ChildName);
+    Node.AppendChild(ChildNode);
+    Result := ChildNode;
+  end;
+
+begin
+  (* Set this floor to Visited *)
+  levelVisited := True;
+  (* First save the current level data *)
+  saveDungeonLevel;
+  (* Save game stats *)
+  dfileName := (globalUtils.saveDirectory + PathDelim + globalutils.saveFile);
+  try
+    (* Create a document *)
+    Doc := TXMLDocument.Create;
+    (* Create a root node *)
+    RootNode := Doc.CreateElement('root');
+    Doc.Appendchild(RootNode);
+    RootNode := Doc.DocumentElement;
+
+    (* Game data *)
+    DataNode := AddChild(RootNode, 'GameData');
+    AddElement(datanode, 'RandSeed', IntToStr(RandSeed));
+    AddElement(datanode, 'dungeonID', IntToStr(uniqueID));
+    AddElement(datanode, 'currentDepth', IntToStr(currentDepth));
+    AddElement(datanode, 'levelVisited', BoolToStr(True));
+    AddElement(datanode, 'itemsOnThisFloor', IntToStr(items.itemAmount));
+    AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
+    WriteStr(Value, dungeonType);
+    AddElement(datanode, 'mapType', Value);
+    AddElement(datanode, 'npcAmount', IntToStr(entities.npcAmount));
+    AddElement(datanode, 'itemAmount', IntToStr(items.itemAmount));
+
+    (* Player inventory *)
+    for i := 0 to 9 do
+    begin
+      DataNode := AddChild(RootNode, 'playerInventory');
+      TDOMElement(dataNode).SetAttribute('id', IntToStr(i));
+      AddElement(DataNode, 'Name', inventory[i].Name);
+      AddElement(DataNode, 'equipped', BoolToStr(inventory[i].equipped));
+      AddElement(DataNode, 'description', inventory[i].description);
+      WriteStr(Value, inventory[i].itemType);
+      AddElement(DataNode, 'itemType', Value);
+      WriteStr(Value, inventory[i].itemMaterial);
+      AddElement(DataNode, 'itemMaterial', Value);
+      AddElement(DataNode, 'useID', IntToStr(inventory[i].useID));
+      AddElement(DataNode, 'glyph', inventory[i].glyph);
+      AddElement(DataNode, 'glyphColour', inventory[i].glyphColour);
+      AddElement(DataNode, 'inInventory', BoolToStr(inventory[i].inInventory));
+    end;
+
+    { Plot elements }
+
+    (* Save XML *)
+    WriteXMLFile(Doc, dfileName);
+  finally
+    { Free memory }
+    Doc.Free;
   end;
 end;
 

@@ -7,7 +7,7 @@ unit green_fungus;
 interface
 
 uses
-  SysUtils, globalutils, map, los, ui;
+  SysUtils;
 
 (* Create fungus *)
 procedure createGreenFungus(uniqueid, npcx, npcy: smallint);
@@ -21,7 +21,7 @@ procedure combat(idOwner, idTarget: smallint);
 implementation
 
 uses
-  entities;
+  entities, globalutils, ui, map, los;
 
 procedure createGreenFungus(uniqueid, npcx, npcy: smallint);
 begin

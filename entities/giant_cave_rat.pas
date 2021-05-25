@@ -7,7 +7,7 @@ unit giant_cave_rat;
 interface
 
 uses
-  SysUtils, Math, map;
+  SysUtils, Math;
 
 (* Create a cave rat *)
 procedure createGiantCaveRat(uniqueid, npcx, npcy: smallint);
@@ -33,7 +33,7 @@ procedure combat(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui, universe, los;
+  entities, globalutils, ui, universe, los, map;
 
 procedure createGiantCaveRat(uniqueid, npcx, npcy: smallint);
 var

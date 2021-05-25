@@ -7,7 +7,7 @@ unit blood_bat;
 interface
 
 uses
-  SysUtils, Math, map;
+  SysUtils, Math;
 
 (* Create a blood bat *)
 procedure createBloodBat(uniqueid, npcx, npcy: smallint);
@@ -31,7 +31,7 @@ procedure combat(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui, los;
+  entities, globalutils, ui, los, map;
 
 procedure createBloodbat(uniqueid, npcx, npcy: smallint);
 var

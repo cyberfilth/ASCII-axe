@@ -9,11 +9,12 @@ unit entities;
 interface
 
 uses
-  ui, map, globalUtils,
+  ui, globalUtils,
   { List of creatures }
   cave_rat, giant_cave_rat, blood_bat, green_fungus;
 
-type
+
+type { NPC attitudes }
   attitudes = (stateNeutral, stateHostile, stateEscape);
 
 type
@@ -92,7 +93,7 @@ procedure NPCgameLoop;
 implementation
 
 uses
-  player, universe;
+  player, universe, map;
 
 procedure spawnPlayer;
 begin

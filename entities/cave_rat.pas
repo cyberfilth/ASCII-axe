@@ -7,7 +7,7 @@ unit cave_rat;
 interface
 
 uses
-  SysUtils, Math, map;
+  SysUtils, Math;
 
 (* Create a cave rat *)
 procedure createCaveRat(uniqueid, npcx, npcy: smallint);
@@ -33,7 +33,7 @@ procedure combat(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui, los;
+  entities, globalutils, ui, los, map;
 
 procedure createCaveRat(uniqueid, npcx, npcy: smallint);
 var
@@ -111,7 +111,7 @@ end;
 procedure decisionHostile(id: smallint);
 begin
   { If health is below 25%, escape }
-  if (entityList[id].currentHP < (entityList[id].maxHP div 4)) then
+  if (entityList[id].currentHP < (entityList[id].maxHP div 2)) then
   begin
     entityList[id].state := stateEscape;
     escapePlayer(id, entityList[id].posX, entityList[id].posY);

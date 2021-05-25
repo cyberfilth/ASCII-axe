@@ -85,6 +85,9 @@ end;
 procedure exitApplication;
 begin
   try
+    (* Don't attempt to save game from Title screen *)
+    universe.saveGame;
+
     gameState := stGameOver;
     { Shutdown keyboard unit }
     keyboardinput.shutdownKeyboard;
