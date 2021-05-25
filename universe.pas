@@ -455,6 +455,34 @@ begin
     AddElement(datanode, 'npcAmount', IntToStr(entities.npcAmount));
     AddElement(datanode, 'itemAmount', IntToStr(items.itemAmount));
 
+    (* Player data *)
+    DataNode := AddChild(RootNode, 'PlayerData');
+    AddElement(DataNode, 'race', entities.entityList[0].race);
+    AddElement(DataNode, 'description', entities.entityList[0].description);
+    AddElement(DataNode, 'glyph', entities.entityList[0].glyph);
+    AddElement(DataNode, 'glyphColour', entities.entityList[0].glyphColour);
+    AddElement(DataNode, 'maxHP', IntToStr(entities.entityList[0].maxHP));
+    AddElement(DataNode, 'currentHP', IntToStr(entities.entityList[0].currentHP));
+    AddElement(DataNode, 'attack', IntToStr(entities.entityList[0].attack));
+    AddElement(DataNode, 'defence', IntToStr(entities.entityList[0].defence));
+    AddElement(DataNode, 'weaponDice', IntToStr(entities.entityList[0].weaponDice));
+    AddElement(DataNode, 'weaponAdds', IntToStr(entities.entityList[0].weaponAdds));
+    AddElement(DataNode, 'xpReward', IntToStr(entities.entityList[0].xpReward));
+    AddElement(DataNode, 'visRange', IntToStr(entities.entityList[0].visionRange));
+    AddElement(DataNode, 'moveCount', IntToStr(entities.entityList[0].moveCount));
+    AddElement(DataNode, 'targetX', IntToStr(entities.entityList[0].targetX));
+    AddElement(DataNode, 'targetY', IntToStr(entities.entityList[0].targetY));
+    AddElement(DataNode, 'weaponEquipped',
+      BoolToStr(entities.entityList[0].weaponEquipped));
+    AddElement(DataNode, 'armourEquipped',
+      BoolToStr(entities.entityList[0].armourEquipped));
+    AddElement(DataNode, 'stsDrunk', BoolToStr(entities.entityList[0].stsDrunk));
+    AddElement(DataNode, 'stsPoison', BoolToStr(entities.entityList[0].stsPoison));
+    AddElement(DataNode, 'tmrDrunk', IntToStr(entities.entityList[0].tmrDrunk));
+    AddElement(DataNode, 'tmrPoison', IntToStr(entities.entityList[0].tmrPoison));
+    AddElement(DataNode, 'posX', IntToStr(entities.entityList[0].posX));
+    AddElement(DataNode, 'posY', IntToStr(entities.entityList[0].posY));
+
     (* Player inventory *)
     for i := 0 to 9 do
     begin
