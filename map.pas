@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils, universe, ui;
+  SysUtils, globalUtils, universe, ui, file_handling;
 
 type
   (* Tiles that make up the game world *)
@@ -141,9 +141,9 @@ begin
     begin
       (* Ascend the stairs *)
       { Write current level to disk }
-      universe.saveDungeonLevel;
+      file_handling.saveDungeonLevel;
       { Read next level from disk }
-      universe.loadDungeonLevel(universe.currentDepth - 1);
+      file_handling.loadDungeonLevel(universe.currentDepth - 1);
       { Show already discovered tiles }
       for r := 1 to globalUtils.MAXROWS do
       begin
@@ -172,9 +172,9 @@ begin
   begin
     (* Descend the stairs *)
     { Write current level to disk }
-    universe.saveDungeonLevel;
+    file_handling.saveDungeonLevel;
     { Read next level from disk }
-    universe.loadDungeonLevel(universe.currentDepth + 1);
+    file_handling.loadDungeonLevel(universe.currentDepth + 1);
     { Show already discovered tiles }
     for r := 1 to globalUtils.MAXROWS do
     begin

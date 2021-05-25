@@ -47,7 +47,7 @@ procedure calcDistances(x, y: smallint);
 implementation
 
 uses
-  map, universe;
+  map, universe, file_handling;
 
 procedure fillWithWalls;
 begin
@@ -300,7 +300,7 @@ begin
         end;
       end;
       universe.totalRooms := totalRooms;
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      file_handling.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
     end
     { If the floor number is an odd number }
     else if (Odd(i)) and (i <> totalDepth) then
@@ -322,7 +322,7 @@ begin
       (* Save location of stairs *)
       stairX := c;
       stairY := r;
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      file_handling.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
     end
     else if not (Odd(i)) and (i <> totalDepth) then
       { If the floor number is an even number }
@@ -344,7 +344,7 @@ begin
       (* Save location of stairs *)
       stairX := c;
       stairY := r;
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      file_handling.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
     end
     else
       (* Last floor *)
@@ -354,7 +354,7 @@ begin
         digCave(i);
       until terrainArray[stairY][stairX] = '.';
       terrainArray[stairY][stairX] := '<';
-      universe.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
+      file_handling.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
     end;
 
     (*

@@ -7,7 +7,7 @@ unit items;
 interface
 
 uses
-  globalutils, map, universe, item_lookup;
+  item_lookup;
 
 type
   tItem = (itmDrink, itmWeapon, itmArmour, itmEmptySlot);
@@ -60,6 +60,9 @@ function getItemDescription(x, y: smallint): shortstring;
 procedure redrawItems;
 
 implementation
+
+uses
+  map;
 
 procedure initialiseItems;
 begin

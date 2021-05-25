@@ -5,7 +5,7 @@ unit scrRIP;
 interface
 
 uses
-  video, SysUtils, ui, KeyboardInput, globalUtils, universe, entities;
+  video, SysUtils, ui, KeyboardInput, globalUtils, entities, file_handling;
 
 (* Show the game over screen screen *)
 procedure displayRIPscreen;
@@ -30,7 +30,7 @@ begin
   UpdateScreen(False);
 
   (* Delete all saved data from disk *)
-  universe.deleteGameData;
+  file_handling.deleteGameData;
 
   (* prepare changes to the screen *)
   LockScreenUpdate;
