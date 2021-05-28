@@ -192,7 +192,7 @@ begin
     end;
 
     (* Items on the map *)
-    for i := 1 to items.itemAmount do
+    for i := 0 to items.itemAmount do
     begin
       DataNode := AddChild(RootNode, 'Items');
       TDOMElement(dataNode).SetAttribute('itemID', IntToStr(itemList[i].itemID));
@@ -272,7 +272,7 @@ begin
       (* Items on the map *)
       SetLength(items.itemList, 1);
       ItemsNode := Doc.DocumentElement.FindNode('Items');
-      for i := 1 to items.itemAmount do
+      for i := 0 to items.itemAmount do
       begin
         items.listLength := length(items.itemList);
         SetLength(items.itemList, items.listLength + 1);

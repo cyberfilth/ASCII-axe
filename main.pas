@@ -112,14 +112,16 @@ begin
   universe.dlistLength := 0;
   (* first map type is always a cave *)
   map.mapType := tCave;
-  (* map type is a cave with tunnels *)
+  (* Create the dungeon *)
   universe.createNewDungeon(map.mapType);
   (* Create the Player *)
   entities.spawnPlayer;
   (* Spawn game entities *)
   universe.spawnDenizens;
-  (* Drop items *)
+  (* Initialise items list *)
   items.initialiseItems;
+  (* Start dropping items on map *)
+  universe.litterItems;
 
   { prepare changes to the screen }
   LockScreenUpdate;
@@ -159,24 +161,7 @@ begin
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 
   (* Redraw all items *)
-  for i := 1 to items.itemAmount do
-    if (map.canSee(items.itemList[i].posX, items.itemList[i].posY) = True) and
-      (items.itemList[i].onMap = True) then
-    begin
-      items.itemList[i].inView := True;
-      items.drawItemsOnMap(i);
-      (* Display a message if this is the first time seeing this item *)
-      if (items.itemList[i].discovered = False) then
-      begin
-        ui.displayMessage('You see a ' + items.itemList[i].itemName);
-        items.itemList[i].discovered := True;
-      end;
-    end
-    else
-    begin
-      items.itemList[i].inView := False;
-      map.drawTile(itemList[i].posX, itemList[i].posY, 0);
-    end;
+  items.redrawItems;
 
   (* Redraw all NPC'S *)
   for i := 1 to entities.npcAmount do

@@ -7,7 +7,7 @@ unit items;
 interface
 
 uses
-  item_lookup;
+  item_lookup, ui;
 
 type
   tItem = (itmDrink, itmWeapon, itmArmour, itmEmptySlot);
@@ -66,10 +66,9 @@ uses
 
 procedure initialiseItems;
 begin
-  itemAmount := 0;
+  itemAmount := 0; // reset value???
   { initialise array }
   SetLength(itemList, 0);
-  item_lookup.dispenseItem;
 end;
 
 procedure drawItemsOnMap(id: byte);
@@ -119,8 +118,27 @@ begin
 end;
 
 procedure redrawItems;
+var
+  i: byte;
 begin
-
+  for i := 0 to items.itemAmount do
+    if (map.canSee(items.itemList[i].posX, items.itemList[i].posY) = True) and
+      (items.itemList[i].onMap = True) then
+    begin
+      items.itemList[i].inView := True;
+      items.drawItemsOnMap(i);
+      (* Display a message if this is the first time seeing this item *)
+      if (items.itemList[i].discovered = False) then
+      begin
+        ui.displayMessage('You see a ' + items.itemList[i].itemName);
+        items.itemList[i].discovered := True;
+      end;
+    end
+    else
+    begin
+      items.itemList[i].inView := False;
+      map.drawTile(itemList[i].posX, itemList[i].posY, 0);
+    end;
 end;
 
 end.

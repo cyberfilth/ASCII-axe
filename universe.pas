@@ -32,12 +32,14 @@ var
 procedure createNewDungeon(levelType: dungeonTerrain);
 (* Spawn creatures based on dungeon type and player level *)
 procedure spawnDenizens;
+(* Drop items based on dungeon type and player level *)
+procedure litterItems;
 
 
 implementation
 
 uses
-  map, npc_lookup, entities;
+  map, npc_lookup, entities, items, item_lookup;
 
 procedure createNewDungeon(levelType: dungeonTerrain);
 begin
@@ -79,14 +81,37 @@ begin
     tDungeon: ;
     tCave: { Cave }
     begin
-      (* Number of NPC's = total number of rooms + floor level *)
-      NPCnumber := (totalRooms + currentDepth);
       (* Create the NPC's *);
       for i := 1 to NPCnumber do
       begin
         { create an encounter table: Monster type: Dungeon type: floor number }
         { NPC generation will take the Player level into account when creating stats }
         npc_lookup.NPCpicker(i, tCave);
+      end;
+    end;
+  end;
+end;
+
+procedure litterItems;
+var
+  { Number of items to create }
+  ItemNumber, i: byte;
+begin
+  { Drop a unique item on level }
+  item_lookup.dropFirstItem;
+  { Based on number of rooms in current level, dungeon type & dungeon level }
+  ItemNumber := totalRooms div 4;
+  items.itemAmount := ItemNumber;
+
+  case dungeonType of
+    tDungeon: ;
+    tCave: { Cave }
+    begin
+      (* Create the items *);
+      for i := 1 to ItemNumber do
+      begin
+        { create an encounter table: Item type: Dungeon type: floor number }
+        item_lookup.dispenseItem(i, tCave);
       end;
     end;
   end;

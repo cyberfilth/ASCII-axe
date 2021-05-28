@@ -191,7 +191,7 @@ begin
 end;
 
 procedure examineInventory(selection: byte);
-
+            { TODO : Only show materials for weapons and armour }
 var
   material: shortstring;
 begin
