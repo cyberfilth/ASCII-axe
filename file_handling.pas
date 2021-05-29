@@ -169,7 +169,7 @@ begin
     AddElement(datanode, 'title', title);
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'levelVisited', BoolToStr(True));
-    AddElement(datanode, 'itemsOnThisFloor', IntToStr(items.itemAmount));
+    AddElement(datanode, 'itemsOnThisFloor', IntToStr(items.countNonEmptyItems));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
     WriteStr(Value, dungeonType);
     AddElement(datanode, 'mapType', Value);
@@ -192,7 +192,7 @@ begin
     end;
 
     (* Items on the map *)
-    for i := 0 to items.itemAmount do
+    for i := 1 to items.itemAmount do
     begin
       DataNode := AddChild(RootNode, 'Items');
       TDOMElement(dataNode).SetAttribute('itemID', IntToStr(itemList[i].itemID));

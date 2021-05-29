@@ -117,10 +117,24 @@ begin
       inventory[i].glyphColour := itemList[itemNumber].glyphColour;
       inventory[i].inInventory := True;
       ui.displayMessage('You pick up the ' + inventory[i].Name);
-      (* Remove the item from list of items on the map *)
-      { Requires FPC3.2.0 or higher }
-      Delete(itemList, 1, 1);
-      Dec(itemAmount);
+      (* Set an empty flag for the item on the map, this
+         gets deleted what saving the map *)
+      with itemList[itemNumber] do
+      begin
+        itemID := itemNumber;
+        itemName := 'empty';
+        itemDescription := '';
+        itemType := itmEmptySlot;
+        itemMaterial := matEmpty;
+        useID := 1;
+        glyph := 'x';
+        glyphColour := 'lightCyan';
+        inView := False;
+        posX := 1;
+        posY := 1;
+        onMap := False;
+        discovered := False;
+      end;
       Result := True;
       exit;
     end;
@@ -191,7 +205,7 @@ begin
 end;
 
 procedure examineInventory(selection: byte);
-            { TODO : Only show materials for weapons and armour }
+{ TODO : Only show materials for weapons and armour }
 var
   material: shortstring;
 begin

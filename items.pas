@@ -56,6 +56,8 @@ function containsItem(x, y: smallint): boolean;
 function getItemName(x, y: smallint): shortstring;
 (* Get description of item at coordinates *)
 function getItemDescription(x, y: smallint): shortstring;
+(* Count non-empty items in array *)
+function countNonEmptyItems: byte;
 (* Redraw all items *)
 procedure redrawItems;
 
@@ -117,28 +119,43 @@ begin
   end;
 end;
 
+function countNonEmptyItems: byte;
+var
+  i, Count: byte;
+begin
+  Count := 0;
+  for i := 1 to items.itemAmount do
+    if (itemList[i].itemType <> itmEmptySlot) then
+      Inc(Count);
+  Result := Count;
+end;
+
 procedure redrawItems;
 var
   i: byte;
 begin
   for i := 1 to items.itemAmount do
-    if (map.canSee(items.itemList[i].posX, items.itemList[i].posY) = True) and
-      (items.itemList[i].onMap = True) then
-    begin
-      items.itemList[i].inView := True;
-      items.drawItemsOnMap(i);
-      (* Display a message if this is the first time seeing this item *)
-      if (items.itemList[i].discovered = False) then
+  begin
+    { Don't draw used items on the map }
+    if (items.itemList[i].itemType <> itmEmptySlot) then
+      if (map.canSee(items.itemList[i].posX, items.itemList[i].posY) = True) and
+        (items.itemList[i].onMap = True) then
       begin
-        ui.displayMessage('You see a ' + items.itemList[i].itemName);
-        items.itemList[i].discovered := True;
+        items.itemList[i].inView := True;
+        items.drawItemsOnMap(i);
+        (* Display a message if this is the first time seeing this item *)
+        if (items.itemList[i].discovered = False) then
+        begin
+          ui.displayMessage('You see a ' + items.itemList[i].itemName);
+          items.itemList[i].discovered := True;
+        end;
+      end
+      else
+      begin
+        items.itemList[i].inView := False;
+        map.drawTile(itemList[i].posX, itemList[i].posY, 0);
       end;
-    end
-    else
-    begin
-      items.itemList[i].inView := False;
-      map.drawTile(itemList[i].posX, itemList[i].posY, 0);
-    end;
+  end;
 end;
 
 end.
