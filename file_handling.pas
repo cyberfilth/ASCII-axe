@@ -207,7 +207,7 @@ begin
           AddElement(DataNode, 'itemMaterial', Value);
           AddElement(DataNode, 'useID', IntToStr(itemList[i].useID));
           { Convert extended ASCII to plain text }
-          if (itemList[i].itemName = 'crude dagger') then
+          if (itemList[i].glyph = chr(24)) then
             AddElement(DataNode, 'glyph', '|')
           else
             AddElement(DataNode, 'glyph', itemList[i].glyph);
@@ -431,7 +431,7 @@ begin
       AddElement(DataNode, 'itemMaterial', Value);
       AddElement(DataNode, 'useID', IntToStr(inventory[i].useID));
       { Convert extended ASCII to plain text }
-      if (inventory[i].Name = 'crude dagger') then
+      if (inventory[i].glyph = chr(24)) then
         AddElement(DataNode, 'glyph', '|')
       else
         AddElement(DataNode, 'glyph', inventory[i].glyph);
