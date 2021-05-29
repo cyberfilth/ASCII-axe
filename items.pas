@@ -121,7 +121,7 @@ procedure redrawItems;
 var
   i: byte;
 begin
-  for i := 0 to items.itemAmount do
+  for i := 1 to items.itemAmount do
     if (map.canSee(items.itemList[i].posX, items.itemList[i].posY) = True) and
       (items.itemList[i].onMap = True) then
     begin

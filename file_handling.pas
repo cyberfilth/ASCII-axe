@@ -203,7 +203,11 @@ begin
       WriteStr(Value, itemList[i].itemMaterial);
       AddElement(DataNode, 'itemMaterial', Value);
       AddElement(DataNode, 'useID', IntToStr(itemList[i].useID));
-      AddElement(DataNode, 'glyph', itemList[i].glyph);
+       { Convert extended ASCII to plain text }
+      if (itemList[i].itemName = 'crude dagger') then
+        AddElement(DataNode, 'glyph', '|')
+      else
+        AddElement(DataNode, 'glyph', itemList[i].glyph);
       AddElement(DataNode, 'glyphColour', itemList[i].glyphColour);
       AddElement(DataNode, 'inView', BoolToStr(itemList[i].inView));
       AddElement(DataNode, 'posX', IntToStr(itemList[i].posX));
@@ -422,7 +426,11 @@ begin
       WriteStr(Value, inventory[i].itemMaterial);
       AddElement(DataNode, 'itemMaterial', Value);
       AddElement(DataNode, 'useID', IntToStr(inventory[i].useID));
-      AddElement(DataNode, 'glyph', inventory[i].glyph);
+      { Convert extended ASCII to plain text }
+      if (inventory[i].Name = 'crude dagger') then
+        AddElement(DataNode, 'glyph', '|')
+      else
+        AddElement(DataNode, 'glyph', inventory[i].glyph);
       AddElement(DataNode, 'glyphColour', inventory[i].glyphColour);
       AddElement(DataNode, 'inInventory', BoolToStr(inventory[i].inInventory));
     end;
