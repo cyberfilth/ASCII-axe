@@ -193,28 +193,32 @@ begin
 
     (* Items on the map *)
     for i := 1 to items.itemAmount do
-    begin
-      DataNode := AddChild(RootNode, 'Items');
-      TDOMElement(dataNode).SetAttribute('itemID', IntToStr(itemList[i].itemID));
-      AddElement(DataNode, 'Name', itemList[i].itemName);
-      AddElement(DataNode, 'description', itemList[i].itemDescription);
-      WriteStr(Value, itemList[i].itemType);
-      AddElement(DataNode, 'itemType', Value);
-      WriteStr(Value, itemList[i].itemMaterial);
-      AddElement(DataNode, 'itemMaterial', Value);
-      AddElement(DataNode, 'useID', IntToStr(itemList[i].useID));
-       { Convert extended ASCII to plain text }
-      if (itemList[i].itemName = 'crude dagger') then
-        AddElement(DataNode, 'glyph', '|')
-      else
-        AddElement(DataNode, 'glyph', itemList[i].glyph);
-      AddElement(DataNode, 'glyphColour', itemList[i].glyphColour);
-      AddElement(DataNode, 'inView', BoolToStr(itemList[i].inView));
-      AddElement(DataNode, 'posX', IntToStr(itemList[i].posX));
-      AddElement(DataNode, 'posY', IntToStr(itemList[i].posY));
-      AddElement(DataNode, 'onMap', BoolToStr(itemList[i].onMap));
-      AddElement(DataNode, 'discovered', BoolToStr(itemList[i].discovered));
-    end;
+      (* Don't save empty items *)
+      if (items.itemList[i].itemType <> itmEmptySlot) then
+      begin
+        begin
+          DataNode := AddChild(RootNode, 'Items');
+          TDOMElement(dataNode).SetAttribute('itemID', IntToStr(itemList[i].itemID));
+          AddElement(DataNode, 'Name', itemList[i].itemName);
+          AddElement(DataNode, 'description', itemList[i].itemDescription);
+          WriteStr(Value, itemList[i].itemType);
+          AddElement(DataNode, 'itemType', Value);
+          WriteStr(Value, itemList[i].itemMaterial);
+          AddElement(DataNode, 'itemMaterial', Value);
+          AddElement(DataNode, 'useID', IntToStr(itemList[i].useID));
+          { Convert extended ASCII to plain text }
+          if (itemList[i].itemName = 'crude dagger') then
+            AddElement(DataNode, 'glyph', '|')
+          else
+            AddElement(DataNode, 'glyph', itemList[i].glyph);
+          AddElement(DataNode, 'glyphColour', itemList[i].glyphColour);
+          AddElement(DataNode, 'inView', BoolToStr(itemList[i].inView));
+          AddElement(DataNode, 'posX', IntToStr(itemList[i].posX));
+          AddElement(DataNode, 'posY', IntToStr(itemList[i].posY));
+          AddElement(DataNode, 'onMap', BoolToStr(itemList[i].onMap));
+          AddElement(DataNode, 'discovered', BoolToStr(itemList[i].discovered));
+        end;
+      end;
 
     (* Save XML *)
     WriteXMLFile(Doc, dfileName);
