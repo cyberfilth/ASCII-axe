@@ -100,7 +100,7 @@ begin
   { Drop a unique item on level }
   item_lookup.dropFirstItem;
   { Based on number of rooms in current level, dungeon type & dungeon level }
-  ItemNumber := totalRooms div 4;
+  ItemNumber := (totalRooms div 4) + currentDepth;
   items.itemAmount := ItemNumber;
 
   case dungeonType of

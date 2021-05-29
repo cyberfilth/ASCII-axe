@@ -18,7 +18,7 @@ uses
 
 procedure createClub(uniqueid, itmx, itmy: smallint);
 begin
-    items.listLength := length(items.itemList);
+  items.listLength := length(items.itemList);
   SetLength(items.itemList, items.listLength + 1);
   with items.itemList[items.listLength] do
   begin
@@ -40,7 +40,7 @@ end;
 
 procedure useItem(equipped: boolean);
 begin
-   if (equipped = False) then
+  if (equipped = False) then
     (* To equip the weapon *)
   begin
     entityList[0].weaponEquipped := True;

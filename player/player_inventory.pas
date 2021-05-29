@@ -141,9 +141,7 @@ begin
   end;
 end;
 
-(* Returns TRUE if successfully removed, FALSE if the inventory is full *)
 function removeFromInventory(itemNumber: smallint): boolean;
-
 var
   newItem: item;
 begin
@@ -214,12 +212,17 @@ begin
   begin
     (* Get the item material *)
     material := '';
-    if (inventory[selection].itemMaterial = matIron) then
-      material := ' [iron]';
-    if (inventory[selection].itemMaterial = matSteel) then
-      material := ' [steel]';
-    if (inventory[selection].itemMaterial = matWood) then
-      material := ' [wooden]';
+    if (inventory[selection].itemType <> itmDrink) then
+    begin
+      if (inventory[selection].itemMaterial = matIron) then
+        material := ' [iron]';
+      if (inventory[selection].itemMaterial = matSteel) then
+        material := ' [steel]';
+      if (inventory[selection].itemMaterial = matWood) then
+        material := ' [wooden]';
+      if (inventory[selection].itemMaterial = matLeather) then
+        material := ' [leather]';
+    end;
     { prepare changes to the screen }
     LockScreenUpdate;
     (* Clear the name & description lines *)
