@@ -102,7 +102,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="31">
+    <Units Count="32">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -233,6 +233,10 @@
         <Filename Value="file_handling.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit30>
+      <Unit31>
+        <Filename Value="items\weapons\basic_club.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit31>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

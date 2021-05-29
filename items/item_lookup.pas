@@ -11,16 +11,16 @@ uses
   { List of drinks }
   ale_tankard,
   { List of weapons }
-  crude_dagger,
+  crude_dagger, basic_club,
   { List of armour }
   leather_armour1;
 
 const
   (* Array of items found in a cave, ordered by cave level *)
-  caveItems1: array[1..4] of string =            { leather }
-    ('aleTankard', 'crudeDagger', 'aleTankard', 'aleTankard');
+  caveItems1: array[1..4] of string =
+    ('aleTankard', 'crudeDagger', 'aleTankard', 'basicClub');
   caveItems2: array[1..4] of string =
-    ('aleTankard', 'aleTankard', 'aleTankard', 'leatherArmour1');
+    ('aleTankard', 'aleTankard', 'crudeDagger', 'leatherArmour1');
   caveItems3: array[1..2] of string = ('aleTankard', 'crudeDagger');
 
 (* Choose an item and call the generate code directly *)
@@ -75,6 +75,7 @@ begin
     'aleTankard': ale_tankard.createAleTankard(i, c, r);
     'crudeDagger': crude_dagger.createDagger(i, c, r);
     'leatherArmour1': leather_armour1.createLeatherArmour(i, c, r);
+    'basicClub': basic_club.createClub(i, c, r);
   end;
 end;
 
@@ -84,6 +85,7 @@ begin
     1: ale_tankard.useItem;
     2: crude_dagger.useItem(equipped);
     3: leather_armour1.useItem(equipped);
+    4: basic_club.useItem(equipped);
   end;
 end;
 
