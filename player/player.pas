@@ -128,7 +128,9 @@ begin
   begin
     entities.entityList[0].posX := originalX;
     entities.entityList[0].posY := originalY;
-    ui.displayMessage('You bump into a wall');
+    (* display a clumsy message if player intoxicate *)
+    if (entityList[0].stsDrunk = True) then
+      ui.displayMessage('You bump into a wall');
     Dec(entities.entityList[0].moveCount);
   end;
   (* Occupy tile *)
