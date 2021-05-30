@@ -9,7 +9,7 @@ interface
 
 uses
   SysUtils, DOM, XMLWrite, XMLRead, TypInfo, globalutils, universe,
-  cave, items, entities, player_inventory;
+  cave, items, entities, player_inventory, logging;
 
 (* Write a newly generate level of a dungeon to disk *)
 procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
@@ -229,19 +229,26 @@ begin
 end;
 
 procedure loadDungeonLevel(lvl: byte);
-
 var
   dfileName: string;
   RootNode, Tile, ItemsNode, ParentNode, NextNode, Blocks, Visible,
   Occupied, Discovered, GlyphNode: TDOMNode;
   Doc: TXMLDocument;
-  r, c, itemsOnThisFloor: integer;
+  r, c: integer;
+  levelVisited: boolean;
 begin
   dfileName := globalUtils.saveDirectory + PathDelim + 'd_' +
     IntToStr(uniqueID) + '_f' + IntToStr(lvl) + '.dat';
   try
+
+    logAction(' reading file ' + dfileName);
+
+
     (* Read in dat file from disk *)
     ReadXMLFile(Doc, dfileName);
+
+    logAction('reading file [completed]');
+
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('levelData');
     (* Number of rooms in current level *)
@@ -250,6 +257,9 @@ begin
     levelVisited := StrToBool(RootNode.FindNode('levelVisited').TextContent);
     (* Number of items on current level *)
     items.itemAmount := StrToInt(RootNode.FindNode('itemsOnThisFloor').TextContent);
+
+
+    logAction(' Loading map tiles');
 
     (* Map tile data *)
     Tile := RootNode.NextSibling;
@@ -274,30 +284,58 @@ begin
       end;
     end;
 
+    logAction('Loading map tiles [completed]');
+
+    logAction(' levelVisited = ' + BoolToStr(levelVisited));
+
     (* Load items on this level if already visited *)
     if (levelVisited = True) then
     begin
+      logAction(' Loading items from file');
+      logAction(' Total items: ' + IntToStr(itemAmount));
+
       (* Items on the map *)
       SetLength(items.itemList, 1);
       ItemsNode := Doc.DocumentElement.FindNode('Items');
-      for i := 0 to items.itemAmount do
+      for i := 0 to items.itemAmount - 1 do      //   reduce the item number for game loop
       begin
+
+        logAction('loading item ' + IntToStr(i));
+
         items.listLength := length(items.itemList);
         SetLength(items.itemList, items.listLength + 1);
         items.itemList[i].itemID := StrToInt(ItemsNode.Attributes.Item[0].NodeValue);
         items.itemList[i].itemName := ItemsNode.FindNode('Name').TextContent;
+
+
         items.itemList[i].itemDescription :=
           ItemsNode.FindNode('description').TextContent;
+
         items.itemList[i].itemType :=
           tItem(GetEnumValue(Typeinfo(tItem),
           ItemsNode.FindNode('itemType').TextContent));
+
+
         items.itemList[i].itemMaterial :=
           tMaterial(GetEnumValue(Typeinfo(tMaterial),
           ItemsNode.FindNode('itemMaterial').TextContent));
+
+
         items.itemList[i].useID := StrToInt(ItemsNode.FindNode('useID').TextContent);
-        items.itemList[i].glyph :=
-          char(widechar(ItemsNode.FindNode('glyph').TextContent[1]));
+
+
+        { Convert plain text to extended ASCII }
+        if (ItemsNode.FindNode('glyph').TextContent[1] = '|') then
+          items.itemList[i].glyph := chr(24)
+        else
+          items.itemList[i].glyph :=
+            char(widechar(ItemsNode.FindNode('glyph').TextContent[1]));
+
+        logAction('glyph loaded');
+
         items.itemList[i].glyphColour := ItemsNode.FindNode('glyphColour').TextContent;
+
+
         items.itemList[i].inView := StrToBool(ItemsNode.FindNode('inView').TextContent);
         items.itemList[i].posX := StrToInt(ItemsNode.FindNode('posX').TextContent);
         items.itemList[i].posY := StrToInt(ItemsNode.FindNode('posY').TextContent);
@@ -306,12 +344,24 @@ begin
           StrToBool(ItemsNode.FindNode('discovered').TextContent);
         ParentNode := ItemsNode.NextSibling;
         ItemsNode := ParentNode;
+
+        logAction('loaded item ' + IntToStr(i));
+
       end;
-    end;
+
+      logAction('Loading items from file [completed]');
+
+    end
+    else
+      (* Generate new items if floor not already visited *)
+      universe.litterItems;
+    currentDepth := lvl;
+
+
+
   finally
     (* free memory *)
     Doc.Free;
-    currentDepth := lvl;
   end;
 end;
 

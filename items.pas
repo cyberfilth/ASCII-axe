@@ -58,13 +58,15 @@ function getItemName(x, y: smallint): shortstring;
 function getItemDescription(x, y: smallint): shortstring;
 (* Count non-empty items in array *)
 function countNonEmptyItems: byte;
+(* Fill new level with items *)
+procedure newFloorItems;
 (* Redraw all items *)
 procedure redrawItems;
 
 implementation
 
 uses
-  map;
+  map, universe;
 
 procedure initialiseItems;
 begin
@@ -128,6 +130,13 @@ begin
     if (itemList[i].itemType <> itmEmptySlot) then
       Inc(Count);
   Result := Count;
+end;
+
+procedure newFloorItems;
+begin
+  (* Clear the current item amount *)
+  itemAmount := 0;
+  SetLength(itemList, 0);
 end;
 
 procedure redrawItems;

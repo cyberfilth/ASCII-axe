@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils, universe, ui, file_handling;
+  SysUtils, globalUtils, universe, ui, file_handling, logging;
 
 type
   (* Tiles that make up the game world *)
@@ -73,7 +73,7 @@ procedure setupMap;
 implementation
 
 uses
-  entities, fov;
+  entities, items, fov;
 
 procedure occupy(x, y: smallint);
 begin
@@ -130,6 +130,8 @@ end;
 
 procedure ascendStairs;
 begin
+  logAction('>ascendStairs');
+
   (* Check if the player is standing on up staircase *)
   if (maparea[entities.entityList[0].posY][entities.entityList[0].posX].Glyph =
     '<') then
@@ -141,9 +143,27 @@ begin
     begin
       (* Ascend the stairs *)
       { Write current level to disk }
+
+      logAction(' write current file to disk');
+
       file_handling.saveDungeonLevel;
+
+      logAction('[completed]');
+
+      logAction(' Clearing itemList');
+
+      (* Clear list of items *)
+      items.newFloorItems;
+
+      logAction('Clearing itemList [completed]');
+
+      logAction(' read level '+IntToStr(universe.currentDepth - 1) + ' from disk');
+
       { Read next level from disk }
       file_handling.loadDungeonLevel(universe.currentDepth - 1);
+
+      logAction('read level from disk [completed]');
+
       { Show already discovered tiles }
       for r := 1 to globalUtils.MAXROWS do
       begin
@@ -152,6 +172,15 @@ begin
           drawTile(c, r, 0);
         end;
       end;
+
+      logAction(' Create new list of NPCs');
+
+      (* Clear NPC's from current floor and spawn new ones *)
+      entities.newFloorNPCs;
+
+
+      logAction('Create new list of NPCs [completed]');
+
       { Display current floor }
       ui.displayMessage('You ascend to level ' + IntToStr(universe.currentDepth));
       { Display Field of View }
@@ -173,6 +202,8 @@ begin
     (* Descend the stairs *)
     { Write current level to disk }
     file_handling.saveDungeonLevel;
+    (* Clear list of items *)
+    items.newFloorItems;
     { Read next level from disk }
     file_handling.loadDungeonLevel(universe.currentDepth + 1);
     { Show already discovered tiles }
@@ -186,7 +217,7 @@ begin
     (* Clear NPC's from current floor and spawn new ones *)
     entities.newFloorNPCs;
     { Display current floor }
-      ui.displayMessage('You descend to level ' + IntToStr(universe.currentDepth));
+    ui.displayMessage('You descend to level ' + IntToStr(universe.currentDepth));
     { Display Field of View }
     fov.fieldOfView(entities.entityList[0].posX, entities.entityList[0].posY,
       entities.entityList[0].visionRange, 1);

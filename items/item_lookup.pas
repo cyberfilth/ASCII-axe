@@ -7,7 +7,7 @@ unit item_lookup;
 interface
 
 uses
-  entities, universe, globalUtils,
+  universe, globalUtils,
   { List of drinks }
   ale_tankard,
   { List of weapons }

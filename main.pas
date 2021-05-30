@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, scrRIP, plot_gen, file_handling;
+  universe, fov, player, scrRIP, plot_gen, file_handling, logging;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -105,6 +105,8 @@ end;
 
 procedure newGame;
 begin
+  logging.beginLogging;
+
   (* Game state = game running *)
   gameState := stGame;
   killer := 'empty';
