@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, scrRIP, plot_gen, file_handling, logging;
+  universe, fov, player, scrRIP, plot_gen, file_handling;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -84,29 +84,26 @@ end;
 
 procedure exitApplication;
 begin
-  try
-    (* Don't attempt to save game from Title screen *)
+  (* Don't attempt to save game from Title screen *)
+  if (gameState <> stTitle) then
+  begin
     file_handling.saveGame;
-
-    gameState := stGameOver;
-    { Shutdown keyboard unit }
-    keyboardinput.shutdownKeyboard;
-    { Shutdown video unit }
-    ui.shutdownScreen;
-    (* Clear screen and display author message *)
-    ui.exitMessage;
     (* Clear arrays *)
     entityList := nil;
     itemList := nil;
-  finally
-    halt;
   end;
+  gameState := stGameOver;
+  { Shutdown keyboard unit }
+  keyboardinput.shutdownKeyboard;
+  { Shutdown video unit }
+  ui.shutdownScreen;
+  (* Clear screen and display author message *)
+  ui.exitMessage;
+  halt;
 end;
 
 procedure newGame;
 begin
-  logging.beginLogging;
-
   (* Game state = game running *)
   gameState := stGame;
   killer := 'empty';
