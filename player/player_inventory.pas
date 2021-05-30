@@ -144,6 +144,7 @@ end;
 function removeFromInventory(itemNumber: smallint): boolean;
 var
   newItem: item;
+  ss: shortstring;
 begin
   Result := False;
   (* Check if there is already an item on the floor here *)
@@ -167,7 +168,8 @@ begin
     { Place item on the game map }
     Inc(items.itemAmount);
     Insert(newitem, itemList, itemAmount);
-    ui.bufferMessage('You drop the ' + newItem.itemName);
+    WriteStr(ss, 'You drop the ', newItem.itemName);
+    ui.bufferMessage(ss);
 
     (* Remove from inventory *)
     inventory[itemNumber].Name := 'Empty';

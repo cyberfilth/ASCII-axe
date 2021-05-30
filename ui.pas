@@ -16,8 +16,8 @@ uses
 var
   vid: TVideoMode;
   x, y: smallint;
-  messageArray: array[1..7] of string = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
-  buffer: string;
+  messageArray: array[1..7] of shortstring = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
+  buffer: shortstring;
   equippedWeapon, equippedArmour: shortstring;
   (* Status effects *)
   poisonStatusSet: boolean;
@@ -33,9 +33,9 @@ procedure shutdownScreen;
 (* Display status effects *)
 procedure displayStatusEffect(onoff: byte; effectType: shortstring);
 (* Write text to the message log *)
-procedure displayMessage(message: string);
+procedure displayMessage(message: shortstring);
 (* Store all messages from players turn *)
-procedure bufferMessage(message: string);
+procedure bufferMessage(message: shortstring);
 (* Write buffered message to the message log *)
 procedure writeBufferedMessages;
 (* Restore message window after showing a menu *)
@@ -155,7 +155,7 @@ begin
   end;
 end;
 
-procedure displayMessage(message: string);
+procedure displayMessage(message: shortstring);
 begin
   (* Catch duplicate messages *)
   if (message = messageArray[1]) then
@@ -195,7 +195,7 @@ begin
   end;
 end;
 
-procedure bufferMessage(message: string);
+procedure bufferMessage(message: shortstring);
 begin
   buffer := buffer + message + '. ';
   if (Length(buffer) >= 45) then
