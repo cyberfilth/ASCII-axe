@@ -36,19 +36,19 @@ function removeFromInventory(itemNumber: smallint): boolean;
 (* Display the inventory screen *)
 procedure showInventory;
 (* Display more information about an item *)
-procedure examineInventory(selection: byte);
+procedure examineInventory(selection: smallint);
 (* Drop menu *)
 procedure drop;
 (* Drop selected item *)
-procedure dropSelection(selection: byte);
+procedure dropSelection(selection: smallint);
 (* Quaff menu *)
 procedure quaff;
 (* Quaff selected item *)
-procedure quaffSelection(selection: byte);
+procedure quaffSelection(selection: smallint);
 (* Wear / Wield menu *)
 procedure wield;
 (* Wear / Wield selected item *)
-procedure wearWieldSelection(selection: byte);
+procedure wearWieldSelection(selection: smallint);
 
 implementation
 
@@ -118,7 +118,7 @@ begin
       inventory[i].inInventory := True;
       ui.displayMessage('You pick up the ' + inventory[i].Name);
       (* Set an empty flag for the item on the map, this
-         gets deleted what saving the map *)
+         gets deleted when saving the map *)
       with itemList[itemNumber] do
       begin
         itemID := itemNumber;
@@ -202,8 +202,7 @@ begin
   keyboardinput.waitForInput;
 end;
 
-procedure examineInventory(selection: byte);
-{ TODO : Only show materials for weapons and armour }
+procedure examineInventory(selection: smallint);
 var
   material: shortstring;
 begin
@@ -260,12 +259,11 @@ begin
   keyboardinput.waitForInput;
 end;
 
-procedure dropSelection(selection: byte);
+procedure dropSelection(selection: smallint);
 begin
   (* Check that the slot is not empty *)
   if (inventory[selection].inInventory = True) then
     removeFromInventory(selection);
-  { TODO : The 'if not' condition causes a stack trace. Will need to investigate. }
 end;
 
 procedure quaff;
@@ -283,7 +281,7 @@ begin
   keyboardinput.waitForInput;
 end;
 
-procedure quaffSelection(selection: byte);
+procedure quaffSelection(selection: smallint);
 begin
   (* Check that the slot is not empty *)
   if (inventory[selection].inInventory = True) and
@@ -322,7 +320,7 @@ begin
   keyboardinput.waitForInput;
 end;
 
-procedure wearWieldSelection(selection: byte);
+procedure wearWieldSelection(selection: smallint);
 begin
   (* Check that the slot is not empty *)
   if (inventory[selection].inInventory = True) then

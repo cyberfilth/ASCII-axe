@@ -7,7 +7,7 @@ unit items;
 interface
 
 uses
-  item_lookup, ui;
+  ui;
 
 type
   tItem = (itmDrink, itmWeapon, itmArmour, itmEmptySlot);
