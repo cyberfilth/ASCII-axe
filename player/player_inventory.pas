@@ -337,16 +337,38 @@ begin
       if (inventory[selection].equipped = False) and
         (inventory[selection].itemType = itmWeapon) and
         (entityList[0].weaponEquipped = True) then
-        TextOut(6, 21, 'cyan', 'You must first unequip the weapon you already hold')
-
+      begin
+        { prepare changes to the screen }
+        LockScreenUpdate;
+        (* Clear the message line *)
+        TextOut(6, 20, 'black', '                                                  ');
+        { Display message }
+        TextOut(6, 20, 'cyan', 'You must first unequip the weapon you already hold');
+        { Write those changes to the screen }
+        UnlockScreenUpdate;
+        { only redraws the parts that have been updated }
+        UpdateScreen(False);
+        KeyboardInput.waitForInput;
+      end
 
 (* If the item is unworn armour, and the player is already wearing armour
          prompt the player to unequip their armour first *)
       else if (inventory[selection].equipped = False) and
         (inventory[selection].itemType = itmArmour) and
         (entityList[0].armourEquipped = True) then
-        TextOut(6, 21, 'cyan',
-          'You must first remove the armour you already wear')
+      begin
+        { prepare changes to the screen }
+        LockScreenUpdate;
+        (* Clear the message line *)
+        TextOut(6, 20, 'black', '                                                  ');
+        { Display message }
+        TextOut(6, 20, 'cyan', 'You must first remove the armour you already wear');
+        { Write those changes to the screen }
+        UnlockScreenUpdate;
+        { only redraws the parts that have been updated }
+        UpdateScreen(False);
+        KeyboardInput.waitForInput;
+      end
 
       (* Check whether the item is already equipped or not *)
       else if (inventory[selection].equipped = False) then
