@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, scrRIP, plot_gen, file_handling;
+  universe, fov, player, scrRIP, plot_gen, file_handling, keyboard;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -24,6 +24,7 @@ procedure setSeed;
 procedure initialise;
 procedure exitApplication;
 procedure newGame;
+procedure loop;
 procedure gameLoop;
 procedure returnToGameScreen;
 procedure gameOver;
@@ -78,8 +79,6 @@ begin
   end;
   { Initialise keyboard unit }
   keyboardinput.setupKeyboard;
-  { wait for keyboard input }
-  keyboardinput.waitForInput;
 end;
 
 procedure exitApplication;
@@ -140,6 +139,37 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+end;
+
+(* Take input from player *)
+procedure loop;
+var
+  Keypress: TKeyEvent;
+begin
+  while True do
+  begin
+    Keypress := GetKeyEvent;
+    Keypress := TranslateKeyEvent(Keypress);
+    case gameState of
+      { ----------------------------------   Title menu }
+      stTitle: titleInput(Keypress);
+      { -----------------------------------  Game Over screen }
+      stGameOver: RIPInput(Keypress);
+      { ----------------------------------   Prompt to quit game }
+      stQuitMenu: quitInput(Keypress);
+      { ---------------------------------    In the Inventory menu }
+      stInventory: inventoryInput(Keypress);
+      { ---------------------------------    In the Drop item menu }
+      stDropMenu: dropInput(Keypress);
+      { ---------------------------------    In the Quaff menu }
+      stQuaffMenu: quaffInput(Keypress);
+      { ---------------------------------    In the Wear / Wield menu }
+      stWearWield: wearWieldInput(Keypress);
+      { ---------------------------------    Gameplay controls }
+      stGame:
+        gameInput(Keypress);
+    end;//case
+  end;//while
 end;
 
 procedure gameLoop;

@@ -53,7 +53,7 @@ procedure wearWieldSelection(selection: smallint);
 implementation
 
 uses
-  KeyboardInput, scrInventory;
+  scrInventory;
 
 procedure initialiseInventory;
 
@@ -201,7 +201,6 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-  keyboardinput.waitForInput;
 end;
 
 procedure examineInventory(selection: smallint);
@@ -242,7 +241,6 @@ begin
     UnlockScreenUpdate;
     { only redraws the parts that have been updated }
     UpdateScreen(False);
-    keyboardinput.waitForInput;
   end;
 end;
 
@@ -258,7 +256,6 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-  keyboardinput.waitForInput;
 end;
 
 procedure dropSelection(selection: smallint);
@@ -280,7 +277,6 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-  keyboardinput.waitForInput;
 end;
 
 procedure quaffSelection(selection: smallint);
@@ -319,7 +315,6 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
-  keyboardinput.waitForInput;
 end;
 
 procedure wearWieldSelection(selection: smallint);
@@ -348,7 +343,6 @@ begin
         UnlockScreenUpdate;
         { only redraws the parts that have been updated }
         UpdateScreen(False);
-        KeyboardInput.waitForInput;
       end
 
 (* If the item is unworn armour, and the player is already wearing armour
@@ -367,7 +361,6 @@ begin
         UnlockScreenUpdate;
         { only redraws the parts that have been updated }
         UpdateScreen(False);
-        KeyboardInput.waitForInput;
       end
 
       (* Check whether the item is already equipped or not *)

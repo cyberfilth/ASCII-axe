@@ -5,7 +5,7 @@ unit scrRIP;
 interface
 
 uses
-  video, SysUtils, ui, KeyboardInput, globalUtils, entities, file_handling;
+  video, SysUtils, ui, globalUtils, entities, file_handling;
 
 (* Show the game over screen screen *)
 procedure displayRIPscreen;
@@ -40,8 +40,6 @@ begin
 
   UnlockScreenUpdate;
   UpdateScreen(False);
-
-  KeyboardInput.waitForInput;
 end;
 
 end.

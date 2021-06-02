@@ -62,7 +62,7 @@ procedure exitMessage;
 implementation
 
 uses
-  entities, KeyboardInput, main;
+  entities, main;
 
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 var
@@ -344,7 +344,6 @@ begin
   UnlockScreenUpdate;
   (* only redraws the parts that have been updated *)
   UpdateScreen(False);
-  KeyboardInput.waitForInput;
 end;
 
 procedure clearStatusBar;
@@ -356,7 +355,6 @@ begin
   UnlockScreenUpdate;
   (* only redraws the parts that have been updated *)
   UpdateScreen(False);
-  KeyboardInput.waitForInput;
 end;
 
 procedure exitMessage;

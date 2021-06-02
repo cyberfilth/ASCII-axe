@@ -13,8 +13,6 @@ uses
 procedure setupKeyboard;
 (* Shutdown keyboard unit *)
 procedure shutdownKeyboard;
-(* Take input from player *)
-procedure waitForInput;
 (* Input in TITLE Menu state *)
 procedure titleInput(Keypress: TKeyEvent);
 (* Input for QUIT Menu state *)
@@ -45,68 +43,6 @@ end;
 procedure shutdownKeyboard;
 begin
   DoneKeyBoard;
-end;
-
-procedure waitForInput;
-var
-  Keypress: TKeyEvent;
-begin
-  { ---------------------------------   Title menu }
-  while gameState = stTitle do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    titleInput(Keypress);
-  end;
-  { ------------------------------------  Game Over screen }
-  while gameState = stGameOver do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    RIPInput(Keypress);
-  end;
-  { ----------------------------------     Prompt to quit game }
-  while gameState = stQuitMenu do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    quitInput(Keypress);
-  end;
-  { ---------------------------------    In the Inventory menu }
-  while gameState = stInventory do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    inventoryInput(Keypress);
-  end;
-  { ---------------------------------    In the Drop item menu }
-  while gameState = stDropMenu do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    dropInput(Keypress);
-  end;
-  { ---------------------------------    In the Quaff menu }
-  while gameState = stQuaffMenu do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    quaffInput(Keypress);
-  end;
-  { ---------------------------------    In the Wear / Wield menu }
-  while gameState = stWearWield do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    wearWieldInput(Keypress);
-  end;
-  { ---------------------------------    Gameplay controls }
-  while gameState = stGame do
-  begin
-    Keypress := GetKeyEvent;
-    Keypress := TranslateKeyEvent(Keypress);
-    gameInput(Keypress);
-  end;
 end;
 
 procedure titleInput(Keypress: TKeyEvent);

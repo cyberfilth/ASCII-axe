@@ -22,4 +22,5 @@ main;
 begin
   (* Initialise the display, keyboard and game variables *)
   main.initialise;
+  main.loop;
 end.
