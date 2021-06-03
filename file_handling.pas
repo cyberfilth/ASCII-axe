@@ -20,6 +20,8 @@ procedure saveDungeonLevel;
 procedure loadDungeonLevel(lvl: byte);
 (* Delete saved game files *)
 procedure deleteGameData;
+(* Load a saved game *)
+procedure loadGame;
 (* Save game state to file *)
 procedure saveGame;
 
@@ -281,7 +283,6 @@ begin
       SetLength(items.itemList, 1);
       ItemsNode := Doc.DocumentElement.FindNode('Items');
       for i := 0 to items.itemAmount - 1 do
-        //   reduce the item number for game loop
       begin
         items.listLength := length(items.itemList);
         SetLength(items.itemList, items.listLength + 1);
@@ -341,6 +342,129 @@ begin
     until FindNext(datFiles) <> 0;
     FindClose(datFiles);
   end;
+end;
+
+procedure loadGame;
+var
+  RootNode, ParentNode, Tile, NextNode, Blocks, Visible, Occupied,
+  Discovered, InventoryNode, ItemsNode, PlayerDataNode, GlyphNode: TDOMNode;
+  Doc: TXMLDocument;
+  r, c, i: integer;
+  dfileName, Value: string;
+  dID: smallint;
+
+begin
+  try
+    (* Set the save game file name *)
+    dfileName := (globalUtils.saveDirectory + PathDelim + globalutils.saveFile);
+    (* Read xml file from disk *)
+    ReadXMLFile(Doc, dfileName);
+
+    (* Retrieve the nodes *)
+    RootNode := Doc.DocumentElement.FindNode('GameData');
+    ParentNode := RootNode.FirstChild.NextSibling;
+    (* Random seed *)
+    RandSeed := StrToDWord(RootNode.FindNode('RandSeed').TextContent);
+    (* Current dungeon ID *)
+    dID := StrToInt(RootNode.FindNode('dungeonID').TextContent);
+    (* Current depth *)
+    universe.currentDepth := StrToInt(RootNode.FindNode('currentDepth').TextContent);
+
+    (* Player data *)
+    SetLength(entities.entityList, 0);
+    PlayerDataNode := Doc.DocumentElement.FindNode('PlayerData');
+    entities.listLength := length(entities.entityList);
+    SetLength(entities.entityList, entities.listLength + 1);
+    entities.entityList[0].npcID := 0;
+    entities.entityList[0].race := PlayerDataNode.FindNode('race').TextContent;
+    entities.entityList[0].description :=
+      PlayerDataNode.FindNode('description').TextContent;
+    entities.entityList[0].glyph :=
+      char(widechar(PlayerDataNode.FindNode('glyph').TextContent[1]));
+    entities.entityList[0].glyphColour :=
+      PlayerDataNode.FindNode('glyphColour').TextContent;
+    entities.entityList[0].maxHP :=
+      StrToInt(PlayerDataNode.FindNode('maxHP').TextContent);
+    entities.entityList[0].currentHP :=
+      StrToInt(PlayerDataNode.FindNode('currentHP').TextContent);
+    entities.entityList[0].attack :=
+      StrToInt(PlayerDataNode.FindNode('attack').TextContent);
+    entities.entityList[0].defence :=
+      StrToInt(PlayerDataNode.FindNode('defence').TextContent);
+    entities.entityList[0].weaponDice :=
+      StrToInt(PlayerDataNode.FindNode('weaponDice').TextContent);
+    entities.entityList[0].weaponAdds :=
+      StrToInt(PlayerDataNode.FindNode('weaponAdds').TextContent);
+    entities.entityList[0].xpReward :=
+      StrToInt(PlayerDataNode.FindNode('xpReward').TextContent);
+    entities.entityList[0].visionRange :=
+      StrToInt(PlayerDataNode.FindNode('visRange').TextContent);
+    entities.entityList[0].moveCount :=
+      StrToInt(PlayerDataNode.FindNode('moveCount').TextContent);
+    entities.entityList[0].targetX :=
+      StrToInt(PlayerDataNode.FindNode('targetX').TextContent);
+    entities.entityList[0].targetY :=
+      StrToInt(PlayerDataNode.FindNode('targetY').TextContent);
+    entities.entityList[0].inView := True;
+    entities.entityList[0].blocks := False;
+    entities.entityList[0].discovered := True;
+    entities.entityList[0].weaponEquipped :=
+      StrToBool(PlayerDataNode.FindNode('weaponEquipped').TextContent);
+    entities.entityList[0].armourEquipped :=
+      StrToBool(PlayerDataNode.FindNode('armourEquipped').TextContent);
+    entities.entityList[0].isDead := False;
+    entities.entityList[0].stsDrunk :=
+      StrToBool(PlayerDataNode.FindNode('stsDrunk').TextContent);
+    entities.entityList[0].stsPoison :=
+      StrToBool(PlayerDataNode.FindNode('stsPoison').TextContent);
+    entities.entityList[0].tmrDrunk :=
+      StrToInt(PlayerDataNode.FindNode('tmrDrunk').TextContent);
+    entities.entityList[0].tmrPoison :=
+      StrToInt(PlayerDataNode.FindNode('tmrPoison').TextContent);
+    entities.entityList[0].posX :=
+      StrToInt(PlayerDataNode.FindNode('posX').TextContent);
+    entities.entityList[0].posY :=
+      StrToInt(PlayerDataNode.FindNode('posY').TextContent);
+
+    (* Player Inventory *)
+    InventoryNode := Doc.DocumentElement.FindNode('playerInventory');
+    for i := 0 to 9 do
+    begin
+      player_inventory.inventory[i].id := i;
+      player_inventory.inventory[i].Name :=
+        InventoryNode.FindNode('Name').TextContent;
+      player_inventory.inventory[i].equipped :=
+        StrToBool(InventoryNode.FindNode('equipped').TextContent);
+      player_inventory.inventory[i].description :=
+        InventoryNode.FindNode('description').TextContent;
+      player_inventory.inventory[i].itemType :=
+        tItem(GetEnumValue(Typeinfo(tItem), ItemsNode.FindNode(
+        'itemType').TextContent));
+      player_inventory.inventory[i].itemMaterial :=
+        tMaterial(GetEnumValue(Typeinfo(tMaterial),
+        ItemsNode.FindNode('itemMaterial').TextContent));
+      player_inventory.inventory[i].useID :=
+        StrToInt(InventoryNode.FindNode('useID').TextContent);
+
+      { Convert plain text to extended ASCII }
+      if (InventoryNode.FindNode('glyph').TextContent[1] = '|') then
+        player_inventory.inventory[i].glyph := chr(24)
+      else
+        player_inventory.inventory[i].glyph :=
+          char(widechar(InventoryNode.FindNode('glyph').TextContent[1]));
+
+      player_inventory.inventory[i].glyphColour :=
+        InventoryNode.FindNode('glyphColour').TextContent;
+      player_inventory.inventory[i].inInventory :=
+        StrToBool(InventoryNode.FindNode('inInventory').TextContent);
+      ParentNode := InventoryNode.NextSibling;
+      InventoryNode := ParentNode;
+    end;
+
+
+  finally
+  end;
+
 end;
 
 procedure saveGame;

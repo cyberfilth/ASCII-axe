@@ -24,6 +24,7 @@ procedure setSeed;
 procedure initialise;
 procedure exitApplication;
 procedure newGame;
+procedure continue;
 procedure loop;
 procedure gameLoop;
 procedure returnToGameScreen;
@@ -139,6 +140,14 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+end;
+
+procedure continue;
+begin
+  (* Game state = game running *)
+  gameState := stGame;
+  killer := 'empty';
+  file_handling.loadGame;
 end;
 
 (* Take input from player *)

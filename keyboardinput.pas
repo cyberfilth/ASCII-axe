@@ -49,7 +49,11 @@ procedure titleInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
     'n': main.newGame;
-    // 'l': continueGame;
+    'l':
+    begin
+      if (main.saveExists = True) then
+        main.continueGame;
+    end;
     'q': main.exitApplication;
   end;
 end;
