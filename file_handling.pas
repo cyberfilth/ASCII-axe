@@ -9,7 +9,7 @@ interface
 
 uses
   SysUtils, DOM, XMLWrite, XMLRead, TypInfo, globalutils, universe,
-  cave, items, entities, player_inventory, logging;
+  cave, items, entities, player_inventory;
 
 (* Write a newly generate level of a dungeon to disk *)
 procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
@@ -351,41 +351,22 @@ var
   Doc: TXMLDocument;
   r, c, i: integer;
   dfileName, Value: string;
-  dID: smallint;
 
 begin
   try
-
-    logAction('>file_handling.loadGame');
-
-
     (* Set the save game file name *)
     dfileName := (globalUtils.saveDirectory + PathDelim + globalutils.saveFile);
-
-    logAction(' reading ' + dfileName + ' from disk');
-
     (* Read xml file from disk *)
     ReadXMLFile(Doc, dfileName);
-
-    logAction('  success, retrieving the nodes');
-
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('GameData');
     ParentNode := RootNode.FirstChild.NextSibling;
     (* Random seed *)
     RandSeed := StrToDWord(RootNode.FindNode('RandSeed').TextContent);
-
-    logAction('  Updated Random seed: ' + IntToStr(RandSeed));
-
     (* Current dungeon ID *)
-    dID := StrToInt(RootNode.FindNode('dungeonID').TextContent);
+    universe.uniqueID := StrToInt(RootNode.FindNode('dungeonID').TextContent);
     (* Current depth *)
     universe.currentDepth := StrToInt(RootNode.FindNode('currentDepth').TextContent);
-
-    logAction('  read current Dungeon ID ' + IntToStr(dID) +
-      ', and current depth is ' + IntToStr(currentDepth));
-
-    logAction('  Reading PlayerData');
 
     (* Player data *)
     SetLength(entities.entityList, 0);
@@ -443,14 +424,6 @@ begin
     entities.entityList[0].posY :=
       StrToInt(PlayerDataNode.FindNode('posY').TextContent);
 
-
-    logAction('Read data for ' + entityList[0].race + ', the ' +
-      entityList[0].description);
-
-    logAction('');
-
-    logAction('Reading player inventory');
-
     (* Player Inventory *)
     InventoryNode := Doc.DocumentElement.FindNode('playerInventory');
     for i := 0 to 9 do
@@ -484,16 +457,11 @@ begin
         StrToBool(InventoryNode.FindNode('inInventory').TextContent);
       ParentNode := InventoryNode.NextSibling;
       InventoryNode := ParentNode;
-
-      logAction(' > Inventory slot [' + IntToStr(i) + '] is ' +
-        player_inventory.inventory[i].Name);
-
     end;
-
-
   finally
+    (* free memory *)
+    Doc.Free;
   end;
-
 end;
 
 procedure saveGame;

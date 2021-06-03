@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling, logging;
+  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -49,7 +49,6 @@ end;
 
 procedure initialise;
 begin
-  beginLogging;
   gameState := stTitle;
   Randomize;
   { Check if seed set as command line parameter }
@@ -153,35 +152,17 @@ end;
 
 procedure continue;
 begin
-  logAction('> entered main.continue');
-  logAction('  entering file_handling.loadGame');
-
   file_handling.loadGame;
-
-  logAction('  -exiting file_handling.loadGame');
-
+  file_handling.loadDungeonLevel(universe.currentDepth);
   (* Game state = game running *)
   gameState := stGame;
-
-  logAction('  set game state');
-
   killer := 'empty';
-
-  logAction('  set killer');
-
-  logAction('  entering player_inventory.loadEquippedItems');
-
   (* Load player inventory *)
   player_inventory.loadEquippedItems;
-
-  logAction('  -exiting player_inventory.loadEquippedItems');
-
-  logAction('  entering universe.spawnDenizens');
-
   (* Spawn game entities *)
   universe.spawnDenizens;
-
-  logAction('  -exited universe.spawnDenizens');
+   (* Draw player and FOV *)
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 
   { prepare changes to the screen }
   LockScreenUpdate;
@@ -189,7 +170,6 @@ begin
   ui.screenBlank;
   (* Draw the game screen *)
   scrGame.displayGameScreen;
-
   (* draw map through the camera *)
   camera.drawMap;
   (* Generate the welcome message *)
