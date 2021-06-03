@@ -50,9 +50,10 @@ begin
   case GetKeyEventChar(Keypress) of
     'n': main.newGame;
     'l':
+      { Load previously saved game }
     begin
       if (main.saveExists = True) then
-        main.continueGame;
+        main.continue;
     end;
     'q': main.exitApplication;
   end;

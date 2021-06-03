@@ -9,8 +9,8 @@ unit main;
 interface
 
 uses
-  Video, SysUtils, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, scrRIP, plot_gen, file_handling, keyboard;
+  Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
+  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -19,6 +19,8 @@ type
 var
   (* State machine for game menus / controls *)
   gameState: gameStatus;
+  (* Used for title menu, TRUE if there is a save file *)
+  saveExists: boolean;
 
 procedure setSeed;
 procedure initialise;
@@ -66,8 +68,11 @@ begin
   (* Check for previous save file *)
   if (FileExists(globalUtils.saveDirectory + DirectorySeparator +
     globalutils.saveFile)) then
+  begin
+    saveExists := True;
     { Initialise video unit and show title screen }
-    ui.setupScreen(1)
+    ui.setupScreen(1);
+  end
   else
   begin
     try
@@ -132,6 +137,9 @@ begin
   (* draw map through the camera *)
   camera.drawMap;
 
+  (* Draw player and FOV *)
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+
   (* Generate the welcome message *)
   plot_gen.getTrollDate;
   ui.displayMessage('Good Luck...');
@@ -144,10 +152,32 @@ end;
 
 procedure continue;
 begin
+  file_handling.loadGame;
   (* Game state = game running *)
   gameState := stGame;
   killer := 'empty';
-  file_handling.loadGame;
+  (* Load player inventory *)
+  player_inventory.loadEquippedItems;
+  (* Spawn game entities *)
+  universe.spawnDenizens;
+
+  { prepare changes to the screen }
+  LockScreenUpdate;
+  (* Clear the screen *)
+  ui.screenBlank;
+  (* Draw the game screen *)
+  scrGame.displayGameScreen;
+
+  (* draw map through the camera *)
+  camera.drawMap;
+  (* Generate the welcome message *)
+  plot_gen.getTrollDate;
+  ui.displayMessage('Good Luck...');
+  ui.displayMessage('You enter the cave on ' + plot_gen.trollDate);
+  { Write those changes to the screen }
+  UnlockScreenUpdate;
+  { only redraws the parts that have been updated }
+  UpdateScreen(False);
 end;
 
 (* Take input from player *)

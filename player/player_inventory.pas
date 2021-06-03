@@ -76,7 +76,6 @@ begin
 end;
 
 procedure loadEquippedItems;
-
 var
   i: smallint;
 begin
@@ -85,14 +84,13 @@ begin
     if (inventory[i].equipped = True) then
     begin
       (* Check for weapons *)
-      //if (inventory[i].itemType = 'weapon') then
-      //  ui.updateWeapon(inventory[i].Name)
-      //(* Check for armour *)
-      //else if (inventory[i].itemType = 'armour') then
-      //  ui.updateArmour(inventory[i].Name);
+      if (inventory[i].itemType = itmWeapon) then
+        ui.updateWeapon
+      (* Check for armour *)
+      else if (inventory[i].itemType = itmArmour) then
+        ui.updateArmour;
     end;
   end;
-
 end;
 
 (* Returns TRUE if successfully added, FALSE if the inventory is full *)
