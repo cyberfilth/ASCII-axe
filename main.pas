@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling;
+  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling, logging;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -49,6 +49,7 @@ end;
 
 procedure initialise;
 begin
+  beginLogging;
   gameState := stTitle;
   Randomize;
   { Check if seed set as command line parameter }
@@ -152,14 +153,35 @@ end;
 
 procedure continue;
 begin
+  logAction('> entered main.continue');
+  logAction('  entering file_handling.loadGame');
+
   file_handling.loadGame;
+
+  logAction('  -exiting file_handling.loadGame');
+
   (* Game state = game running *)
   gameState := stGame;
+
+  logAction('  set game state');
+
   killer := 'empty';
+
+  logAction('  set killer');
+
+  logAction('  entering player_inventory.loadEquippedItems');
+
   (* Load player inventory *)
   player_inventory.loadEquippedItems;
+
+  logAction('  -exiting player_inventory.loadEquippedItems');
+
+  logAction('  entering universe.spawnDenizens');
+
   (* Spawn game entities *)
   universe.spawnDenizens;
+
+  logAction('  -exited universe.spawnDenizens');
 
   { prepare changes to the screen }
   LockScreenUpdate;

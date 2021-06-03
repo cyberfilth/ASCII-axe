@@ -9,7 +9,7 @@ interface
 
 uses
   SysUtils, DOM, XMLWrite, XMLRead, TypInfo, globalutils, universe,
-  cave, items, entities, player_inventory;
+  cave, items, entities, player_inventory, logging;
 
 (* Write a newly generate level of a dungeon to disk *)
 procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
@@ -355,16 +355,26 @@ var
 
 begin
   try
+
+    logAction('>file_handling.loadGame');
+
+    logAction(' reading ' + dfileName + ' from disk');
+
     (* Set the save game file name *)
     dfileName := (globalUtils.saveDirectory + PathDelim + globalutils.saveFile);
     (* Read xml file from disk *)
     ReadXMLFile(Doc, dfileName);
+
+    logAction('  success, retrieving the nodes');
 
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('GameData');
     ParentNode := RootNode.FirstChild.NextSibling;
     (* Random seed *)
     RandSeed := StrToDWord(RootNode.FindNode('RandSeed').TextContent);
+
+    logAction(' Updated Random seed: ' + IntToStr(RandSeed));
+
     (* Current dungeon ID *)
     dID := StrToInt(RootNode.FindNode('dungeonID').TextContent);
     (* Current depth *)
