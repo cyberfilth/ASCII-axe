@@ -154,6 +154,7 @@ procedure continue;
 begin
   file_handling.loadGame;
   file_handling.loadDungeonLevel(universe.currentDepth);
+  map.loadDisplayedMap;
   (* Game state = game running *)
   gameState := stGame;
   killer := 'empty';

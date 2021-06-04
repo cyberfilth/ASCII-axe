@@ -67,6 +67,8 @@ procedure ascendStairs;
 procedure descendStairs;
 (* Place a tile on the map *)
 procedure drawTile(c, r: smallint; hiDef: byte);
+(* Display explored sections of map when reloading game *)
+procedure loadDisplayedMap;
 (* Setup the current level *)
 procedure setupMap;
 
@@ -267,6 +269,17 @@ begin
           mapDisplay[r][c].Glyph := Chr(176);
         end;
       end;
+    end;
+  end;
+end;
+
+procedure loadDisplayedMap;
+begin
+  for r := 1 to globalUtils.MAXROWS do
+  begin
+    for c := 1 to globalUtils.MAXCOLUMNS do
+    begin
+      drawTile(c, r, 0);
     end;
   end;
 end;
