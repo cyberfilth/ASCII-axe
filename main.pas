@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling;
+  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling, item_lookup;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -151,7 +151,12 @@ begin
 end;
 
 procedure continue;
+var
+  i: byte;
 begin
+  (* Initialise items list *)
+  items.initialiseItems;
+  item_lookup.dropFirstItem;
   file_handling.loadGame;
   file_handling.loadDungeonLevel(universe.currentDepth);
   map.loadDisplayedMap;
@@ -162,8 +167,15 @@ begin
   player_inventory.loadEquippedItems;
   (* Spawn game entities *)
   universe.spawnDenizens;
-   (* Draw player and FOV *)
+  (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+
+  (* Redraw all items *)
+  items.redrawItems;
+
+  (* Redraw all NPC'S *)
+  for i := 1 to entities.npcAmount do
+    entities.redrawMapDisplay(i);
 
   { prepare changes to the screen }
   LockScreenUpdate;
@@ -210,8 +222,8 @@ begin
       { ---------------------------------    Gameplay controls }
       stGame:
         gameInput(Keypress);
-    end;//case
-  end;//while
+    end;
+  end;
 end;
 
 procedure gameLoop;

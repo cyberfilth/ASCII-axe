@@ -18,7 +18,7 @@ uses
 const
   (* Array of items found in a cave, ordered by cave level *)
   caveItems1: array[1..4] of string =
-    ('aleTankard', 'crudeDagger', 'aleTankard', 'basicClub');
+    ('aleTankard', 'leatherArmour1', 'aleTankard', 'basicClub');
   caveItems2: array[1..4] of string =
     ('aleTankard', 'aleTankard', 'crudeDagger', 'leatherArmour1');
   caveItems3: array[1..2] of string = ('aleTankard', 'crudeDagger');
@@ -102,7 +102,7 @@ begin
 
   items.listLength:=Length(items.itemList);
   SetLength(items.itemList, items.itemAmount + 1);
-  leather_armour1.createLeatherArmour(itemAmount, c, r);
+  ale_tankard.createAleTankard(itemAmount, c, r);
 end;
 
 end.

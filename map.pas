@@ -145,7 +145,7 @@ begin
       { Write current level to disk }
       file_handling.saveDungeonLevel;
       (* Clear list of items *)
-      items.newFloorItems;
+      items.initialiseItems;
       { Read next level from disk }
       file_handling.loadDungeonLevel(universe.currentDepth - 1);
       { Show already discovered tiles }
@@ -180,7 +180,7 @@ begin
     { Write current level to disk }
     file_handling.saveDungeonLevel;
     (* Clear list of items *)
-    items.newFloorItems;
+    items.initialiseItems;
     { Read next level from disk }
     file_handling.loadDungeonLevel(universe.currentDepth + 1);
     { Show already discovered tiles }

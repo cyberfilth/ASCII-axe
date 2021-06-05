@@ -247,7 +247,7 @@ begin
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('levelData');
     (* Number of rooms in current level *)
-    totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
+    universe.totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
     (* Has this level been explored already *)
     levelVisited := StrToBool(RootNode.FindNode('levelVisited').TextContent);
     (* Number of items on current level *)
@@ -346,8 +346,7 @@ end;
 
 procedure loadGame;
 var
-  RootNode, ParentNode, Tile, NextNode, Blocks, Visible, Occupied,
-  Discovered, InventoryNode, ItemsNode, PlayerDataNode, GlyphNode: TDOMNode;
+  RootNode, ParentNode, InventoryNode, PlayerDataNode: TDOMNode;
   Doc: TXMLDocument;
   r, c, i: integer;
   dfileName, Value: string;
