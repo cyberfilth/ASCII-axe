@@ -10,7 +10,8 @@ interface
 
 uses
   Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling, item_lookup;
+  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling,
+  item_lookup, logging;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -156,7 +157,6 @@ var
 begin
   (* Initialise items list *)
   items.initialiseItems;
-  item_lookup.dropFirstItem;
   file_handling.loadGame;
   file_handling.loadDungeonLevel(universe.currentDepth);
   map.loadDisplayedMap;

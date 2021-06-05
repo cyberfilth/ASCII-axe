@@ -282,7 +282,7 @@ begin
       (* Items on the map *)
       SetLength(items.itemList, 1);
       ItemsNode := Doc.DocumentElement.FindNode('Items');
-      for i := 0 to items.itemAmount - 1 do
+      for i := 1 to items.itemAmount do
       begin
         items.listLength := length(items.itemList);
         SetLength(items.itemList, items.listLength + 1);
