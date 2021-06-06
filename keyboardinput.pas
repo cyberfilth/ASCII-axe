@@ -49,8 +49,7 @@ procedure titleInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
     'n': main.newGame;
-    'l':
-      { Load previously saved game }
+    'l': { Load previously saved game }
     begin
       if (main.saveExists = True) then
         main.continue;

@@ -93,10 +93,13 @@ begin
   (* Don't attempt to save game from Title screen *)
   if (gameState <> stTitle) then
   begin
-    file_handling.saveGame;
-    (* Clear arrays *)
-    entityList := nil;
-    itemList := nil;
+    if (gameState <> stGameOver) then
+    begin
+      file_handling.saveGame;
+      (* Clear arrays *)
+      entityList := nil;
+      itemList := nil;
+    end;
   end;
   gameState := stGameOver;
   { Shutdown keyboard unit }
@@ -143,7 +146,7 @@ begin
 
   (* Generate the welcome message *)
   plot_gen.getTrollDate;
-   ui.displayMessage('Good Luck...');
+  ui.displayMessage('Good Luck...');
   ui.displayMessage('You enter the ' + universe.title);
   ui.displayMessage('It is ' + plot_gen.trollDate);
   { Write those changes to the screen }
@@ -191,7 +194,7 @@ begin
   camera.drawMap;
   (* Generate the welcome message *)
   plot_gen.getTrollDate;
-   ui.displayMessage('Good Luck...');
+  ui.displayMessage('Good Luck...');
   ui.displayMessage('You are in the ' + universe.title);
   ui.displayMessage('It is ' + plot_gen.trollDate);
   { Write those changes to the screen }
@@ -247,14 +250,11 @@ begin
   player.processStatus;
   (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
-
   (* Redraw all items *)
   items.redrawItems;
-
   (* Redraw all NPC'S *)
   for i := 1 to entities.npcAmount do
     entities.redrawMapDisplay(i);
-
   { prepare changes to the screen }
   LockScreenUpdate;
 
@@ -327,6 +327,7 @@ begin
   ui.writeBufferedMessages;
 
   (* FINISH DRAWING TO THE BUFFER *)
+
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
@@ -336,7 +337,6 @@ end;
 procedure gameOver;
 begin
   scrRIP.displayRIPscreen;
-
 end;
 
 end.

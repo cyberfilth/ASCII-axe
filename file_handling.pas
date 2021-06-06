@@ -331,19 +331,12 @@ end;
 
 procedure deleteGameData;
 var
-  datFiles: TSearchRec;
+  dfileName: string;
 begin
-  { Change into axesData directory }
-  ChDir(globalutils.saveDirectory);
-  { Delete all .dat files in directory }
-  if FindFirst('*.dat', faAnyFile, datFiles) = 0 then
-  begin
-    repeat
-      with datFiles do
-        DeleteFile(datFiles.Name);
-    until FindNext(datFiles) <> 0;
-    FindClose(datFiles);
-  end;
+  (* Set the save game file name *)
+  dfileName := (globalUtils.saveDirectory + PathDelim + globalutils.saveFile);
+  if (FileExists(dfileName)) then
+    DeleteFile(dfileName);
 end;
 
 procedure loadGame;
