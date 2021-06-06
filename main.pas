@@ -143,8 +143,9 @@ begin
 
   (* Generate the welcome message *)
   plot_gen.getTrollDate;
-  ui.displayMessage('Good Luck...');
-  ui.displayMessage('You enter the cave on ' + plot_gen.trollDate);
+   ui.displayMessage('Good Luck...');
+  ui.displayMessage('You enter the ' + universe.title);
+  ui.displayMessage('It is ' + plot_gen.trollDate);
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
@@ -190,8 +191,9 @@ begin
   camera.drawMap;
   (* Generate the welcome message *)
   plot_gen.getTrollDate;
-  ui.displayMessage('Good Luck...');
-  ui.displayMessage('You enter the cave on ' + plot_gen.trollDate);
+   ui.displayMessage('Good Luck...');
+  ui.displayMessage('You are in the ' + universe.title);
+  ui.displayMessage('It is ' + plot_gen.trollDate);
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }

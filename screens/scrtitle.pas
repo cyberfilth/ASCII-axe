@@ -39,9 +39,8 @@ begin
   end
   else
   begin
-    TextOut(18, 22, 'cyan', 'L - Load Last Game');
-    TextOut(18, 23, 'cyan', 'N - New Game');
-    TextOut(18, 24, 'cyan', 'Q - Quit');
+    TextOut(18, 22, 'cyan', 'L - Load Last Game       N - New Game');
+    TextOut(18, 23, 'cyan', 'Q - Quit');
   end;
 end;
 

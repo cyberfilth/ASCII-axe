@@ -78,7 +78,7 @@ begin
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
     AddElement(datanode, 'dungeonID', IntToStr(idNumber));
-    AddElement(datanode, 'title', title);
+    AddElement(datanode, 'title', universe.title);
     AddElement(datanode, 'floor', IntToStr(lvlNum));
     AddElement(datanode, 'levelVisited', BoolToStr(False));
     AddElement(datanode, 'itemsOnThisFloor', IntToStr(0));
@@ -168,7 +168,7 @@ begin
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
     AddElement(datanode, 'dungeonID', IntToStr(uniqueID));
-    AddElement(datanode, 'title', title);
+    AddElement(datanode, 'title', universe.title);
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'levelVisited', BoolToStr(True));
     AddElement(datanode, 'itemsOnThisFloor', IntToStr(items.countNonEmptyItems));
@@ -246,12 +246,14 @@ begin
     ReadXMLFile(Doc, dfileName);
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('levelData');
-    (* Number of rooms in current level *)
-    universe.totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
+    (* Name of dungeon *)
+    title := RootNode.FindNode('title').TextContent;
     (* Has this level been explored already *)
     levelVisited := StrToBool(RootNode.FindNode('levelVisited').TextContent);
     (* Number of items on current level *)
     items.itemAmount := StrToInt(RootNode.FindNode('itemsOnThisFloor').TextContent);
+    (* Number of rooms in current level *)
+    universe.totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
 
     (* Map tile data *)
     Tile := RootNode.NextSibling;
