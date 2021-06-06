@@ -350,8 +350,8 @@ procedure loadGame;
 var
   RootNode, ParentNode, InventoryNode, PlayerDataNode: TDOMNode;
   Doc: TXMLDocument;
-  r, c, i: integer;
-  dfileName, Value: string;
+  i: integer;
+  dfileName: string;
 
 begin
   try

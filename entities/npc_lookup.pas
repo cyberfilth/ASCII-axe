@@ -15,6 +15,7 @@ const
   (* Array of creatures found in a cave, ordered by cave level *)
   caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
   caveNPC2: array[1..4] of string = ('caveRat', 'giantRat', 'giantRat', 'giantRat');
+  caveNPC3: array[1..4] of string = ('caveRat', 'giantRat', 'giantRat', 'giantRat');
 
 
 (* randomly choose a creature and call the generate code directly *)
@@ -48,6 +49,11 @@ begin
       begin
         randSelect := globalUtils.randomRange(1, 4);
         monster := caveNPC2[randSelect];
+      end { Level 3 }
+      else if (universe.currentDepth = 3) then
+      begin
+        randSelect := globalUtils.randomRange(1, 4);
+        monster := caveNPC3[randSelect];
       end;
     end;
     tDungeon:
