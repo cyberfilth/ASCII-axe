@@ -424,6 +424,8 @@ begin
       StrToInt(PlayerDataNode.FindNode('posY').TextContent);
 
     (* Player Inventory *)
+    player_inventory.initialiseInventory;
+
     InventoryNode := Doc.DocumentElement.FindNode('playerInventory');
     for i := 0 to 9 do
     begin

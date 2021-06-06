@@ -11,7 +11,7 @@ interface
 uses
   Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
   universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling,
-  item_lookup, logging;
+  item_lookup;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -163,6 +163,9 @@ begin
   (* Game state = game running *)
   gameState := stGame;
   killer := 'empty';
+  (* set up inventory *)
+  ui.equippedWeapon := 'No weapon equipped';
+  ui.equippedArmour := 'No armour worn';
   (* Load player inventory *)
   player_inventory.loadEquippedItems;
   (* Spawn game entities *)
