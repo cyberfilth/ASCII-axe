@@ -3,7 +3,6 @@
 unit file_handling;
 
 {$mode objfpc}{$H+}
-{$modeswitch UnicodeStrings}
 
 interface
 
@@ -37,9 +36,9 @@ var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
-  dfileName, Value: string;
+  dfileName, Value: shortstring;
 
-  procedure AddElement(Node: TDOMNode; Name, Value: string);
+  procedure AddElement(Node: TDOMNode; Name, Value: UnicodeString);
   var
     NameNode, ValueNode: TDomNode;
   begin
@@ -53,7 +52,7 @@ var
     Node.Appendchild(NameNode);
   end;
 
-  function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
+  function AddChild(Node: TDOMNode; ChildName: shortstring): TDomNode;
 
   var
     ChildNode: TDomNode;
@@ -127,9 +126,9 @@ var
   r, c, id_int: smallint;
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
-  dfileName, Value: string;
+  dfileName, Value: shortstring;
 
-  procedure AddElement(Node: TDOMNode; Name, Value: string);
+  procedure AddElement(Node: TDOMNode; Name, Value: shortstring);
 
   var
     NameNode, ValueNode: TDomNode;
@@ -144,7 +143,7 @@ var
     Node.Appendchild(NameNode);
   end;
 
-  function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
+  function AddChild(Node: TDOMNode; ChildName: shortstring): TDomNode;
   var
     ChildNode: TDomNode;
   begin
@@ -271,7 +270,7 @@ end;
 
 procedure loadDungeonLevel(lvl: byte);
 var
-  dfileName: string;
+  dfileName: shortstring;
   RootNode, Tile, ItemsNode, ParentNode, NPCnode, NextNode, Blocks,
   Visible, Occupied, Discovered, GlyphNode: TDOMNode;
   Doc: TXMLDocument;
@@ -446,7 +445,7 @@ end;
 
 procedure deleteGameData;
 var
-  dfileName: string;
+  dfileName: shortstring;
 begin
   (* Set the save game file name *)
   dfileName := (globalUtils.saveDirectory + PathDelim + globalutils.saveFile);
@@ -459,7 +458,7 @@ var
   RootNode, ParentNode, InventoryNode, PlayerDataNode: TDOMNode;
   Doc: TXMLDocument;
   i: integer;
-  dfileName: string;
+  dfileName: shortstring;
 
 begin
   try
@@ -579,9 +578,9 @@ procedure saveGame;
 var
   Doc: TXMLDocument;
   RootNode, dataNode: TDOMNode;
-  dfileName, Value: string;
+  dfileName, Value: shortstring;
 
-  procedure AddElement(Node: TDOMNode; Name, Value: string);
+  procedure AddElement(Node: TDOMNode; Name, Value: shortstring);
   var
     NameNode, ValueNode: TDomNode;
   begin
@@ -595,7 +594,7 @@ var
     Node.Appendchild(NameNode);
   end;
 
-  function AddChild(Node: TDOMNode; ChildName: string): TDomNode;
+  function AddChild(Node: TDOMNode; ChildName: shortstring): TDomNode;
   var
     ChildNode: TDomNode;
   begin
