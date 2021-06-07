@@ -367,13 +367,14 @@ begin
     (* Load entities on this level if already visited *)
     if (levelVisited = True) then
     begin
+      SetLength(entities.entityList, 1);
       NPCnode := Doc.DocumentElement.FindNode('NPCdata');
       for i := 1 to entities.npcAmount do
       begin
         entities.listLength := length(entities.entityList);
         SetLength(entities.entityList, entities.listLength + 1);
         entities.entityList[i].npcID :=
-          StrToInt(NPCnode.Attributes.Item[0].NodeValue);
+          StrToInt(NPCnode.FindNode('npcID').TextContent);
         entities.entityList[i].race := NPCnode.FindNode('race').TextContent;
         entities.entityList[i].description :=
           NPCnode.FindNode('description').TextContent;
@@ -436,7 +437,6 @@ begin
     else
       (* Generate new entites if floor not already visited *)
       universe.spawnDenizens;
-
     currentDepth := lvl;
   finally
     (* free memory *)
