@@ -57,7 +57,7 @@ var
   var
     ChildNode: TDomNode;
   begin
-    ChildNode := Doc.CreateElement(ChildName);
+    ChildNode := Doc.CreateElement(UTF8Decode(ChildName));
     Node.AppendChild(ChildNode);
     Result := ChildNode;
   end;
@@ -76,15 +76,15 @@ begin
 
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
-    AddElement(datanode, 'dungeonID', IntToStr(idNumber));
+    AddElement(datanode, 'dungeonID', UTF8Decode(IntToStr(idNumber)));
     AddElement(datanode, 'title', universe.title);
-    AddElement(datanode, 'floor', IntToStr(lvlNum));
-    AddElement(datanode, 'levelVisited', BoolToStr(False));
-    AddElement(datanode, 'itemsOnThisFloor', IntToStr(0));
-    AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
+    AddElement(datanode, 'floor', UTF8Decode(IntToStr(lvlNum)));
+    AddElement(datanode, 'levelVisited', UTF8Decode(BoolToStr(False)));
+    AddElement(datanode, 'itemsOnThisFloor', UTF8Decode(IntToStr(0)));
+    AddElement(datanode, 'totalDepth', UTF8Decode(IntToStr(totalDepth)));
     WriteStr(Value, dungeonType);
-    AddElement(datanode, 'mapType', Value);
-    AddElement(datanode, 'totalRooms', IntToStr(totalRooms));
+    AddElement(datanode, 'mapType', UTF8Decode(Value));
+    AddElement(datanode, 'totalRooms', UTF8Decode(IntToStr(totalRooms)));
 
     (* map tiles *)
     for r := 1 to MAXROWS do
@@ -93,22 +93,22 @@ begin
       begin
         Inc(id_int);
         DataNode := AddChild(RootNode, 'map_tiles');
-        TDOMElement(dataNode).SetAttribute('id', IntToStr(id_int));
+        TDOMElement(dataNode).SetAttribute('id', UTF8Decode(IntToStr(id_int)));
         { if dungeon type is a cave }
         if (dType = tCave) then
         begin
           if (cave.terrainArray[r][c] = '*') then
-            AddElement(datanode, 'Blocks', BoolToStr(True))
+            AddElement(datanode, 'Blocks', UTF8Decode(BoolToStr(True)))
           else
-            AddElement(datanode, 'Blocks', BoolToStr(False));
+            AddElement(datanode, 'Blocks', UTF8Decode(BoolToStr(False)));
         end;
-        AddElement(datanode, 'Visible', BoolToStr(False));
-        AddElement(datanode, 'Occupied', BoolToStr(False));
-        AddElement(datanode, 'Discovered', BoolToStr(False));
+        AddElement(datanode, 'Visible', UTF8Decode(BoolToStr(False)));
+        AddElement(datanode, 'Occupied', UTF8Decode(BoolToStr(False)));
+        AddElement(datanode, 'Discovered', UTF8Decode(BoolToStr(False)));
         { if dungeon type is a cave }
         if (dType = tCave) then
         begin
-          AddElement(datanode, 'Glyph', cave.terrainArray[r][c]);
+          AddElement(datanode, 'Glyph', UTF8Decode(cave.terrainArray[r][c]));
         end;
       end;
     end;
@@ -134,9 +134,9 @@ var
     NameNode, ValueNode: TDomNode;
   begin
     { creates future Node/Name }
-    NameNode := Doc.CreateElement(Name);
+    NameNode := Doc.CreateElement(UTF8Decode(Name));
     { creates future Node/Name/Value }
-    ValueNode := Doc.CreateTextNode(Value);
+    ValueNode := Doc.CreateTextNode(UTF8Decode(Value));
     { place value in place }
     NameNode.Appendchild(ValueNode);
     { place Name in place }
@@ -147,7 +147,7 @@ var
   var
     ChildNode: TDomNode;
   begin
-    ChildNode := Doc.CreateElement(ChildName);
+    ChildNode := Doc.CreateElement(UTF8Decode(ChildName));
     Node.AppendChild(ChildNode);
     Result := ChildNode;
   end;
@@ -184,7 +184,7 @@ begin
       begin
         Inc(id_int);
         DataNode := AddChild(RootNode, 'map_tiles');
-        TDOMElement(dataNode).SetAttribute('id', IntToStr(maparea[r][c].id));
+        TDOMElement(dataNode).SetAttribute('id', UTF8Decode(IntToStr(maparea[r][c].id)));
         AddElement(datanode, 'Blocks', BoolToStr(map.maparea[r][c].Blocks));
         AddElement(datanode, 'Visible', BoolToStr(map.maparea[r][c].Visible));
         AddElement(datanode, 'Occupied', BoolToStr(map.maparea[r][c].Occupied));
@@ -200,7 +200,8 @@ begin
       begin
         begin
           DataNode := AddChild(RootNode, 'Items');
-          TDOMElement(dataNode).SetAttribute('itemID', IntToStr(itemList[i].itemID));
+          TDOMElement(dataNode).SetAttribute('itemID',
+            UTF8Decode(IntToStr(itemList[i].itemID)));
           AddElement(DataNode, 'Name', itemList[i].itemName);
           AddElement(DataNode, 'description', itemList[i].itemDescription);
           WriteStr(Value, itemList[i].itemType);
@@ -585,9 +586,9 @@ var
     NameNode, ValueNode: TDomNode;
   begin
     { creates future Node/Name }
-    NameNode := Doc.CreateElement(Name);
+    NameNode := Doc.CreateElement(UTF8Decode(Name));
     { creates future Node/Name/Value }
-    ValueNode := Doc.CreateTextNode(Value);
+    ValueNode := Doc.CreateTextNode(UTF8Decode(Value));
     { place value in place }
     NameNode.Appendchild(ValueNode);
     { place Name in place }
@@ -598,7 +599,7 @@ var
   var
     ChildNode: TDomNode;
   begin
-    ChildNode := Doc.CreateElement(ChildName);
+    ChildNode := Doc.CreateElement(UTF8Decode(ChildName));
     Node.AppendChild(ChildNode);
     Result := ChildNode;
   end;
@@ -663,7 +664,7 @@ begin
     for i := 0 to 9 do
     begin
       DataNode := AddChild(RootNode, 'playerInventory');
-      TDOMElement(dataNode).SetAttribute('id', IntToStr(i));
+      TDOMElement(dataNode).SetAttribute('id', UTF8Decode(IntToStr(i)));
       AddElement(DataNode, 'Name', inventory[i].Name);
       AddElement(DataNode, 'equipped', BoolToStr(inventory[i].equipped));
       AddElement(DataNode, 'description', inventory[i].description);
