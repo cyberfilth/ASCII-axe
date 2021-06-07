@@ -243,6 +243,12 @@ begin
       AddElement(DataNode, 'moveCount', IntToStr(entities.entityList[i].moveCount));
       AddElement(DataNode, 'targetX', IntToStr(entities.entityList[i].targetX));
       AddElement(DataNode, 'targetY', IntToStr(entities.entityList[i].targetY));
+      AddElement(DataNode, 'inView', BoolToStr(entities.entityList[i].inView));
+      AddElement(DataNode, 'blocks', BoolToStr(entities.entityList[i].blocks));
+      WriteStr(Value, entities.entityList[i].state);
+      AddElement(DataNode, 'state', Value);
+      AddElement(DataNode, 'discovered',
+        BoolToStr(entities.entityList[i].discovered));
       AddElement(DataNode, 'weaponEquipped',
         BoolToStr(entities.entityList[i].weaponEquipped));
       AddElement(DataNode, 'armourEquipped',
@@ -266,8 +272,8 @@ end;
 procedure loadDungeonLevel(lvl: byte);
 var
   dfileName: string;
-  RootNode, Tile, ItemsNode, ParentNode, NextNode, Blocks, Visible,
-  Occupied, Discovered, GlyphNode: TDOMNode;
+  RootNode, Tile, ItemsNode, ParentNode, NPCnode, NextNode, Blocks,
+  Visible, Occupied, Discovered, GlyphNode: TDOMNode;
   Doc: TXMLDocument;
   r, c: integer;
   levelVisited: boolean;
@@ -285,6 +291,8 @@ begin
     levelVisited := StrToBool(RootNode.FindNode('levelVisited').TextContent);
     (* Number of items on current level *)
     items.itemAmount := StrToInt(RootNode.FindNode('itemsOnThisFloor').TextContent);
+    (* Number of entities on current level *)
+    entities.npcAmount := StrToInt(RootNode.FindNode('entitiesOnThisFloor').TextContent);
     (* Number of rooms in current level *)
     universe.totalRooms := StrToInt(RootNode.FindNode('totalRooms').TextContent);
 
@@ -355,6 +363,80 @@ begin
     else
       (* Generate new items if floor not already visited *)
       universe.litterItems;
+
+    (* Load entities on this level if already visited *)
+    if (levelVisited = True) then
+    begin
+      NPCnode := Doc.DocumentElement.FindNode('NPCdata');
+      for i := 1 to entities.npcAmount do
+      begin
+        entities.listLength := length(entities.entityList);
+        SetLength(entities.entityList, entities.listLength + 1);
+        entities.entityList[i].npcID :=
+          StrToInt(NPCnode.Attributes.Item[0].NodeValue);
+        entities.entityList[i].race := NPCnode.FindNode('race').TextContent;
+        entities.entityList[i].description :=
+          NPCnode.FindNode('description').TextContent;
+        entities.entityList[i].glyph :=
+          char(widechar(NPCnode.FindNode('glyph').TextContent[1]));
+        entities.entityList[i].glyphColour :=
+          NPCnode.FindNode('glyphColour').TextContent;
+        entities.entityList[i].maxHP :=
+          StrToInt(NPCnode.FindNode('maxHP').TextContent);
+        entities.entityList[i].currentHP :=
+          StrToInt(NPCnode.FindNode('currentHP').TextContent);
+        entities.entityList[i].attack :=
+          StrToInt(NPCnode.FindNode('attack').TextContent);
+        entities.entityList[i].defence :=
+          StrToInt(NPCnode.FindNode('defence').TextContent);
+        entities.entityList[i].weaponDice :=
+          StrToInt(NPCnode.FindNode('weaponDice').TextContent);
+        entities.entityList[i].weaponAdds :=
+          StrToInt(NPCnode.FindNode('weaponAdds').TextContent);
+        entities.entityList[i].xpReward :=
+          StrToInt(NPCnode.FindNode('xpReward').TextContent);
+        entities.entityList[i].visionRange :=
+          StrToInt(NPCnode.FindNode('visRange').TextContent);
+        entities.entityList[i].moveCount :=
+          StrToInt(NPCnode.FindNode('moveCount').TextContent);
+        entities.entityList[i].targetX :=
+          StrToInt(NPCnode.FindNode('targetX').TextContent);
+        entities.entityList[i].targetY :=
+          StrToInt(NPCnode.FindNode('targetY').TextContent);
+        entities.entityList[i].inView :=
+          StrToBool(NPCnode.FindNode('inView').TextContent);
+        entities.entityList[i].blocks :=
+          StrToBool(NPCnode.FindNode('blocks').TextContent);
+        entities.entityList[i].state :=
+          attitudes(GetEnumValue(Typeinfo(attitudes), NPCnode.FindNode(
+          'state').TextContent));
+        entities.entityList[i].discovered :=
+          StrToBool(NPCnode.FindNode('discovered').TextContent);
+        entities.entityList[i].weaponEquipped :=
+          StrToBool(NPCnode.FindNode('weaponEquipped').TextContent);
+        entities.entityList[i].armourEquipped :=
+          StrToBool(NPCnode.FindNode('armourEquipped').TextContent);
+        entities.entityList[i].isDead := False;
+        entities.entityList[i].stsDrunk :=
+          StrToBool(NPCnode.FindNode('stsDrunk').TextContent);
+        entities.entityList[i].stsPoison :=
+          StrToBool(NPCnode.FindNode('stsPoison').TextContent);
+        entities.entityList[i].tmrDrunk :=
+          StrToInt(NPCnode.FindNode('tmrDrunk').TextContent);
+        entities.entityList[i].tmrPoison :=
+          StrToInt(NPCnode.FindNode('tmrPoison').TextContent);
+        entities.entityList[i].posX :=
+          StrToInt(NPCnode.FindNode('posX').TextContent);
+        entities.entityList[i].posY :=
+          StrToInt(NPCnode.FindNode('posY').TextContent);
+        ParentNode := NPCnode.NextSibling;
+        NPCnode := ParentNode;
+      end;
+    end
+    else
+      (* Generate new entites if floor not already visited *)
+      universe.spawnDenizens;
+
     currentDepth := lvl;
   finally
     (* free memory *)

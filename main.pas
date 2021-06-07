@@ -172,8 +172,7 @@ begin
   ui.equippedArmour := 'No armour worn';
   (* Load player inventory *)
   player_inventory.loadEquippedItems;
-  (* Spawn game entities *)
-  universe.spawnDenizens;
+
   (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 
