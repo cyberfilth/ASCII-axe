@@ -86,6 +86,8 @@ procedure occupyUpdate;
 procedure redrawMapDisplay(id: byte);
 (* Clear list of NPC's *)
 procedure newFloorNPCs;
+(* Count all living NPC's *)
+function countLivingEntities: byte;
 (* Call Creatures.takeTurn procedure *)
 procedure NPCgameLoop;
 
@@ -260,6 +262,17 @@ begin
   (* Clear the current NPC amount *)
   npcAmount := 1;
   SetLength(entityList, 1);
+end;
+
+function countLivingEntities: byte;
+var
+  i, Count: byte;
+begin
+  Count := 0;
+  for i := 1 to npcAmount do
+    if (entityList[i].isDead = False) then
+      Inc(Count);
+  Result := Count;
 end;
 
 procedure NPCgameLoop;

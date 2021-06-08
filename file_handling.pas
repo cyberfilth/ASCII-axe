@@ -175,7 +175,7 @@ begin
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'levelVisited', BoolToStr(True));
     AddElement(datanode, 'itemsOnThisFloor', IntToStr(items.countNonEmptyItems));
-    AddElement(datanode, 'entitiesOnThisFloor', IntToStr(entities.npcAmount));
+    AddElement(datanode, 'entitiesOnThisFloor', IntToStr(entities.countLivingEntities));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
     WriteStr(Value, dungeonType);
     AddElement(datanode, 'mapType', Value);
@@ -230,38 +230,42 @@ begin
 
     { Entities on the map }
     for i := 1 to entities.npcAmount do
-    begin
-      DataNode := AddChild(RootNode, 'NPCdata');
-      AddElement(DataNode, 'npcID', IntToStr(entities.entityList[i].npcID));
-      AddElement(DataNode, 'race', entities.entityList[i].race);
-      AddElement(DataNode, 'description', entities.entityList[i].description);
-      AddElement(DataNode, 'glyph', entities.entityList[i].glyph);
-      AddElement(DataNode, 'glyphColour', entities.entityList[i].glyphColour);
-      AddElement(DataNode, 'maxHP', IntToStr(entities.entityList[i].maxHP));
-      AddElement(DataNode, 'currentHP', IntToStr(entities.entityList[i].currentHP));
-      AddElement(DataNode, 'attack', IntToStr(entities.entityList[i].attack));
-      AddElement(DataNode, 'defence', IntToStr(entities.entityList[i].defence));
-      AddElement(DataNode, 'weaponDice', IntToStr(entities.entityList[i].weaponDice));
-      AddElement(DataNode, 'weaponAdds', IntToStr(entities.entityList[i].weaponAdds));
-      AddElement(DataNode, 'xpReward', IntToStr(entities.entityList[i].xpReward));
-      AddElement(DataNode, 'visRange', IntToStr(entities.entityList[i].visionRange));
-      AddElement(DataNode, 'moveCount', IntToStr(entities.entityList[i].moveCount));
-      AddElement(DataNode, 'targetX', IntToStr(entities.entityList[i].targetX));
-      AddElement(DataNode, 'targetY', IntToStr(entities.entityList[i].targetY));
-      AddElement(DataNode, 'inView', BoolToStr(entities.entityList[i].inView));
-      AddElement(DataNode, 'blocks', BoolToStr(entities.entityList[i].blocks));
-      WriteStr(Value, entities.entityList[i].state);
-      AddElement(DataNode, 'state', Value);
-      AddElement(DataNode, 'discovered', BoolToStr(entities.entityList[i].discovered));
-      AddElement(DataNode, 'weaponEquipped', BoolToStr(entities.entityList[i].weaponEquipped));
-      AddElement(DataNode, 'armourEquipped', BoolToStr(entities.entityList[i].armourEquipped));
-      AddElement(DataNode, 'stsDrunk', BoolToStr(entities.entityList[i].stsDrunk));
-      AddElement(DataNode, 'stsPoison', BoolToStr(entities.entityList[i].stsPoison));
-      AddElement(DataNode, 'tmrDrunk', IntToStr(entities.entityList[i].tmrDrunk));
-      AddElement(DataNode, 'tmrPoison', IntToStr(entities.entityList[i].tmrPoison));
-      AddElement(DataNode, 'posX', IntToStr(entities.entityList[i].posX));
-      AddElement(DataNode, 'posY', IntToStr(entities.entityList[i].posY));
-    end;
+     (* Don't save dead entities *)
+      if (entities.entityList[i].isDead = False) then
+      begin
+        begin
+          DataNode := AddChild(RootNode, 'NPCdata');
+          AddElement(DataNode, 'npcID', IntToStr(entities.entityList[i].npcID));
+          AddElement(DataNode, 'race', entities.entityList[i].race);
+          AddElement(DataNode, 'description', entities.entityList[i].description);
+          AddElement(DataNode, 'glyph', entities.entityList[i].glyph);
+          AddElement(DataNode, 'glyphColour', entities.entityList[i].glyphColour);
+          AddElement(DataNode, 'maxHP', IntToStr(entities.entityList[i].maxHP));
+          AddElement(DataNode, 'currentHP', IntToStr(entities.entityList[i].currentHP));
+          AddElement(DataNode, 'attack', IntToStr(entities.entityList[i].attack));
+          AddElement(DataNode, 'defence', IntToStr(entities.entityList[i].defence));
+          AddElement(DataNode, 'weaponDice', IntToStr(entities.entityList[i].weaponDice));
+          AddElement(DataNode, 'weaponAdds', IntToStr(entities.entityList[i].weaponAdds));
+          AddElement(DataNode, 'xpReward', IntToStr(entities.entityList[i].xpReward));
+          AddElement(DataNode, 'visRange', IntToStr(entities.entityList[i].visionRange));
+          AddElement(DataNode, 'moveCount', IntToStr(entities.entityList[i].moveCount));
+          AddElement(DataNode, 'targetX', IntToStr(entities.entityList[i].targetX));
+          AddElement(DataNode, 'targetY', IntToStr(entities.entityList[i].targetY));
+          AddElement(DataNode, 'inView', BoolToStr(entities.entityList[i].inView));
+          AddElement(DataNode, 'blocks', BoolToStr(entities.entityList[i].blocks));
+          WriteStr(Value, entities.entityList[i].state);
+          AddElement(DataNode, 'state', Value);
+          AddElement(DataNode, 'discovered', BoolToStr(entities.entityList[i].discovered));
+          AddElement(DataNode, 'weaponEquipped', BoolToStr(entities.entityList[i].weaponEquipped));
+          AddElement(DataNode, 'armourEquipped', BoolToStr(entities.entityList[i].armourEquipped));
+          AddElement(DataNode, 'stsDrunk', BoolToStr(entities.entityList[i].stsDrunk));
+          AddElement(DataNode, 'stsPoison', BoolToStr(entities.entityList[i].stsPoison));
+          AddElement(DataNode, 'tmrDrunk', IntToStr(entities.entityList[i].tmrDrunk));
+          AddElement(DataNode, 'tmrPoison', IntToStr(entities.entityList[i].tmrPoison));
+          AddElement(DataNode, 'posX', IntToStr(entities.entityList[i].posX));
+          AddElement(DataNode, 'posY', IntToStr(entities.entityList[i].posY));
+        end;
+      end;
 
     (* Save XML *)
     WriteXMLFile(Doc, dfileName);
