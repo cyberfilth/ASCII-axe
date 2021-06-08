@@ -84,7 +84,7 @@ function isCreatureVisible(x, y: smallint): boolean;
 procedure occupyUpdate;
 (* Update the map display to show all NPC's *)
 procedure redrawMapDisplay(id: byte);
-(* Fill new level with NPC's *)
+(* Clear list of NPC's *)
 procedure newFloorNPCs;
 (* Call Creatures.takeTurn procedure *)
 procedure NPCgameLoop;
@@ -260,7 +260,6 @@ begin
   (* Clear the current NPC amount *)
   npcAmount := 1;
   SetLength(entityList, 1);
-  universe.spawnDenizens;
 end;
 
 procedure NPCgameLoop;

@@ -77,6 +77,7 @@ begin
   NPCnumber := totalRooms + currentDepth;
   { player level is considered when generating the NPCs }
   entities.npcAmount := NPCnumber;
+
   case dungeonType of
     tDungeon: ;
     tCave: { Cave }

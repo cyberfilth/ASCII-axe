@@ -146,6 +146,8 @@ begin
       file_handling.saveDungeonLevel;
       (* Clear list of items *)
       items.initialiseItems;
+      (* Clear list of NPC's *)
+      entities.newFloorNPCs;
       { Read next level from disk }
       file_handling.loadDungeonLevel(universe.currentDepth - 1);
       { Show already discovered tiles }
@@ -156,8 +158,6 @@ begin
           drawTile(c, r, 0);
         end;
       end;
-      (* Clear NPC's from current floor and spawn new ones *)
-      entities.newFloorNPCs;
       { Display current floor }
       ui.displayMessage('You ascend to level ' + IntToStr(universe.currentDepth));
       { Display Field of View }
@@ -181,6 +181,8 @@ begin
     file_handling.saveDungeonLevel;
     (* Clear list of items *)
     items.initialiseItems;
+    (* Clear list of NPC's *)
+    entities.newFloorNPCs;
     { Read next level from disk }
     file_handling.loadDungeonLevel(universe.currentDepth + 1);
     { Show already discovered tiles }
@@ -191,8 +193,6 @@ begin
         drawTile(c, r, 0);
       end;
     end;
-    (* Clear NPC's from current floor and spawn new ones *)
-    entities.newFloorNPCs;
     { Display current floor }
     ui.displayMessage('You descend to level ' + IntToStr(universe.currentDepth));
     { Display Field of View }

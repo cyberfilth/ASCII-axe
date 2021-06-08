@@ -81,10 +81,14 @@ begin
     AddElement(datanode, 'floor', UTF8Decode(IntToStr(lvlNum)));
     AddElement(datanode, 'levelVisited', UTF8Decode(BoolToStr(False)));
     AddElement(datanode, 'itemsOnThisFloor', UTF8Decode(IntToStr(0)));
+    AddElement(datanode, 'entitiesOnThisFloor', UTF8Decode(IntToStr(0)));
     AddElement(datanode, 'totalDepth', UTF8Decode(IntToStr(totalDepth)));
     WriteStr(Value, dungeonType);
     AddElement(datanode, 'mapType', UTF8Decode(Value));
     AddElement(datanode, 'totalRooms', UTF8Decode(IntToStr(totalRooms)));
+
+
+    // no entities are written here!!!
 
     (* map tiles *)
     for r := 1 to MAXROWS do
@@ -200,8 +204,7 @@ begin
       begin
         begin
           DataNode := AddChild(RootNode, 'Items');
-          TDOMElement(dataNode).SetAttribute('itemID',
-            UTF8Decode(IntToStr(itemList[i].itemID)));
+          TDOMElement(dataNode).SetAttribute('itemID', UTF8Decode(IntToStr(itemList[i].itemID)));
           AddElement(DataNode, 'Name', itemList[i].itemName);
           AddElement(DataNode, 'description', itemList[i].itemDescription);
           WriteStr(Value, itemList[i].itemType);
@@ -209,11 +212,13 @@ begin
           WriteStr(Value, itemList[i].itemMaterial);
           AddElement(DataNode, 'itemMaterial', Value);
           AddElement(DataNode, 'useID', IntToStr(itemList[i].useID));
+
           { Convert extended ASCII to plain text }
           if (itemList[i].glyph = chr(24)) then
             AddElement(DataNode, 'glyph', '|')
           else
             AddElement(DataNode, 'glyph', itemList[i].glyph);
+
           AddElement(DataNode, 'glyphColour', itemList[i].glyphColour);
           AddElement(DataNode, 'inView', BoolToStr(itemList[i].inView));
           AddElement(DataNode, 'posX', IntToStr(itemList[i].posX));
@@ -247,12 +252,9 @@ begin
       AddElement(DataNode, 'blocks', BoolToStr(entities.entityList[i].blocks));
       WriteStr(Value, entities.entityList[i].state);
       AddElement(DataNode, 'state', Value);
-      AddElement(DataNode, 'discovered',
-        BoolToStr(entities.entityList[i].discovered));
-      AddElement(DataNode, 'weaponEquipped',
-        BoolToStr(entities.entityList[i].weaponEquipped));
-      AddElement(DataNode, 'armourEquipped',
-        BoolToStr(entities.entityList[i].armourEquipped));
+      AddElement(DataNode, 'discovered', BoolToStr(entities.entityList[i].discovered));
+      AddElement(DataNode, 'weaponEquipped', BoolToStr(entities.entityList[i].weaponEquipped));
+      AddElement(DataNode, 'armourEquipped', BoolToStr(entities.entityList[i].armourEquipped));
       AddElement(DataNode, 'stsDrunk', BoolToStr(entities.entityList[i].stsDrunk));
       AddElement(DataNode, 'stsPoison', BoolToStr(entities.entityList[i].stsPoison));
       AddElement(DataNode, 'tmrDrunk', IntToStr(entities.entityList[i].tmrDrunk));
@@ -293,8 +295,11 @@ begin
     items.itemAmount := StrToInt(UTF8Encode(RootNode.FindNode('itemsOnThisFloor').TextContent));
     (* Number of entities on current level *)
     entities.npcAmount := StrToInt(UTF8Encode(RootNode.FindNode('entitiesOnThisFloor').TextContent));
+    (* Total depth of current dungeon *)
+    universe.totalDepth := StrToInt(UTF8Encode(RootNode.FindNode('totalDepth').TextContent));
     (* Number of rooms in current level *)
     universe.totalRooms := StrToInt(UTF8Encode(RootNode.FindNode('totalRooms').TextContent));
+    universe.currentDepth := lvl;
 
     (* Map tile data *)
     Tile := RootNode.NextSibling;
@@ -340,8 +345,7 @@ begin
         if (ItemsNode.FindNode('glyph').TextContent[1] = '|') then
           items.itemList[i].glyph := chr(24)
         else
-          items.itemList[i].glyph :=
-            char(widechar(ItemsNode.FindNode('glyph').TextContent[1]));
+          items.itemList[i].glyph := char(widechar(ItemsNode.FindNode('glyph').TextContent[1]));
 
         items.itemList[i].glyphColour := UTF8Encode(ItemsNode.FindNode('glyphColour').TextContent);
         items.itemList[i].inView := StrToBool(UTF8Encode(ItemsNode.FindNode('inView').TextContent));
@@ -400,9 +404,9 @@ begin
       end;
     end
     else
-      (* Generate new entites if floor not already visited *)
+      (* Generate new entities if floor not already visited *)
       universe.spawnDenizens;
-    currentDepth := lvl;
+
   finally
     (* free memory *)
     Doc.Free;
@@ -494,8 +498,7 @@ begin
       if (InventoryNode.FindNode('glyph').TextContent[1] = '|') then
         player_inventory.inventory[i].glyph := chr(24)
       else
-        player_inventory.inventory[i].glyph :=
-          char(widechar(InventoryNode.FindNode('glyph').TextContent[1]));
+        player_inventory.inventory[i].glyph := char(widechar(InventoryNode.FindNode('glyph').TextContent[1]));
 
       player_inventory.inventory[i].glyphColour := UTF8Encode(InventoryNode.FindNode('glyphColour').TextContent);
       player_inventory.inventory[i].inInventory := StrToBool(UTF8Encode(InventoryNode.FindNode('inInventory').TextContent));
@@ -582,10 +585,8 @@ begin
     AddElement(DataNode, 'moveCount', IntToStr(entities.entityList[0].moveCount));
     AddElement(DataNode, 'targetX', IntToStr(entities.entityList[0].targetX));
     AddElement(DataNode, 'targetY', IntToStr(entities.entityList[0].targetY));
-    AddElement(DataNode, 'weaponEquipped',
-      BoolToStr(entities.entityList[0].weaponEquipped));
-    AddElement(DataNode, 'armourEquipped',
-      BoolToStr(entities.entityList[0].armourEquipped));
+    AddElement(DataNode, 'weaponEquipped', BoolToStr(entities.entityList[0].weaponEquipped));
+    AddElement(DataNode, 'armourEquipped', BoolToStr(entities.entityList[0].armourEquipped));
     AddElement(DataNode, 'stsDrunk', BoolToStr(entities.entityList[0].stsDrunk));
     AddElement(DataNode, 'stsPoison', BoolToStr(entities.entityList[0].stsPoison));
     AddElement(DataNode, 'tmrDrunk', IntToStr(entities.entityList[0].tmrDrunk));
@@ -606,11 +607,13 @@ begin
       WriteStr(Value, inventory[i].itemMaterial);
       AddElement(DataNode, 'itemMaterial', Value);
       AddElement(DataNode, 'useID', IntToStr(inventory[i].useID));
+
       { Convert extended ASCII to plain text }
       if (inventory[i].glyph = chr(24)) then
         AddElement(DataNode, 'glyph', '|')
       else
         AddElement(DataNode, 'glyph', inventory[i].glyph);
+
       AddElement(DataNode, 'glyphColour', inventory[i].glyphColour);
       AddElement(DataNode, 'inInventory', BoolToStr(inventory[i].inInventory));
     end;
