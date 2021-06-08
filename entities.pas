@@ -178,6 +178,7 @@ function getCreatureHP(x, y: smallint): smallint;
 var
   i: smallint;
 begin
+  Result := 0;
   for i := 0 to npcAmount do
   begin
     if (entityList[i].posX = x) and (entityList[i].posY = y) then
@@ -189,6 +190,7 @@ function getCreatureMaxHP(x, y: smallint): smallint;
 var
   i: smallint;
 begin
+  Result := 0;
   for i := 0 to npcAmount do
   begin
     if (entityList[i].posX = x) and (entityList[i].posY = y) then
@@ -212,6 +214,7 @@ function getCreatureName(x, y: smallint): shortstring;
 var
   i: smallint;
 begin
+  Result := '';
   for i := 0 to npcAmount do
   begin
     if (entityList[i].posX = x) and (entityList[i].posY = y) then

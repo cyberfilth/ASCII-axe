@@ -41,6 +41,7 @@ var
   randSelect: byte;
   thing: string;
 begin
+  thing := '';
   (* Choose random location on the map *)
   repeat
     r := globalutils.randomRange(3, (MAXROWS - 3));

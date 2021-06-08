@@ -101,6 +101,7 @@ function getItemName(x, y: smallint): shortstring;
 var
   i: smallint;
 begin
+  Result := '';
   for i := 1 to itemAmount do
   begin
     if (itemList[i].posX = x) and (itemList[i].posY = y) then
@@ -112,6 +113,7 @@ function getItemDescription(x, y: smallint): shortstring;
 var
   i: smallint;
 begin
+  Result := '';
   for i := 1 to itemAmount do
   begin
     if (itemList[i].posX = x) and (itemList[i].posY = y) then

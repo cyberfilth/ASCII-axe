@@ -29,6 +29,7 @@ var
   randSelect: byte;
   monster: string;
 begin
+  monster := '';
   (* Choose random location on the map *)
   repeat
     r := globalutils.randomRange(2, (MAXROWS - 1));

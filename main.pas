@@ -147,7 +147,7 @@ begin
   (* Generate the welcome message *)
   plot_gen.getTrollDate;
   ui.displayMessage('Good Luck...');
-  ui.displayMessage('You enter the ' + universe.title);
+  ui.displayMessage('You enter the ' + UTF8Encode(universe.title));
   ui.displayMessage('It is ' + plot_gen.trollDate);
   { Write those changes to the screen }
   UnlockScreenUpdate;
@@ -194,7 +194,7 @@ begin
   (* Generate the welcome message *)
   plot_gen.getTrollDate;
   ui.displayMessage('Good Luck...');
-  ui.displayMessage('You are in the ' + universe.title);
+  ui.displayMessage('You are in the ' + UTF8Encode(universe.title));
   ui.displayMessage('It is ' + plot_gen.trollDate);
   { Write those changes to the screen }
   UnlockScreenUpdate;
