@@ -62,6 +62,11 @@ begin
       begin
         randSelect := globalUtils.randomRange(1, 4);
         thing := caveItems2[randSelect];
+      end { Level 3 }
+      else if (universe.currentDepth = 3) then
+      begin
+        randSelect := globalUtils.randomRange(1, 2);
+        thing := caveItems3[randSelect];
       end;
     end;
     tDungeon:
@@ -101,7 +106,7 @@ begin
     (* choose a location that is not a wall or occupied *)
   until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False);
 
-  items.listLength:=Length(items.itemList);
+  items.listLength := Length(items.itemList);
   SetLength(items.itemList, items.itemAmount + 1);
   ale_tankard.createAleTankard(itemAmount, c, r);
 end;
