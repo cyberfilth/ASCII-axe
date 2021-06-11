@@ -112,8 +112,7 @@ begin
     begin
       if (idTarget = 0) then
       begin
-        if (killer = 'empty') then
-          killer := entityList[idOwner].race;
+        killer := entityList[idOwner].race;
         exit;
       end
       else

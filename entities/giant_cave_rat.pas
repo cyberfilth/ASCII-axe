@@ -305,8 +305,7 @@ begin
       (entities.entityList[0].currentHP - damageAmount);
     if (entities.entityList[0].currentHP < 1) then
     begin
-      if (killer = 'empty') then
-        killer := entityList[id].race;
+      killer := entityList[id].race;
       exit;
     end
     else
