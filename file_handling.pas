@@ -77,6 +77,7 @@ begin
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
     AddElement(datanode, 'dungeonID', UTF8Decode(IntToStr(idNumber)));
+    AddElement(datanode, 'canExitDungeon', UTF8Decode(BoolToStr(False)));
     AddElement(datanode, 'title', universe.title);
     AddElement(datanode, 'floor', UTF8Decode(IntToStr(lvlNum)));
     AddElement(datanode, 'levelVisited', UTF8Decode(BoolToStr(False)));
@@ -86,9 +87,6 @@ begin
     WriteStr(Value, dungeonType);
     AddElement(datanode, 'mapType', UTF8Decode(Value));
     AddElement(datanode, 'totalRooms', UTF8Decode(IntToStr(totalRooms)));
-
-
-    // no entities are written here!!!
 
     (* map tiles *)
     for r := 1 to MAXROWS do
@@ -171,6 +169,7 @@ begin
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
     AddElement(datanode, 'dungeonID', IntToStr(uniqueID));
+    AddElement(datanode, 'canExitDungeon', UTF8Decode(BoolToStr(canExitDungeon)));
     AddElement(datanode, 'title', UTF8Encode(universe.title));
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'levelVisited', BoolToStr(True));
@@ -291,6 +290,8 @@ begin
     ReadXMLFile(Doc, dfileName);
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('levelData');
+    (* Can the player exit the dungeon *)
+    canExitDungeon := StrToBool(UTF8Encode(RootNode.FindNode('canExitDungeon').TextContent));;
     (* Name of dungeon *)
     title := RootNode.FindNode('title').TextContent;
     (* Has this level been explored already *)
