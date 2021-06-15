@@ -163,6 +163,7 @@ begin
       (* Update UI *)
       ui.displayStatusEffect(1, 'poison');
       ui.poisonStatusSet := True;
+      entityList[0].glyphColour := 'green';
     end;
     if (entities.entityList[0].tmrPoison <= 0) then
     begin
@@ -171,6 +172,7 @@ begin
       (* Update UI *)
       ui.displayStatusEffect(0, 'poison');
       ui.poisonStatusSet := False;
+      entityList[0].glyphColour := 'yellow';
     end
     else
     begin
