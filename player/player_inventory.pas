@@ -190,7 +190,18 @@ begin
     drop;
   end
   else
-    ui.bufferMessage('There is no room here');
+  begin
+    { prepare changes to the screen }
+    LockScreenUpdate;
+    (* Clear the message line *)
+    TextOut(6, 20, 'black', '                                                  ');
+    { Display message }
+    TextOut(6, 20, 'cyan', 'There is no room to drop this item here');
+    { Write those changes to the screen }
+    UnlockScreenUpdate;
+    { only redraws the parts that have been updated }
+    UpdateScreen(False);
+  end;
 end;
 
 procedure showInventory;
