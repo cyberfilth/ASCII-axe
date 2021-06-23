@@ -15,9 +15,9 @@ const
   (* Version info - a = Alpha, d = Debug, r = Release *)
   VERSION = '30a';
   (* Columns of the game map *)
-  MAXCOLUMNS = 67;
+  MAXCOLUMNS = 57;
   (* Rows of the game map *)
-  MAXROWS = 38;
+  MAXROWS = 19;
   (* Save game directory *)
   saveDirectory = 'axesData';
   (* Save game file *)

@@ -173,8 +173,7 @@ end;
 procedure descendStairs;
 begin
   (* Check if the player is standing on up staircase *)
-  if (maparea[entities.entityList[0].posY][entities.entityList[0].posX].Glyph =
-    '>') then
+  if (maparea[entities.entityList[0].posY][entities.entityList[0].posX].Glyph = '>') then
   begin
     (* Descend the stairs *)
     { Write current level to disk }
