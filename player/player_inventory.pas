@@ -46,7 +46,7 @@ procedure quaff;
 (* Quaff selected item *)
 procedure quaffSelection(selection: smallint);
 (* Wear / Wield menu *)
-procedure wield;
+procedure wield(message: char);
 (* Wear / Wield selected item *)
 procedure wearWieldSelection(selection: smallint);
 
@@ -318,7 +318,7 @@ begin
   end;
 end;
 
-procedure wield;
+procedure wield(message: char);
 begin
   { prepare changes to the screen }
   LockScreenUpdate;
@@ -326,6 +326,11 @@ begin
   ui.screenBlank;
   (* Draw the game screen *)
   scrInventory.displayWieldMenu;
+  (* Check if there is a message to show *)
+  if (message = 'w') then
+    TextOut(6, 20, 'cyan', 'You must first unequip the weapon you already hold')
+  else if (message = 'a') then
+    TextOut(6, 20, 'cyan', 'You must first remove the armour you already wear');
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
@@ -333,7 +338,12 @@ begin
 end;
 
 procedure wearWieldSelection(selection: smallint);
+var
+  { Flag to display message if armour or weapon is equipped }
+  msg: char;
 begin
+  (* Set default flag *)
+  msg := 'n';
   (* Check that the slot is not empty *)
   if (inventory[selection].inInventory = True) then
   begin
@@ -347,36 +357,14 @@ begin
       if (inventory[selection].equipped = False) and
         (inventory[selection].itemType = itmWeapon) and
         (entityList[0].weaponEquipped = True) then
-      begin
-        { prepare changes to the screen }
-        LockScreenUpdate;
-        (* Clear the message line *)
-        TextOut(6, 20, 'black', '                                                  ');
-        { Display message }
-        TextOut(6, 20, 'cyan', 'You must first unequip the weapon you already hold');
-        { Write those changes to the screen }
-        UnlockScreenUpdate;
-        { only redraws the parts that have been updated }
-        UpdateScreen(False);
-      end
+        msg := 'w'
 
 (* If the item is unworn armour, and the player is already wearing armour
          prompt the player to unequip their armour first *)
       else if (inventory[selection].equipped = False) and
         (inventory[selection].itemType = itmArmour) and
         (entityList[0].armourEquipped = True) then
-      begin
-        { prepare changes to the screen }
-        LockScreenUpdate;
-        (* Clear the message line *)
-        TextOut(6, 20, 'black', '                                                  ');
-        { Display message }
-        TextOut(6, 20, 'cyan', 'You must first remove the armour you already wear');
-        { Write those changes to the screen }
-        UnlockScreenUpdate;
-        { only redraws the parts that have been updated }
-        UpdateScreen(False);
-      end
+        msg := 'a'
 
       (* Check whether the item is already equipped or not *)
       else if (inventory[selection].equipped = False) then
@@ -393,7 +381,7 @@ begin
       end;
       { Increment turn counter }
       Inc(entityList[0].moveCount);
-      wield;
+      wield(msg);
     end;
   end;
 end;

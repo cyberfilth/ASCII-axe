@@ -93,7 +93,7 @@ begin
     'W': { Wear / Wield menu }
     begin
       gameState := stWearWield;
-      player_inventory.wield;
+      player_inventory.wield('n');
     end;
     'x', 'X': { Exit menu }
     begin
@@ -130,7 +130,7 @@ begin
     'W': { Wear / Wield menu }
     begin
       gameState := stWearWield;
-      player_inventory.wield;
+      player_inventory.wield('n');
     end;
     { List of inventory slots }
     'a': player_inventory.dropSelection(0);
@@ -162,7 +162,7 @@ begin
     'W': { Wear / Wield menu }
     begin
       gameState := stWearWield;
-      player_inventory.wield;
+      player_inventory.wield('n');
     end;
     { List of inventory slots }
     'a': player_inventory.quaffSelection(0);
@@ -315,7 +315,7 @@ begin
     'w', 'W': { Wear / Wield menu }
     begin
       gameState := stWearWield;
-      player_inventory.wield;
+      player_inventory.wield('n');
     end;
     ',', 'g', 'G': { Get item }
     begin
