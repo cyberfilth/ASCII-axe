@@ -9,10 +9,9 @@ unit entities;
 interface
 
 uses
-  ui, globalUtils,
+  ui, globalUtils, logging, SysUtils,
   { List of creatures }
   cave_rat, giant_cave_rat, blood_bat, green_fungus;
-
 
 type { NPC attitudes }
   attitudes = (stateNeutral, stateHostile, stateEscape);
@@ -114,25 +113,23 @@ begin
   entityList[id].glyph := '%';
   entityList[id].blocks := False;
   map.unoccupy(entityList[id].posX, entityList[id].posY);
+
   { Green Fungus }
   if (entityList[id].race = 'Green Fungus') then
+    (* Attempt to spread spores *)
   begin
+    (* Set a random number of spores *)
     amount := randomRange(0, 3);
     if (amount > 0) then
     begin
       for i := 1 to amount do
       begin
-        attempts := 0;
-        repeat
-          (* limit the number of attempts to move so the game doesn't hang if no suitable space found *)
-          Inc(attempts);
-          if attempts > 10 then
-            exit;
-          r := globalutils.randomRange(entityList[id].posY - 4, entityList[id].posY + 4);
-          c := globalutils.randomRange(entityList[id].posX - 4, entityList[id].posX + 4);
-          (* choose a location that is not a wall or occupied *)
-        until (maparea[r][c].Blocks <> True) and (maparea[r][c].Occupied <> True);
-        if (withinBounds(c, r) = True) then
+        (* Choose a space to place the fungus *)
+        r := globalutils.randomRange(entityList[id].posY - 4, entityList[id].posY + 4);
+        c := globalutils.randomRange(entityList[id].posX - 4, entityList[id].posX + 4);
+        (* choose a location that is not a wall or occupied *)
+        if (maparea[r][c].Blocks <> True) and (maparea[r][c].Occupied <> True) and
+          (withinBounds(c, r) = True) then
         begin
           Inc(npcAmount);
           green_fungus.createGreenFungus(npcAmount, c, r);
@@ -142,7 +139,9 @@ begin
       ui.bufferMessage('The fungus releases spores into the air');
     end;
   end;
+  { End of Green Fungus death }
 end;
+
 
 procedure moveNPC(id, newX, newY: smallint);
 begin

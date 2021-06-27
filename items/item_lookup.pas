@@ -13,12 +13,12 @@ uses
   { List of weapons }
   crude_dagger, basic_club,
   { List of armour }
-  leather_armour1;
+  leather_armour1, cloth_armour1;
 
 const
   (* Array of items found in a cave, ordered by cave level *)
   caveItems1: array[1..4] of string =
-    ('aleTankard', 'leatherArmour1', 'aleTankard', 'basicClub');
+    ('aleTankard', 'clothArmour1', 'aleTankard', 'basicClub');
   caveItems2: array[1..4] of string =
     ('aleTankard', 'aleTankard', 'crudeDagger', 'leatherArmour1');
   caveItems3: array[1..4] of string =
@@ -83,6 +83,7 @@ begin
     'crudeDagger': crude_dagger.createDagger(i, c, r);
     'leatherArmour1': leather_armour1.createLeatherArmour(i, c, r);
     'basicClub': basic_club.createClub(i, c, r);
+    'clothArmour1': cloth_armour1.createClothArmour(i, c, r);
   end;
 end;
 
@@ -93,6 +94,7 @@ begin
     2: crude_dagger.useItem(equipped);
     3: leather_armour1.useItem(equipped);
     4: basic_club.useItem(equipped);
+    5: cloth_armour1.useItem(equipped);
   end;
 end;
 
