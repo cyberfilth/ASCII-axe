@@ -10,7 +10,7 @@ interface
 
 uses
   Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling, logging,
+  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling,
   item_lookup;
 
 type
@@ -159,10 +159,6 @@ procedure continue;
 var
   i: byte;
 begin
-
-
-  beginLogging;
-
   (* Initialise items list *)
   items.initialiseItems;
   file_handling.loadGame;

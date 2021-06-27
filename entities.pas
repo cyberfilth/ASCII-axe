@@ -9,7 +9,7 @@ unit entities;
 interface
 
 uses
-  ui, globalUtils, logging, SysUtils,
+  ui, globalUtils, SysUtils,
   { List of creatures }
   cave_rat, giant_cave_rat, blood_bat, green_fungus;
 
@@ -94,7 +94,7 @@ procedure NPCgameLoop;
 implementation
 
 uses
-  player, universe, map;
+  player, map;
 
 procedure spawnPlayer;
 begin
@@ -107,7 +107,7 @@ end;
 
 procedure killEntity(id: smallint);
 var
-  i, amount, r, c, attempts: smallint;
+  i, amount, r, c: smallint;
 begin
   entityList[id].isDead := True;
   entityList[id].glyph := '%';
