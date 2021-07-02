@@ -48,6 +48,7 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
+    faction:=fungusFaction;
     state := stateHostile;
     discovered := False;
     weaponEquipped := False;

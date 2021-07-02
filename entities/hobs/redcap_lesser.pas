@@ -1,6 +1,6 @@
-(* Weak enemy with simple AI, no pathfinding *)
+(* Intelligent enemy with scent tracking *)
 
-Unit cave_rat;
+Unit redcap_lesser;
 
 {$mode objfpc}{$H+}
 
@@ -9,8 +9,8 @@ Interface
 Uses
 SysUtils, Math;
 
-(* Create a cave rat *)
-Procedure createCaveRat(uniqueid, npcx, npcy: smallint);
+(* Create a Redcap Hob *)
+Procedure createRedcap(uniqueid, npcx, npcy: smallint);
 (* Take a turn *)
 Procedure takeTurn(id: smallint);
 (* Decision tree for Neutral state *)
@@ -21,8 +21,8 @@ Procedure decisionHostile(id: smallint);
 Procedure decisionEscape(id: smallint);
 (* Move in a random direction *)
 Procedure wander(id, spx, spy: smallint);
-(* Chase the player *)
-Procedure chasePlayer(id, spx, spy: smallint);
+(* Chase enemy *)
+Procedure chaseTarget(id, spx, spy: smallint);
 (* Check if player is next to NPC *)
 Function isNextToPlayer(spx, spy: smallint): boolean;
 (* Run from player *)
@@ -32,27 +32,27 @@ Procedure combat(id: smallint);
 
 Implementation
 
-Uses 
+Uses
 entities, globalutils, ui, los, map;
 
-Procedure createCaveRat(uniqueid, npcx, npcy: smallint);
+Procedure createRedcap(uniqueid, npcx, npcy: smallint);
 
-Var 
+Var
   mood: byte;
 Begin
   (* Determine hostility *)
   mood := randomRange(1, 2);
-  (* Add a cave rat to the list of creatures *)
+  (* Add a redcap to the list of creatures *)
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
   With entities.entityList[entities.listLength] Do
     Begin
       npcID := uniqueid;
-      race := 'Cave Rat';
-      description := 'a large rat';
-      glyph := 'r';
-      glyphColour := 'brown';
-      maxHP := randomRange(2, 4);
+      race := 'Hob';
+      description := 'a short Hob wearing a red cap';
+      glyph := 'h';
+      glyphColour := 'red';
+      maxHP := randomRange(3, 5);
       currentHP := maxHP;
       attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
       defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
@@ -65,7 +65,7 @@ Begin
       targetY := 0;
       inView := False;
       blocks := False;
-      faction:=animalFaction;
+      faction:=redcapFaction;
       If (mood = 1) Then
         state := stateHostile
       Else
@@ -85,10 +85,9 @@ Begin
   map.occupy(npcx, npcy);
 End;
 
-
 Procedure takeTurn(id: smallint);
 Begin
-  Case entityList[id].state Of 
+  Case entityList[id].state Of
     stateNeutral: decisionNeutral(id);
     stateHostile: decisionHostile(id);
     stateEscape: decisionEscape(id);
@@ -99,7 +98,7 @@ End;
 
 Procedure decisionNeutral(id: smallint);
 
-Var 
+Var
   stopAndSmellFlowers: byte;
 Begin
   stopAndSmellFlowers := globalutils.randomRange(1, 2);
@@ -130,7 +129,7 @@ Begin
              combat(id)
            Else
       { Chase the player }
-             chasePlayer(id, entityList[id].posX, entityList[id].posY);
+             chaseTarget(id, entityList[id].posX, entityList[id].posY);
          End
 
   { If not injured and player not in sight }
@@ -160,7 +159,7 @@ End;
 
 Procedure wander(id, spx, spy: smallint);
 
-Var 
+Var
   direction, attempts, testx, testy: smallint;
 Begin
   { Set NPC state }
@@ -181,7 +180,7 @@ Begin
         entities.moveNPC(id, spx, spy);
         exit;
       End;
-    Case direction Of 
+    Case direction Of
       0: Dec(testy);
       1: Inc(testy);
       2: Dec(testx);
@@ -193,9 +192,9 @@ Begin
   entities.moveNPC(id, testx, testy);
 End;
 
-Procedure chasePlayer(id, spx, spy: smallint);
+Procedure chaseTarget(id, spx, spy: smallint);
 
-Var 
+Var
   newX, newY, dx, dy: smallint;
   distance: double;
 Begin
@@ -230,7 +229,7 @@ Begin
     (* Else if tile does not contain player, check for another entity *)
       Else If (map.isOccupied(newX, newY) = True) Then
              Begin
-               ui.bufferMessage('The cave rat bumps into ' + getCreatureName(newX, newY));
+               ui.bufferMessage('The giant rat bumps into ' + getCreatureName(newX, newY));
                entities.moveNPC(id, spx, spy);
              End
     (* if map is unoccupied, move to that tile *)
@@ -243,7 +242,7 @@ End;
 
 Function isNextToPlayer(spx, spy: smallint): boolean;
 
-Var 
+Var
   dx, dy: smallint;
   distance: double;
   // try single
@@ -258,7 +257,7 @@ End;
 
 Procedure escapePlayer(id, spx, spy: smallint);
 
-Var 
+Var
   newX, newY, dx, dy: smallint;
   distance: single;
 Begin
@@ -305,13 +304,15 @@ End;
 
 Procedure combat(id: smallint);
 
-Var 
+Var
   damageAmount: smallint;
 Begin
-  damageAmount := globalutils.randomRange(1, entities.entityList[id].attack) - entities.entityList[0].defence;
+  damageAmount := globalutils.randomRange(1, entities.entityList[id].attack) -
+                  entities.entityList[0].defence;
   If (damageAmount > 0) Then
     Begin
-      entities.entityList[0].currentHP := (entities.entityList[0].currentHP - damageAmount);
+      entities.entityList[0].currentHP :=
+                                          (entities.entityList[0].currentHP - damageAmount);
       If (entities.entityList[0].currentHP < 1) Then
         Begin
           killer := entityList[id].race;
@@ -320,15 +321,16 @@ Begin
       Else
         Begin
           If (damageAmount = 1) Then
-            ui.displayMessage('The cave rat slightly wounds you')
+            ui.displayMessage('The hob slightly wounds you')
           Else
-            ui.displayMessage('The cave rat bites you, inflicting ' + IntToStr(damageAmount) + ' damage');
+            ui.displayMessage('The hob claws you, dealing ' +
+                              IntToStr(damageAmount) + ' damage');
       (* Update health display to show damage *)
           ui.updateHealth;
         End;
     End
   Else
-    ui.displayMessage('The cave rat attacks but misses');
+    ui.displayMessage('The hob misses');
 End;
 
 End.

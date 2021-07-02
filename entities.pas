@@ -1,25 +1,28 @@
 (* Unit responsible for NPC stat, initialising enemies and utility functions *)
 
-unit entities;
+Unit entities;
 
 {$mode objfpc}{$H+}
 {$ModeSwitch advancedrecords}
 {$RANGECHECKS OFF}
 
-interface
+Interface
 
-uses
-  ui, globalUtils, SysUtils,
+Uses
+ui, globalUtils, SysUtils,
   { List of creatures }
-  cave_rat, giant_cave_rat, blood_bat, green_fungus;
+cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser;
 
-type { NPC attitudes }
-  attitudes = (stateNeutral, stateHostile, stateEscape);
+Type { NPC attitudes }
+  Tattitudes = (stateNeutral, stateHostile, stateEscape);
 
-type
+Type {NPC factions / groups }
+  Tfactions = (redcapFaction, bluecapFaction, animalFaction, fungusFaction);
+
+Type
   (* Store information about NPC's *)
   { Creature }
-  Creature = record
+  Creature = Record
     (* Unique ID *)
     npcID: smallint;
     (* Creature type *)
@@ -43,8 +46,10 @@ type
     discovered: boolean;
     (* Some entities block movement, i.e. barrels *)
     blocks: boolean;
+    (* NPC faction *)
+    faction: Tfactions;
     (* NPC finite state *)
-    state: attitudes;
+    state: Tattitudes;
     (* Is a weapon equipped *)
     weaponEquipped: boolean;
     (* Is Armour equipped *)
@@ -56,247 +61,258 @@ type
     (* status timers *)
     tmrDrunk, tmrPoison: smallint;
     (* The procedure that allows each NPC to take a turn *)
-    procedure entityTakeTurn(i: smallint);
-  end;
+    Procedure entityTakeTurn(i: smallint);
+  End;
 
-var
-  entityList: array of Creature;
+Var
+  entityList: array Of Creature;
   npcAmount, listLength: byte;
 
 (* Add player to list of creatures on the map *)
-procedure spawnPlayer;
+Procedure spawnPlayer;
 (* Handle death of NPC's *)
-procedure killEntity(id: smallint);
+Procedure killEntity(id: smallint);
 (* Update NPCs X, Y coordinates *)
-procedure moveNPC(id, newX, newY: smallint);
+Procedure moveNPC(id, newX, newY: smallint);
 (* Get creature currentHP at coordinates *)
-function getCreatureHP(x, y: smallint): smallint;
+Function getCreatureHP(x, y: smallint): smallint;
 (* Get creature maxHP at coordinates *)
-function getCreatureMaxHP(x, y: smallint): smallint;
+Function getCreatureMaxHP(x, y: smallint): smallint;
 (* Get creature ID at coordinates *)
-function getCreatureID(x, y: smallint): smallint;
+Function getCreatureID(x, y: smallint): smallint;
 (* Get creature name at coordinates *)
-function getCreatureName(x, y: smallint): shortstring;
+Function getCreatureName(x, y: smallint): shortstring;
 (* Check if creature is visible at coordinates *)
-function isCreatureVisible(x, y: smallint): boolean;
+Function isCreatureVisible(x, y: smallint): boolean;
 (* Ensure all NPC's are correctly occupying tiles *)
-procedure occupyUpdate;
+Procedure occupyUpdate;
 (* Update the map display to show all NPC's *)
-procedure redrawMapDisplay(id: byte);
+Procedure redrawMapDisplay(id: byte);
 (* Clear list of NPC's *)
-procedure newFloorNPCs;
+Procedure newFloorNPCs;
 (* Count all living NPC's *)
-function countLivingEntities: byte;
+Function countLivingEntities: byte;
 (* Call Creatures.takeTurn procedure *)
-procedure NPCgameLoop;
+Procedure NPCgameLoop;
 
 
-implementation
+Implementation
 
-uses
-  player, map;
+Uses
+player, map;
 
-procedure spawnPlayer;
-begin
+Procedure spawnPlayer;
+Begin
   npcAmount := 1;
   (*  initialise array *)
   SetLength(entityList, 0);
   (* Add the player to Entity list *)
   player.createPlayer;
-end;
+End;
 
-procedure killEntity(id: smallint);
-var
+Procedure killEntity(id: smallint);
+
+Var
   i, amount, r, c: smallint;
-begin
+Begin
   entityList[id].isDead := True;
   entityList[id].glyph := '%';
   entityList[id].blocks := False;
   map.unoccupy(entityList[id].posX, entityList[id].posY);
 
   { Green Fungus }
-  if (entityList[id].race = 'Green Fungus') then
+  If (entityList[id].race = 'Green Fungus') Then
     (* Attempt to spread spores *)
-  begin
+    Begin
     (* Set a random number of spores *)
-    amount := randomRange(0, 3);
-    if (amount > 0) then
-    begin
-      for i := 1 to amount do
-      begin
+      amount := randomRange(0, 3);
+      If (amount > 0) Then
+        Begin
+          For i := 1 To amount Do
+            Begin
         (* Choose a space to place the fungus *)
-        r := globalutils.randomRange(entityList[id].posY - 4, entityList[id].posY + 4);
-        c := globalutils.randomRange(entityList[id].posX - 4, entityList[id].posX + 4);
+              r := globalutils.randomRange(entityList[id].posY - 4, entityList[id].posY + 4);
+              c := globalutils.randomRange(entityList[id].posX - 4, entityList[id].posX + 4);
         (* choose a location that is not a wall or occupied *)
-        if (maparea[r][c].Blocks <> True) and (maparea[r][c].Occupied <> True) and
-          (withinBounds(c, r) = True) then
-        begin
-          Inc(npcAmount);
-          green_fungus.createGreenFungus(npcAmount, c, r);
-        end;
-      end;
-      ui.writeBufferedMessages;
-      ui.bufferMessage('The fungus releases spores into the air');
-    end;
-  end;
+              If (maparea[r][c].Blocks <> True) And (maparea[r][c].Occupied <> True) And
+                 (withinBounds(c, r) = True) Then
+                Begin
+                  Inc(npcAmount);
+                  green_fungus.createGreenFungus(npcAmount, c, r);
+                End;
+            End;
+          ui.writeBufferedMessages;
+          ui.bufferMessage('The fungus releases spores into the air');
+        End;
+    End;
   { End of Green Fungus death }
-end;
+End;
 
 
-procedure moveNPC(id, newX, newY: smallint);
-begin
+Procedure moveNPC(id, newX, newY: smallint);
+Begin
   (* mark tile as unoccupied *)
   map.unoccupy(entityList[id].posX, entityList[id].posY);
   (* update new position *)
-  if (map.isOccupied(newX, newY) = True) and (getCreatureID(newX, newY) <> id) then
-  begin
-    newX := entityList[id].posX;
-    newY := entityList[id].posY;
-  end;
+  If (map.isOccupied(newX, newY) = True) And (getCreatureID(newX, newY) <> id) Then
+    Begin
+      newX := entityList[id].posX;
+      newY := entityList[id].posY;
+    End;
   entityList[id].posX := newX;
   entityList[id].posY := newY;
 
   (* Check if NPC in players FoV *)
-  if (map.canSee(newX, newY) = True) then
-  begin
-    entityList[id].inView := True;
-    if (entityList[id].discovered = False) then
-    begin
-      ui.displayMessage('You see ' + entityList[id].description);
-      entityList[id].discovered := True;
-    end;
+  If (map.canSee(newX, newY) = True) Then
+    Begin
+      entityList[id].inView := True;
+      If (entityList[id].discovered = False) Then
+        Begin
+          ui.displayMessage('You see ' + entityList[id].description);
+          entityList[id].discovered := True;
+        End;
     (* Draw to map display *)
-    map.mapDisplay[newY, newX].GlyphColour := entityList[id].glyphColour;
-    map.mapDisplay[newY, newX].Glyph := entityList[id].glyph;
-  end
-  else
+      map.mapDisplay[newY, newX].GlyphColour := entityList[id].glyphColour;
+      map.mapDisplay[newY, newX].Glyph := entityList[id].glyph;
+    End
+  Else
     entityList[id].inView := False;
   (* mark tile as occupied *)
   map.occupy(newX, newY);
-end;
+End;
 
-function getCreatureHP(x, y: smallint): smallint;
-var
+Function getCreatureHP(x, y: smallint): smallint;
+
+Var
   i: smallint;
-begin
+Begin
   Result := 0;
-  for i := 0 to npcAmount do
-  begin
-    if (entityList[i].posX = x) and (entityList[i].posY = y) then
-      Result := entityList[i].currentHP;
-  end;
-end;
+  For i := 0 To npcAmount Do
+    Begin
+      If (entityList[i].posX = x) And (entityList[i].posY = y) Then
+        Result := entityList[i].currentHP;
+    End;
+End;
 
-function getCreatureMaxHP(x, y: smallint): smallint;
-var
+Function getCreatureMaxHP(x, y: smallint): smallint;
+
+Var
   i: smallint;
-begin
+Begin
   Result := 0;
-  for i := 0 to npcAmount do
-  begin
-    if (entityList[i].posX = x) and (entityList[i].posY = y) then
-      Result := entityList[i].maxHP;
-  end;
-end;
+  For i := 0 To npcAmount Do
+    Begin
+      If (entityList[i].posX = x) And (entityList[i].posY = y) Then
+        Result := entityList[i].maxHP;
+    End;
+End;
 
-function getCreatureID(x, y: smallint): smallint;
-var
-  i: smallint;
-begin
-  Result := 0; // initialise variable
-  for i := 0 to npcAmount do
-  begin
-    if (entityList[i].posX = x) and (entityList[i].posY = y) then
-      Result := i;
-  end;
-end;
+Function getCreatureID(x, y: smallint): smallint;
 
-function getCreatureName(x, y: smallint): shortstring;
-var
+Var
   i: smallint;
-begin
+Begin
+  Result := 0;
+  // initialise variable
+  For i := 0 To npcAmount Do
+    Begin
+      If (entityList[i].posX = x) And (entityList[i].posY = y) Then
+        Result := i;
+    End;
+End;
+
+Function getCreatureName(x, y: smallint): shortstring;
+
+Var
+  i: smallint;
+Begin
   Result := '';
-  for i := 0 to npcAmount do
-  begin
-    if (entityList[i].posX = x) and (entityList[i].posY = y) then
-      Result := entityList[i].race;
-  end;
-end;
+  For i := 0 To npcAmount Do
+    Begin
+      If (entityList[i].posX = x) And (entityList[i].posY = y) Then
+        Result := entityList[i].race;
+    End;
+End;
 
-function isCreatureVisible(x, y: smallint): boolean;
-var
+Function isCreatureVisible(x, y: smallint): boolean;
+
+Var
   i: smallint;
-begin
+Begin
   Result := False;
-  for i := 0 to npcAmount do
-    if (entityList[i].posX = x) and (entityList[i].posY = y) then
-      if (entityList[i].inView = True) and (entityList[i].glyph <> '%') then
+  For i := 0 To npcAmount Do
+    If (entityList[i].posX = x) And (entityList[i].posY = y) Then
+      If (entityList[i].inView = True) And (entityList[i].glyph <> '%') Then
         Result := True;
-end;
+End;
 
-procedure occupyUpdate;
-var
+Procedure occupyUpdate;
+
+Var
   i: smallint;
-begin
-  for i := 1 to npcAmount do
-    if (entityList[i].isDead = False) then
+Begin
+  For i := 1 To npcAmount Do
+    If (entityList[i].isDead = False) Then
       map.occupy(entityList[i].posX, entityList[i].posY);
-end;
+End;
 
-procedure redrawMapDisplay(id: byte);
-begin
-  (* Redrawing NPC directly to map display as looping through
+Procedure redrawMapDisplay(id: byte);
+Begin
+
+(* Redrawing NPC directly to map display as looping through
      entity list in the camera unit wasn't working *)
-  if (entityList[id].isDead = False) and (entityList[id].inView = True) then
-  begin
-    map.mapDisplay[entityList[id].posY, entityList[id].posX].GlyphColour :=
-      entityList[id].glyphColour;
-    map.mapDisplay[entityList[id].posY, entityList[id].posX].Glyph :=
-      entityList[id].glyph;
-  end;
-end;
+  If (entityList[id].isDead = False) And (entityList[id].inView = True) Then
+    Begin
+      map.mapDisplay[entityList[id].posY, entityList[id].posX].GlyphColour := entityList[id].glyphColour;
+      map.mapDisplay[entityList[id].posY, entityList[id].posX].Glyph := entityList[id].glyph;
+    End;
+End;
 
-procedure newFloorNPCs;
-begin
+Procedure newFloorNPCs;
+Begin
   (* Clear the current NPC amount *)
   npcAmount := 1;
   SetLength(entityList, 1);
-end;
+End;
 
-function countLivingEntities: byte;
-var
+Function countLivingEntities: byte;
+
+Var
   i, Count: byte;
-begin
+Begin
   Count := 0;
-  for i := 1 to npcAmount do
-    if (entityList[i].isDead = False) then
+  For i := 1 To npcAmount Do
+    If (entityList[i].isDead = False) Then
       Inc(Count);
   Result := Count;
-end;
+End;
 
-procedure NPCgameLoop;
-var
+Procedure NPCgameLoop;
+
+Var
   i: smallint;
-begin
-  for i := 1 to npcAmount do
-    if (entityList[i].glyph <> '%') then
+Begin
+  For i := 1 To npcAmount Do
+    If (entityList[i].glyph <> '%') Then
       entityList[i].entityTakeTurn(i);
-end;
+End;
 
 { Creature }
 
-procedure Creature.entityTakeTurn(i: smallint);
-begin
-  if (entityList[i].race = 'Cave Rat') then
+Procedure Creature.entityTakeTurn(i: smallint);
+Begin
+  If (entityList[i].race = 'Cave Rat') Then
     cave_rat.takeTurn(i)
-  else if (entityList[i].race = 'Giant Rat') then
-    giant_cave_rat.takeTurn(i)
-  else if (entityList[i].race = 'Blood Bat') then
-    blood_bat.takeTurn(i)
-  else if (entityList[i].race = 'Green Fungus') then
-    green_fungus.takeTurn(i);
+  Else If (entityList[i].race = 'Giant Rat') Then
+         giant_cave_rat.takeTurn(i)
+  Else If (entityList[i].race = 'Blood Bat') Then
+         blood_bat.takeTurn(i)
+  Else If (entityList[i].race = 'Green Fungus') Then
+         green_fungus.takeTurn(i)
+  Else If (entityList[i].race = 'Hob') Then
+         redcap_lesser.takeTurn(i);
 
   occupyUpdate;
-end;
+End;
 
-end.
+End.

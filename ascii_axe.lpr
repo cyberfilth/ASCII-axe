@@ -9,18 +9,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *)
 
-program ascii_axe;
+Program ascii_axe;
 
 {$mode fpc}{$H+}
 {$IFDEF WINDOWS}
 {$APPTYPE CONSOLE}
 {$ENDIF}
 
-uses
+Uses
 main;
 
-begin
+Begin
   (* Initialise the display, keyboard and game variables *)
   main.initialise;
   main.loop;
-end.
+End.

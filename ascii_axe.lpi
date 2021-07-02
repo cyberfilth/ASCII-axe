@@ -27,7 +27,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="screens;dungeons;player;vision;entities;items;items\weapons;items\armour"/>
+            <OtherUnitFiles Value="screens;dungeons;player;vision;entities;items;items\weapons;items\armour;entities\hobs"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -70,7 +70,7 @@
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
-            <OtherUnitFiles Value="screens;dungeons;player;vision;entities;items;items\weapons;items\armour"/>
+            <OtherUnitFiles Value="screens;dungeons;player;vision;entities;items;items\weapons;items\armour;entities\hobs"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <Parsing>
@@ -103,7 +103,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="33">
+    <Units Count="34">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -242,6 +242,10 @@
         <Filename Value="items\armour\cloth_armour1.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit32>
+      <Unit33>
+        <Filename Value="entities\hobs\redcap_lesser.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit33>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -252,7 +256,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="screens;dungeons;player;vision;entities;items;items\weapons;items\armour"/>
+      <OtherUnitFiles Value="screens;dungeons;player;vision;entities;items;items\weapons;items\armour;entities\hobs"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

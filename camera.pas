@@ -6,14 +6,14 @@ Unit camera;
 
 Interface
 
-Uses 
+Uses
 SysUtils, globalUtils, ui, map, entities;
 
-Const 
+Const
   camHeight = 19;
   camWidth = 57;
 
-Var 
+Var
   r, c: smallint;
 
 Function getX(Xcoord: smallint): smallint;
@@ -25,7 +25,7 @@ Implementation
 
 Function getX(Xcoord: smallint): smallint;
 
-Var 
+Var
   p, hs, s, m: smallint;
 Begin
   p := Xcoord;
@@ -43,12 +43,12 @@ End;
 
 Function getY(Ycoord: smallint): smallint;
 
-Const 
+Const
   s = camHeight;
   hs = camHeight div 2;
   m = globalUtils.MAXROWS;
 
-Var 
+Var
   p: smallint;
 Begin
   p := Ycoord;
@@ -62,7 +62,7 @@ End;
 
 Procedure drawMap;
 
-Var 
+Var
   (* Player coordinates *)
   pX, pY: smallint;
   (* Tile colour *)
@@ -83,7 +83,7 @@ End;
 
 Procedure drawPlayer;
 
-Var 
+Var
   entX, entY: smallint;
   (* Glyph colour *)
   gCol: shortstring;

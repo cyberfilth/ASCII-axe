@@ -64,6 +64,7 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
+    faction:=animalFaction;
     if (mood = 1) then
       state := stateNeutral
     else

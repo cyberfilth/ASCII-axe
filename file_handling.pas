@@ -252,6 +252,8 @@ begin
           AddElement(DataNode, 'targetY', IntToStr(entities.entityList[i].targetY));
           AddElement(DataNode, 'inView', BoolToStr(entities.entityList[i].inView));
           AddElement(DataNode, 'blocks', BoolToStr(entities.entityList[i].blocks));
+          WriteStr(Value, entities.entityList[i].faction);
+          AddElement(DataNode, 'faction', Value);
           WriteStr(Value, entities.entityList[i].state);
           AddElement(DataNode, 'state', Value);
           AddElement(DataNode, 'discovered', BoolToStr(entities.entityList[i].discovered));
@@ -393,7 +395,8 @@ begin
         entities.entityList[i].targetY := StrToInt(UTF8Encode(NPCnode.FindNode('targetY').TextContent));
         entities.entityList[i].inView := StrToBool(UTF8Encode(NPCnode.FindNode('inView').TextContent));
         entities.entityList[i].blocks := StrToBool(UTF8Encode(NPCnode.FindNode('blocks').TextContent));
-        entities.entityList[i].state := attitudes(GetEnumValue(Typeinfo(attitudes), UTF8Encode(NPCnode.FindNode('state').TextContent)));
+        entities.entityList[i].faction := Tfactions(GetEnumValue(Typeinfo(Tfactions), UTF8Encode(NPCnode.FindNode('faction').TextContent)));
+        entities.entityList[i].state := Tattitudes(GetEnumValue(Typeinfo(Tattitudes), UTF8Encode(NPCnode.FindNode('state').TextContent)));
         entities.entityList[i].discovered := StrToBool(UTF8Encode(NPCnode.FindNode('discovered').TextContent));
         entities.entityList[i].weaponEquipped := StrToBool(UTF8Encode(NPCnode.FindNode('weaponEquipped').TextContent));
         entities.entityList[i].armourEquipped := StrToBool(UTF8Encode(NPCnode.FindNode('armourEquipped').TextContent));
