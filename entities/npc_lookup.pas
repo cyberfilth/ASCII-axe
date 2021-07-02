@@ -13,8 +13,8 @@ cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser;
 
 Const
   (* Array of creatures found in a cave, ordered by cave level *)
-  caveNPC1: array[1..4] Of string = ('redcapLesser', 'redcapLesser', 'redcapLesser', 'redcapLesser');
-//caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');  REMOVED JUST FOR TESTING HOB NPC
+  //caveNPC1: array[1..4] Of string = ('redcapLesser', 'redcapLesser', 'redcapLesser', 'redcapLesser');  REMOVED JUST FOR TESTING HOB NPC
+  caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
   caveNPC2: array[1..4] Of string = ('caveRat', 'giantRat', 'giantRat', 'giantRat');
   caveNPC3: array[1..4] Of string = ('caveRat', 'giantRat', 'giantRat', 'giantRat');
 
