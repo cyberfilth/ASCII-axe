@@ -169,7 +169,7 @@ begin
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
     AddElement(datanode, 'dungeonID', IntToStr(uniqueID));
-    AddElement(datanode, 'canExitDungeon', UTF8Decode(BoolToStr(canExitDungeon)));
+    AddElement(datanode, 'canExitDungeon', UTF8Encode(BoolToStr(canExitDungeon)));
     AddElement(datanode, 'title', UTF8Encode(universe.title));
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'levelVisited', BoolToStr(True));

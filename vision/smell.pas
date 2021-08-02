@@ -3,7 +3,7 @@
    Creatures can then track the player by finding a tile with a lower number
    than the one that they're standing on.
 
-   The below routine is based on code from Stephen Peter (aka speter) *)
+   The below routine is based on code from Stephen Peter (AKA speter) *)
 
 unit smell;
 
@@ -12,7 +12,7 @@ unit smell;
 interface
 
 uses
-  globalutils;
+  globalutils, map;
 
 const
   (* used on the smell map to denote a wall *)
@@ -51,9 +51,9 @@ uses
 
 function blockORnot(x, y: smallint): Tbkinds;
 begin
-  if (dungeon[y][x] = '#') then
+  if (map.maparea[y][x] = '*') then
     Result := bWall
-  else if (dungeon[y][x] = '.') then
+  else if (map.maparea[y][x] = '.') then
     Result := bClear
   else
     Result := bWall;
@@ -69,7 +69,7 @@ procedure calcDistances(x, y: smallint);
   (* Set distance around current tile *)
   procedure setaround(x, y: smallint; d: smallint);
   const
-    r: array[1..4] of tpoint =              // the four directions of movement
+    r: array[1..4] of tpoint =              { the four directions of movement }
       ((x: 0; y: -1), (x: 1; y: 0), (x: 0; y: 1), (x: -1; y: 0));
   var
     a: smallint;
