@@ -12,7 +12,7 @@ unit smell;
 interface
 
 uses
-  globalutils, map;
+  Classes, globalutils, map;
 
 const
   (* used on the smell map to denote a wall *)
@@ -25,12 +25,14 @@ type
 var
   smellmap: array[1..MAXROWS, 1..MAXCOLUMNS] of smallint;
   distances: TDist;
+  (* Tracks the scent decaying over time *)
+  smellCounter: byte;
   (* TESTING - Write smell map to text file *)
   filename: ShortString;
   myfile: Text;
 
 (* Check if tile is a wall or not *)
-function blockORnot(x, y: smallint): Tbkinds;
+// function blockORnot(x, y: smallint): Tbkinds; // Commented out to remove forward declaration error
 (* Calculate distance from player *)
 procedure calcDistances(x, y: smallint);
 (* Generate smell map *)
@@ -49,11 +51,11 @@ implementation
 uses
   entities;
 
-function blockORnot(x, y: smallint): Tbkinds;
+function blockORnot(x, y: integer): Tbkinds;
 begin
-  if (map.maparea[y][x] = '*') then
+  if (map.maparea[y][x].Glyph = '*') then
     Result := bWall
-  else if (map.maparea[y][x] = '.') then
+  else if (map.maparea[y][x].Glyph = '.') then
     Result := bClear
   else
     Result := bWall;

@@ -11,7 +11,7 @@ interface
 uses
   Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
   universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling,
-  item_lookup;
+  item_lookup, smell;
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -122,6 +122,8 @@ begin
   map.mapType := tCave;
   (* Create the dungeon *)
   universe.createNewDungeon(map.mapType);
+  (* Set smell counter to zero *)
+  smell.smellCounter := 0;
   (* Create the Player *)
   entities.spawnPlayer;
   (* Spawn game entities *)
@@ -156,6 +158,7 @@ begin
 end;
 
 procedure continue;
+
 var
   i: byte;
 begin
@@ -204,6 +207,7 @@ end;
 
 (* Take input from player *)
 procedure loop;
+
 var
   Keypress: TKeyEvent;
 begin
@@ -234,6 +238,7 @@ begin
 end;
 
 procedure gameLoop;
+
 var
   i: byte;
 begin
@@ -262,6 +267,9 @@ begin
   entities.occupyUpdate;
   (* Update health display to show damage *)
   ui.updateHealth;
+  (* Reduce smell counter *)
+  if (smell.smellCounter > 0) then
+    Dec(smell.smellCounter);
   (* draw map through the camera *)
   camera.drawMap;
 
@@ -280,6 +288,7 @@ begin
 end;
 
 procedure returnToGameScreen;
+
 var
   i: byte;
 begin
