@@ -12,7 +12,7 @@ unit smell;
 interface
 
 uses
-  Classes, Math, globalutils, map;
+  Classes, Math, globalutils, SysUtils;
 
 const
   (* used on the smell map to denote a wall *)
@@ -27,10 +27,12 @@ var
   distances: TDist;
   (* Tracks the scent decaying over time *)
   smellCounter: byte;
-  (* TESTING - Write smell map to text file *)
-  filename: ShortString;
-  myfile: Text;
 
+(* TESTING - Write smell map to text file *)
+  {filename: ShortString;
+  myfile: Text;}
+
+function blockORnot(x, y: integer): Tbkinds;
 (* Calculate distance from player *)
 procedure calcDistances(x, y: smallint);
 (* Generate smell map *)
@@ -41,7 +43,7 @@ function scentDirection(y, x: smallint): char;
 implementation
 
 uses
-  entities;
+  entities, map;
 
 (* Check if tile is a wall or not *)
 function blockORnot(x, y: integer): Tbkinds;
@@ -49,6 +51,10 @@ begin
   if (map.maparea[y][x].Glyph = '*') then
     Result := bWall
   else if (map.maparea[y][x].Glyph = '.') then
+    Result := bClear
+  else if (map.maparea[y][x].Glyph = '<') then
+    Result := bClear
+  else if (map.maparea[y][x].Glyph = '>') then
     Result := bClear
   else
     Result := bWall;
@@ -102,24 +108,33 @@ begin
   (* flood map from players current position *)
   calcDistances(entityList[0].posX, entityList[0].posY);
 
+  (* create smell map *)
+  for r := 1 to MAXROWS do
+  begin
+    for c := 1 to MAXCOLUMNS do
+    begin
+      smellmap[r][c] := distances[r, c];
+    end;
+  end;
+
   (* Set smell counter *)
   smellCounter := 5;
 
-  /////////////////////////////
-  //Write map to text file for testing
-  //filename := 'smellmap.txt';
-  //AssignFile(myfile, filename);
-  //rewrite(myfile);
-  //for r := 1 to MAXROWS do
-  //begin
-  //  for c := 1 to MAXCOLUMNS do
-  //  begin
-  //    Write(myfile, smellmap[r][c], ' ');
-  //  end;
-  //  Write(myfile, sLineBreak);
-  //end;
-  //closeFile(myfile);
-  //////////////////////////////
+  (*
+  // Write map to text file for testing
+  filename := 'smellmap.txt';
+  AssignFile(myfile, filename);
+  rewrite(myfile);
+  for r := 1 to MAXROWS do
+  begin
+    for c := 1 to MAXCOLUMNS do
+    begin
+      Write(myfile, smellmap[r][c], ' ');
+    end;
+    Write(myfile, sLineBreak);
+  end;
+  closeFile(myfile);
+  *)
 
 end;
 
@@ -127,7 +142,7 @@ function scentDirection(y, x: smallint): char;
 var
   surroundingArea: array[0..3] of integer;
 begin
-  if (smellCounter > 0) then
+  if (smellCounter < 1) then
     (* Smell the surrounding area *)
     sniff;
 

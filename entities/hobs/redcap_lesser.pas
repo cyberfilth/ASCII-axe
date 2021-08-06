@@ -1,336 +1,368 @@
 (* Intelligent enemy with scent tracking *)
 
-Unit redcap_lesser;
+unit redcap_lesser;
 
 {$mode objfpc}{$H+}
 
-Interface
+interface
 
-Uses
-SysUtils, Math;
+uses
+  SysUtils, Math, smell;
 
 (* Create a Redcap Hob *)
-Procedure createRedcap(uniqueid, npcx, npcy: smallint);
+procedure createRedcap(uniqueid, npcx, npcy: smallint);
 (* Take a turn *)
-Procedure takeTurn(id: smallint);
+procedure takeTurn(id: smallint);
 (* Decision tree for Neutral state *)
-Procedure decisionNeutral(id: smallint);
+procedure decisionNeutral(id: smallint);
 (* Decision tree for Hostile state *)
-Procedure decisionHostile(id: smallint);
+procedure decisionHostile(id: smallint);
 (* Decision tree for Escape state *)
-Procedure decisionEscape(id: smallint);
+procedure decisionEscape(id: smallint);
 (* Move in a random direction *)
-Procedure wander(id, spx, spy: smallint);
+procedure wander(id, spx, spy: smallint);
 (* Chase enemy *)
-Procedure chaseTarget(id, spx, spy: smallint);
+procedure chaseTarget(id, spx, spy: smallint);
 (* Check if player is next to NPC *)
-Function isNextToPlayer(spx, spy: smallint): boolean;
+function isNextToPlayer(spx, spy: smallint): boolean;
 (* Run from player *)
-Procedure escapePlayer(id, spx, spy: smallint);
+procedure escapePlayer(id, spx, spy: smallint);
 (* Combat *)
-Procedure combat(id: smallint);
+procedure combat(id: smallint);
+(* Sniff out the player *)
+procedure followScent(id: smallint);
 
-Implementation
+implementation
 
-Uses
-entities, globalutils, ui, los, map;
+uses
+  entities, globalutils, ui, los, map;
 
-Procedure createRedcap(uniqueid, npcx, npcy: smallint);
-
-Var
+procedure createRedcap(uniqueid, npcx, npcy: smallint);
+var
   mood: byte;
-Begin
+begin
   (* Determine hostility *)
   mood := randomRange(1, 2);
   (* Add a redcap to the list of creatures *)
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
-  With entities.entityList[entities.listLength] Do
-    Begin
-      npcID := uniqueid;
-      race := 'Hob';
-      description := 'a short Hob wearing a red cap';
-      glyph := 'h';
-      glyphColour := 'lightMagenta';
-      maxHP := randomRange(3, 5);
-      currentHP := maxHP;
-      attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
-      defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
-      weaponDice := 0;
-      weaponAdds := 0;
-      xpReward := maxHP;
-      visionRange := 4;
-      moveCount := 0;
-      targetX := 0;
-      targetY := 0;
-      inView := False;
-      blocks := False;
-      faction:=redcapFaction;
-      If (mood = 1) Then
-        state := stateHostile
-      Else
-        state := stateNeutral;
-      discovered := False;
-      weaponEquipped := False;
-      armourEquipped := False;
-      isDead := False;
-      stsDrunk := False;
-      stsPoison := False;
-      tmrDrunk := 0;
-      tmrPoison := 0;
-      posX := npcx;
-      posY := npcy;
-    End;
+  with entities.entityList[entities.listLength] do
+  begin
+    npcID := uniqueid;
+    race := 'Hob';
+    description := 'a short Hob wearing a red cap';
+    glyph := 'h';
+    glyphColour := 'lightMagenta';
+    maxHP := randomRange(3, 5);
+    currentHP := maxHP;
+    attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
+    defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
+    weaponDice := 0;
+    weaponAdds := 0;
+    xpReward := maxHP;
+    visionRange := 4;
+    moveCount := 0;
+    targetX := 0;
+    targetY := 0;
+    inView := False;
+    blocks := False;
+    faction := redcapFaction;
+    if (mood = 1) then
+      state := stateHostile
+    else
+      state := stateNeutral;
+    discovered := False;
+    weaponEquipped := False;
+    armourEquipped := False;
+    isDead := False;
+    stsDrunk := False;
+    stsPoison := False;
+    tmrDrunk := 0;
+    tmrPoison := 0;
+    posX := npcx;
+    posY := npcy;
+  end;
   (* Occupy tile *)
   map.occupy(npcx, npcy);
-End;
+end;
 
-Procedure takeTurn(id: smallint);
-Begin
-  Case entityList[id].state Of
+procedure takeTurn(id: smallint);
+begin
+  case entityList[id].state of
     stateNeutral: decisionNeutral(id);
     stateHostile: decisionHostile(id);
     stateEscape: decisionEscape(id);
-    Else
+    else
       decisionNeutral(id);
-  End;
-End;
+  end;
+end;
 
-Procedure decisionNeutral(id: smallint);
-
-Var
+procedure decisionNeutral(id: smallint);
+var
   stopAndSmellFlowers: byte;
-Begin
+begin
   stopAndSmellFlowers := globalutils.randomRange(1, 2);
-  If (stopAndSmellFlowers = 1) Then
+  if (stopAndSmellFlowers = 1) then
     { Either wander randomly }
     wander(id, entityList[id].posX, entityList[id].posY)
-  Else
+  else
     { or stay in place }
     entities.moveNPC(id, entityList[id].posX, entityList[id].posY);
-End;
+end;
 
-Procedure decisionHostile(id: smallint);
-Begin
+procedure decisionHostile(id: smallint);
+begin
   { If health is below 25%, escape }
-  If (entityList[id].currentHP < (entityList[id].maxHP Div 2)) Then
-    Begin
-      entityList[id].state := stateEscape;
-      escapePlayer(id, entityList[id].posX, entityList[id].posY);
-    End
+  if (entityList[id].currentHP < (entityList[id].maxHP div 2)) then
+  begin
+    entityList[id].state := stateEscape;
+    escapePlayer(id, entityList[id].posX, entityList[id].posY);
+  end
 
   { If NPC can see the player }
-  Else If (los.inView(entityList[id].posX, entityList[id].posY,
-          entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) Then
-         Begin
+  else if (los.inView(entityList[id].posX, entityList[id].posY,
+    entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) then
+  begin
     { If next to the player }
-           If (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) Then
+    if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
       { Attack the Player }
-             combat(id)
-           Else
+      combat(id)
+    else
       { Chase the player }
-             chaseTarget(id, entityList[id].posX, entityList[id].posY);
-         End
+      chaseTarget(id, entityList[id].posX, entityList[id].posY);
+  end
 
-  { If not injured and player not in sight }
-  Else
-    wander(id, entityList[id].posX, entityList[id].posY);
-End;
+  { If not injured and player not in sight, smell them out }
+  else
+    followScent(id);
+  // wander(id, entityList[id].posX, entityList[id].posY);
+end;
 
-Procedure decisionEscape(id: smallint);
-Begin
+procedure decisionEscape(id: smallint);
+begin
   { Check if player is in sight }
-  If (los.inView(entityList[id].posX, entityList[id].posY, entityList[0].posX,
-     entityList[0].posY, entityList[id].visionRange) = True) Then
+  if (los.inView(entityList[id].posX, entityList[id].posY, entityList[0].posX,
+    entityList[0].posY, entityList[id].visionRange) = True) then
     { If the player is in sight, run away }
     escapePlayer(id, entityList[id].posX, entityList[id].posY)
 
   { If the player is not in sight }
-  Else
-    Begin
+  else
+  begin
     { Heal if health is below 50% }
-      If (entityList[id].currentHP < (entityList[id].maxHP Div 2)) Then
-        Inc(entityList[id].currentHP, 3)
-      Else
+    if (entityList[id].currentHP < (entityList[id].maxHP div 2)) then
+      Inc(entityList[id].currentHP, 3)
+    else
       { Reset state to Neutral and wander }
-        wander(id, entityList[id].posX, entityList[id].posY);
-    End;
-End;
+      wander(id, entityList[id].posX, entityList[id].posY);
+  end;
+end;
 
-Procedure wander(id, spx, spy: smallint);
-
-Var
+procedure wander(id, spx, spy: smallint);
+var
   direction, attempts, testx, testy: smallint;
-Begin
+begin
   { Set NPC state }
   entityList[id].state := stateNeutral;
   attempts := 0;
   testx := 0;
   testy := 0;
   direction := 0;
-  Repeat
+  repeat
     (* Reset values after each failed loop so they don't keep dec/incrementing *)
     testx := spx;
     testy := spy;
     direction := random(6);
     (* limit the number of attempts to move so the game doesn't hang if NPC is stuck *)
     Inc(attempts);
-    If attempts > 10 Then
-      Begin
-        entities.moveNPC(id, spx, spy);
-        exit;
-      End;
-    Case direction Of
+    if attempts > 10 then
+    begin
+      entities.moveNPC(id, spx, spy);
+      exit;
+    end;
+    case direction of
       0: Dec(testy);
       1: Inc(testy);
       2: Dec(testx);
       3: Inc(testx);
       4: testx := spx;
       5: testy := spy;
-    End
-  Until (map.canMove(testx, testy) = True) And (map.isOccupied(testx, testy) = False);
+    end
+  until (map.canMove(testx, testy) = True) and (map.isOccupied(testx, testy) = False);
   entities.moveNPC(id, testx, testy);
-End;
+end;
 
-Procedure chaseTarget(id, spx, spy: smallint);
-
-Var
+procedure chaseTarget(id, spx, spy: smallint);
+var
   newX, newY, dx, dy: smallint;
   distance: double;
-Begin
+begin
   newX := 0;
   newY := 0;
   (* Get new coordinates to chase the player *)
   dx := entityList[0].posX - spx;
   dy := entityList[0].posY - spy;
-  If (dx = 0) And (dy = 0) Then
-    Begin
-      newX := spx;
-      newy := spy;
-    End
-  Else
-    Begin
-      distance := sqrt(dx ** 2 + dy ** 2);
-      dx := round(dx / distance);
-      dy := round(dy / distance);
-      newX := spx + dx;
-      newY := spy + dy;
-    End;
+  if (dx = 0) and (dy = 0) then
+  begin
+    newX := spx;
+    newy := spy;
+  end
+  else
+  begin
+    distance := sqrt(dx ** 2 + dy ** 2);
+    dx := round(dx / distance);
+    dy := round(dy / distance);
+    newX := spx + dx;
+    newY := spy + dy;
+  end;
   (* New coordinates set. Check if they are walkable *)
-  If (map.canMove(newX, newY) = True) Then
-    Begin
+  if (map.canMove(newX, newY) = True) then
+  begin
     (* Do they contain the player *)
-      If (map.hasPlayer(newX, newY) = True) Then
-        Begin
+    if (map.hasPlayer(newX, newY) = True) then
+    begin
       (* Remain on original tile and attack *)
-          entities.moveNPC(id, spx, spy);
-          combat(id);
-        End
+      entities.moveNPC(id, spx, spy);
+      combat(id);
+    end
     (* Else if tile does not contain player, check for another entity *)
-      Else If (map.isOccupied(newX, newY) = True) Then
-             Begin
-               ui.bufferMessage('The giant rat bumps into ' + getCreatureName(newX, newY));
-               entities.moveNPC(id, spx, spy);
-             End
+    else if (map.isOccupied(newX, newY) = True) then
+    begin
+      ui.bufferMessage('The giant rat bumps into ' + getCreatureName(newX, newY));
+      entities.moveNPC(id, spx, spy);
+    end
     (* if map is unoccupied, move to that tile *)
-      Else If (map.isOccupied(newX, newY) = False) Then
-             entities.moveNPC(id, newX, newY);
-    End
-  Else
+    else if (map.isOccupied(newX, newY) = False) then
+      entities.moveNPC(id, newX, newY);
+  end
+  else
     wander(id, spx, spy);
-End;
+end;
 
-Function isNextToPlayer(spx, spy: smallint): boolean;
-
-Var
+function isNextToPlayer(spx, spy: smallint): boolean;
+var
   dx, dy: smallint;
   distance: double;
-  // try single
-Begin
+begin
   Result := False;
   dx := entityList[0].posX - spx;
   dy := entityList[0].posY - spy;
   distance := sqrt(dx ** 2 + dy ** 2);
-  If (round(distance) = 0) Then
+  if (round(distance) = 0) then
     Result := True;
-End;
+end;
 
-Procedure escapePlayer(id, spx, spy: smallint);
-
-Var
+procedure escapePlayer(id, spx, spy: smallint);
+var
   newX, newY, dx, dy: smallint;
   distance: single;
-Begin
+begin
   newX := 0;
   newY := 0;
   (* Get new coordinates to escape the player *)
   dx := entityList[0].posX - spx;
   dy := entityList[0].posY - spy;
-  If (dx = 0) And (dy = 0) Then
-    Begin
-      newX := spx;
-      newy := spy;
-    End
-  Else
-    Begin
-      distance := sqrt(dx ** 2 + dy ** 2);
-      dx := round(dx / distance);
-      dy := round(dy / distance);
-      If (dx > 0) Then
-        dx := -1;
-      If (dx < 0) Then
-        dx := 1;
-      dy := round(dy / distance);
-      If (dy > 0) Then
-        dy := -1;
-      If (dy < 0) Then
-        dy := 1;
-      newX := spx + dx;
-      newY := spy + dy;
-    End;
-  If (map.canMove(newX, newY) = True) Then
-    Begin
-      If (map.hasPlayer(newX, newY) = True) Then
-        Begin
-          entities.moveNPC(id, spx, spy);
-          combat(id);
-        End
-      Else If (map.isOccupied(newX, newY) = False) Then
-             entities.moveNPC(id, newX, newY);
-    End
-  Else
+  if (dx = 0) and (dy = 0) then
+  begin
+    newX := spx;
+    newy := spy;
+  end
+  else
+  begin
+    distance := sqrt(dx ** 2 + dy ** 2);
+    dx := round(dx / distance);
+    dy := round(dy / distance);
+    if (dx > 0) then
+      dx := -1;
+    if (dx < 0) then
+      dx := 1;
+    dy := round(dy / distance);
+    if (dy > 0) then
+      dy := -1;
+    if (dy < 0) then
+      dy := 1;
+    newX := spx + dx;
+    newY := spy + dy;
+  end;
+  if (map.canMove(newX, newY) = True) then
+  begin
+    if (map.hasPlayer(newX, newY) = True) then
+    begin
+      entities.moveNPC(id, spx, spy);
+      combat(id);
+    end
+    else if (map.isOccupied(newX, newY) = False) then
+      entities.moveNPC(id, newX, newY);
+  end
+  else
     wander(id, spx, spy);
-End;
+end;
 
-Procedure combat(id: smallint);
-
-Var
+procedure combat(id: smallint);
+var
   damageAmount: smallint;
-Begin
+begin
   damageAmount := globalutils.randomRange(1, entities.entityList[id].attack) -
-                  entities.entityList[0].defence;
-  If (damageAmount > 0) Then
-    Begin
-      entities.entityList[0].currentHP :=
-                                          (entities.entityList[0].currentHP - damageAmount);
-      If (entities.entityList[0].currentHP < 1) Then
-        Begin
-          killer := entityList[id].race;
-          exit;
-        End
-      Else
-        Begin
-          If (damageAmount = 1) Then
-            ui.displayMessage('The hob slightly wounds you')
-          Else
-            ui.displayMessage('The hob claws you, dealing ' +
-                              IntToStr(damageAmount) + ' damage');
+    entities.entityList[0].defence;
+  if (damageAmount > 0) then
+  begin
+    entities.entityList[0].currentHP :=
+      (entities.entityList[0].currentHP - damageAmount);
+    if (entities.entityList[0].currentHP < 1) then
+    begin
+      killer := entityList[id].race;
+      exit;
+    end
+    else
+    begin
+      if (damageAmount = 1) then
+        ui.displayMessage('The hob slightly wounds you')
+      else
+        ui.displayMessage('The hob claws you, dealing ' +
+          IntToStr(damageAmount) + ' damage');
       (* Update health display to show damage *)
-          ui.updateHealth;
-        End;
-    End
-  Else
+      ui.updateHealth;
+    end;
+  end
+  else
     ui.displayMessage('The hob misses');
-End;
+end;
 
-End.
+procedure followScent(id: smallint);
+var
+  smellDir: char;
+begin
+  ui.displayMessage('SNIFF');
+  smellDir := scentDirection(entities.entityList[id].posY, entities.entityList[id].posX);
+
+  case smellDir of
+    'n':
+    begin
+      if (map.canMove(entities.entityList[id].posX, (entities.entityList[id].posY - 1)) and
+        (map.isOccupied(entities.entityList[id].posX, (entities.entityList[id].posY - 1)) = False)) then
+        entities.moveNPC(id, entities.entityList[id].posX, (entities.entityList[id].posY - 1));
+    end;
+    'e':
+    begin
+       if (map.canMove((entities.entityList[id].posX + 1), entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
+        entities.moveNPC(id, (entities.entityList[id].posX + 1), entities.entityList[id].posY);
+    end;
+    's':
+    begin
+      if (map.canMove(entities.entityList[id].posX, (entities.entityList[id].posY + 1)) and
+        (map.isOccupied(entities.entityList[id].posX, (entities.entityList[id].posY + 1)) = False)) then
+        entities.moveNPC(id, entities.entityList[id].posX, (entities.entityList[id].posY + 1));
+    end;
+    'w':
+    begin
+      if (map.canMove((entities.entityList[id].posX - 1), entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
+        entities.moveNPC(id, (entities.entityList[id].posX - 1), entities.entityList[id].posY);
+    end
+    else
+      entities.moveNPC(id, entities.entityList[id].posX, entities.entityList[id].posY);
+  end;
+end;
+
+end.
