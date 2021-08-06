@@ -91,46 +91,45 @@ end;
 
 procedure sniff;
 begin
-  if (smellCounter > 0) then
+  (* Initialise distance map *)
+  for r := 1 to MAXROWS do
   begin
-    (* Initialise distance map *)
-    for r := 1 to MAXROWS do
+    for c := 1 to MAXCOLUMNS do
     begin
-      for c := 1 to MAXCOLUMNS do
-      begin
-        distances[r, c] := BLOCKVALUE;
-      end;
+      distances[r, c] := BLOCKVALUE;
     end;
-    (* flood map from players current position *)
-    calcDistances(entityList[0].posX, entityList[0].posY);
-
-    (* Set smell counter *)
-    smellCounter := 5;
-
-    /////////////////////////////
-    //Write map to text file for testing
-    //filename := 'smellmap.txt';
-    //AssignFile(myfile, filename);
-    //rewrite(myfile);
-    //for r := 1 to MAXROWS do
-    //begin
-    //  for c := 1 to MAXCOLUMNS do
-    //  begin
-    //    Write(myfile, smellmap[r][c], ' ');
-    //  end;
-    //  Write(myfile, sLineBreak);
-    //end;
-    //closeFile(myfile);
-    //////////////////////////////
   end;
+  (* flood map from players current position *)
+  calcDistances(entityList[0].posX, entityList[0].posY);
+
+  (* Set smell counter *)
+  smellCounter := 5;
+
+  /////////////////////////////
+  //Write map to text file for testing
+  //filename := 'smellmap.txt';
+  //AssignFile(myfile, filename);
+  //rewrite(myfile);
+  //for r := 1 to MAXROWS do
+  //begin
+  //  for c := 1 to MAXCOLUMNS do
+  //  begin
+  //    Write(myfile, smellmap[r][c], ' ');
+  //  end;
+  //  Write(myfile, sLineBreak);
+  //end;
+  //closeFile(myfile);
+  //////////////////////////////
+
 end;
 
 function scentDirection(y, x: smallint): char;
 var
   surroundingArea: array[0..3] of integer;
 begin
-  (* Smell the surrounding area *)
-  sniff;
+  if (smellCounter > 0) then
+    (* Smell the surrounding area *)
+    sniff;
 
   (* Find the tile with the strongest scent *)
   (* North *)
