@@ -51,7 +51,7 @@ Begin
       race := 'Hob';
       description := 'a short Hob wearing a red cap';
       glyph := 'h';
-      glyphColour := 'red';
+      glyphColour := 'lightMagenta';
       maxHP := randomRange(3, 5);
       currentHP := maxHP;
       attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
