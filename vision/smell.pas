@@ -12,7 +12,7 @@ unit smell;
 interface
 
 uses
-  Classes, globalutils, map;
+  Classes, Math, globalutils, map;
 
 const
   (* used on the smell map to denote a wall *)
@@ -31,26 +31,19 @@ var
   filename: ShortString;
   myfile: Text;
 
-(* Check if tile is a wall or not *)
-// function blockORnot(x, y: smallint): Tbkinds; // Commented out to remove forward declaration error
 (* Calculate distance from player *)
 procedure calcDistances(x, y: smallint);
 (* Generate smell map *)
 procedure sniff;
-(* Check tile to the North *)
-function sniffNorth(y, x: smallint): boolean;
-(* Check tile to the East *)
-function sniffEast(y, x: smallint): boolean;
-(* Check tile to the South *)
-function sniffSouth(y, x: smallint): boolean;
-(* Check tile to the West *)
-function sniffWest(y, x: smallint): boolean;
+(* Find the tile with the highest scent value *)
+function scentDirection(y, x: smallint): char;
 
 implementation
 
 uses
   entities;
 
+(* Check if tile is a wall or not *)
 function blockORnot(x, y: integer): Tbkinds;
 begin
   if (map.maparea[y][x].Glyph = '*') then
@@ -98,69 +91,66 @@ end;
 
 procedure sniff;
 begin
-  (* Initialise distance map *)
-  for r := 1 to MAXROWS do
+  if (smellCounter > 0) then
   begin
-    for c := 1 to MAXCOLUMNS do
+    (* Initialise distance map *)
+    for r := 1 to MAXROWS do
     begin
-      distances[r, c] := BLOCKVALUE;
+      for c := 1 to MAXCOLUMNS do
+      begin
+        distances[r, c] := BLOCKVALUE;
+      end;
     end;
+    (* flood map from players current position *)
+    calcDistances(entityList[0].posX, entityList[0].posY);
+
+    (* Set smell counter *)
+    smellCounter := 5;
+
+    /////////////////////////////
+    //Write map to text file for testing
+    //filename := 'smellmap.txt';
+    //AssignFile(myfile, filename);
+    //rewrite(myfile);
+    //for r := 1 to MAXROWS do
+    //begin
+    //  for c := 1 to MAXCOLUMNS do
+    //  begin
+    //    Write(myfile, smellmap[r][c], ' ');
+    //  end;
+    //  Write(myfile, sLineBreak);
+    //end;
+    //closeFile(myfile);
+    //////////////////////////////
   end;
-  (* flood map from players current position *)
-  calcDistances(entityList[0].posX, entityList[0].posY);
-
-  /////////////////////////////
-  //Write map to text file for testing
-  //filename := 'smellmap.txt';
-  //AssignFile(myfile, filename);
-  //rewrite(myfile);
-  //for r := 1 to MAXROWS do
-  //begin
-  //  for c := 1 to MAXCOLUMNS do
-  //  begin
-  //    Write(myfile, smellmap[r][c], ' ');
-  //  end;
-  //  Write(myfile, sLineBreak);
-  //end;
-  //closeFile(myfile);
-  //////////////////////////////
-
 end;
 
-(* If the tile to the North has a lower value than current tile return true *)
-function sniffNorth(y, x: smallint): boolean;
+function scentDirection(y, x: smallint): char;
+var
+  surroundingArea: array[0..3] of integer;
 begin
-  if (smellmap[y - 1][x] < smellmap[y][x]) then
-    Result := True
-  else
-    Result := False;
-end;
+  (* Smell the surrounding area *)
+  sniff;
 
-(* If the tile to the East has a lower value than current tile return true *)
-function sniffEast(y, x: smallint): boolean;
-begin
-  if (smellmap[y][x + 1] < smellmap[y][x]) then
-    Result := True
-  else
-    Result := False;
-end;
+  (* Find the tile with the strongest scent *)
+  (* North *)
+  surroundingArea[0] := smellmap[y - 1][x];
+  (* South *)
+  surroundingArea[1] := smellmap[y + 1][x];
+  (* East *)
+  surroundingArea[2] := smellmap[y][x + 1];
+  (* West *)
+  surroundingArea[3] := smellmap[y][x - 1];
 
-(* If the tile to the South has a lower value than current tile return true *)
-function sniffSouth(y, x: smallint): boolean;
-begin
-  if (smellmap[y + 1][x] < smellmap[y][x]) then
-    Result := True
-  else
-    Result := False;
-end;
-
-(* If the tile to the West has a lower value than current tilem return true *)
-function sniffWest(y, x: smallint): boolean;
-begin
-  if (smellmap[y][x - 1] < smellmap[y][x]) then
-    Result := True
-  else
-    Result := False;
+  (* Return direction with strongest scent *)
+  if (surroundingArea[0] = MaxValue(surroundingArea)) then
+    Result := 'n'
+  else if (surroundingArea[1] = MaxValue(surroundingArea)) then
+    Result := 's'
+  else if (surroundingArea[2] = MaxValue(surroundingArea)) then
+    Result := 'e'
+  else if (surroundingArea[3] = MaxValue(surroundingArea)) then
+    Result := 'w';
 end;
 
 end.
