@@ -8,11 +8,12 @@
 unit smell;
 
 {$mode objfpc}{$H+}
+{$RANGECHECKS OFF}
 
 interface
 
 uses
-  Classes, Math, globalutils, SysUtils;
+  SysUtils, Classes, Math, globalutils;
 
 const
   (* used on the smell map to denote a wall *)

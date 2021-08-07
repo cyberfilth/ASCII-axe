@@ -332,33 +332,43 @@ procedure followScent(id: smallint);
 var
   smellDir: char;
 begin
-  ui.displayMessage('SNIFF');
+  ui.displayMessage('SNIFF');   // just for testing
   smellDir := scentDirection(entities.entityList[id].posY, entities.entityList[id].posX);
 
   case smellDir of
     'n':
     begin
-      if (map.canMove(entities.entityList[id].posX, (entities.entityList[id].posY - 1)) and
-        (map.isOccupied(entities.entityList[id].posX, (entities.entityList[id].posY - 1)) = False)) then
-        entities.moveNPC(id, entities.entityList[id].posX, (entities.entityList[id].posY - 1));
+      if (map.canMove(entities.entityList[id].posX,
+        (entities.entityList[id].posY - 1)) and
+        (map.isOccupied(entities.entityList[id].posX,
+        (entities.entityList[id].posY - 1)) = False)) then
+        entities.moveNPC(id, entities.entityList[id].posX,
+          (entities.entityList[id].posY - 1));
     end;
     'e':
     begin
-       if (map.canMove((entities.entityList[id].posX + 1), entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
-        entities.moveNPC(id, (entities.entityList[id].posX + 1), entities.entityList[id].posY);
+      if (map.canMove((entities.entityList[id].posX + 1),
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
+        entities.moveNPC(id, (entities.entityList[id].posX + 1),
+          entities.entityList[id].posY);
     end;
     's':
     begin
-      if (map.canMove(entities.entityList[id].posX, (entities.entityList[id].posY + 1)) and
-        (map.isOccupied(entities.entityList[id].posX, (entities.entityList[id].posY + 1)) = False)) then
-        entities.moveNPC(id, entities.entityList[id].posX, (entities.entityList[id].posY + 1));
+      if (map.canMove(entities.entityList[id].posX,
+        (entities.entityList[id].posY + 1)) and
+        (map.isOccupied(entities.entityList[id].posX,
+        (entities.entityList[id].posY + 1)) = False)) then
+        entities.moveNPC(id, entities.entityList[id].posX,
+          (entities.entityList[id].posY + 1));
     end;
     'w':
     begin
-      if (map.canMove((entities.entityList[id].posX - 1), entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
-        entities.moveNPC(id, (entities.entityList[id].posX - 1), entities.entityList[id].posY);
+      if (map.canMove((entities.entityList[id].posX - 1),
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
+        entities.moveNPC(id, (entities.entityList[id].posX - 1),
+          entities.entityList[id].posY);
     end
     else
       entities.moveNPC(id, entities.entityList[id].posX, entities.entityList[id].posY);

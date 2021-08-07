@@ -9,7 +9,7 @@ unit main;
 interface
 
 uses
-  Video, SysUtils, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
+  SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
   universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling,
   item_lookup, smell;
 

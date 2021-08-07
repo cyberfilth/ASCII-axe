@@ -23,7 +23,6 @@ const
   (* Save game file *)
   saveFile = 'saveGame.dat';
 
-
 var
   dungeonArray: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
   (* Number of rooms in the current dungeon *)

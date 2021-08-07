@@ -5,7 +5,7 @@ unit scrRIP;
 interface
 
 uses
-  video, SysUtils, ui, globalUtils, entities, file_handling;
+  SysUtils, video, ui, globalUtils, entities, file_handling;
 
 (* Show the game over screen screen *)
 procedure displayRIPscreen;

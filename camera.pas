@@ -1,97 +1,97 @@
 (* Camera unit follows the player around and displays the surrounding game map *)
 
-Unit camera;
+unit camera;
 
 {$mode objfpc}{$H+}
 
-Interface
+interface
 
-Uses
-SysUtils, globalUtils, ui, map, entities;
+uses
+  SysUtils, globalUtils, ui, map, entities;
 
-Const
+const
   camHeight = 19;
   camWidth = 57;
 
-Var
+var
   r, c: smallint;
 
-Function getX(Xcoord: smallint): smallint;
-Function getY(Ycoord: smallint): smallint;
-Procedure drawMap;
-Procedure drawPlayer;
+function getX(Xcoord: smallint): smallint;
+function getY(Ycoord: smallint): smallint;
+procedure drawMap;
+procedure drawPlayer;
 
-Implementation
+implementation
 
-Function getX(Xcoord: smallint): smallint;
+function getX(Xcoord: smallint): smallint;
 
-Var
+var
   p, hs, s, m: smallint;
-Begin
+begin
   p := Xcoord;
-  hs := camWidth Div 2;
+  hs := camWidth div 2;
   s := camWidth;
   m := globalUtils.MAXCOLUMNS;
 
-  If (p < hs) Then
+  if (p < hs) then
     Result := 0
-  Else If (p >= m - hs) Then
-         Result := m - s
-  Else
+  else if (p >= m - hs) then
+    Result := m - s
+  else
     Result := p - hs;
-End;
+end;
 
-Function getY(Ycoord: smallint): smallint;
+function getY(Ycoord: smallint): smallint;
 
-Const
+const
   s = camHeight;
   hs = camHeight div 2;
   m = globalUtils.MAXROWS;
 
-Var
+var
   p: smallint;
-Begin
+begin
   p := Ycoord;
-  If (p < hs) Then
+  if (p < hs) then
     Result := 0
-  Else If (p >= m - hs) Then
-         Result := m - s
-  Else
+  else if (p >= m - hs) then
+    Result := m - s
+  else
     Result := p - hs;
-End;
+end;
 
-Procedure drawMap;
+procedure drawMap;
 
-Var
+var
   (* Player coordinates *)
   pX, pY: smallint;
   (* Tile colour *)
   gCol: shortstring;
-Begin
+begin
   pX := entities.entityList[0].posX;
   pY := entities.entityList[0].posY;
-  For r := 1 To camHeight Do
-    Begin
-      For c := 1 To camWidth Do
-        Begin
-          gCol := map.mapDisplay[r + getY(pY)][c + getX(pX)].GlyphColour;
-          TextOut(c, r, gCol, map.mapDisplay[r + getY(pY)][c + getX(pX)].Glyph);
-        End;
-    End;
+  for r := 1 to camHeight do
+  begin
+    for c := 1 to camWidth do
+    begin
+      gCol := map.mapDisplay[r + getY(pY)][c + getX(pX)].GlyphColour;
+      TextOut(c, r, gCol, map.mapDisplay[r + getY(pY)][c + getX(pX)].Glyph);
+    end;
+  end;
   drawPlayer;
-End;
+end;
 
-Procedure drawPlayer;
+procedure drawPlayer;
 
-Var
+var
   entX, entY: smallint;
   (* Glyph colour *)
   gCol: shortstring;
-Begin
+begin
   gCol := entities.entityList[0].glyphColour;
   entX := entities.entityList[0].posX;
   entY := entities.entityList[0].posY;
   TextOut(entX - getX(entX), entY - getY(entY), gCol, entities.entityList[0].glyph);
-End;
+end;
 
-End.
+end.
