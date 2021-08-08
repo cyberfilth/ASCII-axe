@@ -30,8 +30,8 @@ var
   smellCounter: byte;
 
 (* TESTING - Write smell map to text file *)
-  {filename: ShortString;
-  myfile: Text;}
+  filename: ShortString;
+  myfile: Text;
 
 function blockORnot(x, y: integer): Tbkinds;
 (* Calculate distance from player *)
@@ -121,7 +121,7 @@ begin
   (* Set smell counter *)
   smellCounter := 5;
 
-  (*
+
   // Write map to text file for testing
   filename := 'smellmap.txt';
   AssignFile(myfile, filename);
@@ -135,7 +135,7 @@ begin
     Write(myfile, sLineBreak);
   end;
   closeFile(myfile);
-  *)
+
 
 end;
 

@@ -29,6 +29,8 @@ var
 begin
   (* Attacking an NPC automatically makes it hostile *)
   entities.entityList[npcID].state := stateHostile;
+  (* Number of turns NPC will follow you if out of sight *)
+  entities.entityList[npcID].moveCount:= 5;
 
   damageAmount :=
     (globalutils.randomRange(1, entityList[0].attack) + { Base attack }

@@ -113,26 +113,23 @@ end;
 
 procedure decisionHostile(id: smallint);
 begin
-  { If health is below 25%, escape }
-  if (entityList[id].currentHP < (entityList[id].maxHP div 2)) then
+  {------------------------------- If health is below 25%, escape }
+  if (entityList[id].currentHP < 2) then
   begin
     entityList[id].state := stateEscape;
     escapePlayer(id, entityList[id].posX, entityList[id].posY);
   end
 
-  { If NPC can see the player }
+  {------------------------------- If NPC can see the player }
   else if (los.inView(entityList[id].posX, entityList[id].posY,
     entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) then
   begin
-    { If next to the player }
+  {------------------------------- If next to the player }
     if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
-      { Attack the Player }
-    begin
-      entityList[id].moveCount := 5;
-      combat(id);
-    end
+      {------------------------------- Attack the Player }
+      combat(id)
     else
-      { Chase the player }
+      {------------------------------- Chase the player }
       chaseTarget(id, entityList[id].posX, entityList[id].posY);
   end
 
