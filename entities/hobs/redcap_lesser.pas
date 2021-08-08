@@ -61,6 +61,7 @@ begin
     weaponAdds := 0;
     xpReward := maxHP;
     visionRange := 4;
+    (* Counts number of turns the NPC is in pursuit *)
     moveCount := 0;
     targetX := 0;
     targetY := 0;
@@ -126,16 +127,27 @@ begin
     { If next to the player }
     if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
       { Attack the Player }
-      combat(id)
+    begin
+      entityList[id].moveCount := 5;
+      combat(id);
+    end
     else
       { Chase the player }
       chaseTarget(id, entityList[id].posX, entityList[id].posY);
   end
 
   { If not injured and player not in sight, smell them out }
-  else
+  else if (entityList[id].moveCount > 0) then
+  begin
+    ui.displayMessage('Chase');
+    Dec(entityList[id].moveCount);
     followScent(id);
-  // wander(id, entityList[id].posX, entityList[id].posY);
+  end
+  else
+  begin
+    ui.displayMessage('Wander');
+    wander(id, entityList[id].posX, entityList[id].posY);
+  end;
 end;
 
 procedure decisionEscape(id: smallint);
@@ -367,6 +379,8 @@ begin
       if (map.canMove((entities.entityList[id].posX - 1),
         entities.entityList[id].posY) and (map.isOccupied(
         (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
+
+
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
           entities.entityList[id].posY);
     end

@@ -143,6 +143,8 @@ function scentDirection(y, x: smallint): char;
 var
   surroundingArea: array[0..3] of integer;
 begin
+  { Initialise Result }
+  Result := 'n';
   if (smellCounter < 1) then
     (* Smell the surrounding area *)
     sniff;
