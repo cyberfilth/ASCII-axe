@@ -113,9 +113,17 @@ end;
 
 procedure decisionHostile(id: smallint);
 begin
-  {------------------------------- If health is below 25%, escape }
-  if (entityList[id].currentHP < 2) then
+  { If not injured and player not in sight, smell them out }
+  if (entityList[id].moveCount > 0) then
   begin
+    ui.displayMessage('hostile > chase');
+    followScent(id);
+  end
+
+  {------------------------------- If health is below 25%, escape }
+  else if (entityList[id].currentHP < 2) then
+  begin
+    ui.displayMessage('hostile > escape');
     entityList[id].state := stateEscape;
     escapePlayer(id, entityList[id].posX, entityList[id].posY);
   end
@@ -124,7 +132,8 @@ begin
   else if (los.inView(entityList[id].posX, entityList[id].posY,
     entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) then
   begin
-  {------------------------------- If next to the player }
+    ui.displayMessage('hostile > can see you');
+    {------------------------------- If next to the player }
     if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
       {------------------------------- Attack the Player }
       combat(id)
@@ -133,16 +142,10 @@ begin
       chaseTarget(id, entityList[id].posX, entityList[id].posY);
   end
 
-  { If not injured and player not in sight, smell them out }
-  else if (entityList[id].moveCount > 0) then
-  begin
-    ui.displayMessage('Chase');
-    Dec(entityList[id].moveCount);
-    followScent(id);
-  end
   else
   begin
-    ui.displayMessage('Wander');
+    {------------------------------- Wander }
+    ui.displayMessage('hostile > wander');
     wander(id, entityList[id].posX, entityList[id].posY);
   end;
 end;
@@ -341,7 +344,9 @@ procedure followScent(id: smallint);
 var
   smellDir: char;
 begin
-  ui.displayMessage('SNIFF');   // just for testing
+  ui.displayMessage('Hob number ' + IntToStr(id) + ', Move No: ' +
+    IntToStr(entityList[id].moveCount));   // just for testing
+  Dec(entityList[id].moveCount);
   smellDir := scentDirection(entities.entityList[id].posY, entities.entityList[id].posX);
 
   case smellDir of
@@ -353,14 +358,17 @@ begin
         (entities.entityList[id].posY - 1)) = False)) then
         entities.moveNPC(id, entities.entityList[id].posX,
           (entities.entityList[id].posY - 1));
+      ui.displayMessage('north');
     end;
     'e':
     begin
       if (map.canMove((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) and (map.isOccupied(
-        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX + 1),
+        entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
+      ui.displayMessage('east');
     end;
     's':
     begin
@@ -370,16 +378,17 @@ begin
         (entities.entityList[id].posY + 1)) = False)) then
         entities.moveNPC(id, entities.entityList[id].posX,
           (entities.entityList[id].posY + 1));
+      ui.displayMessage('south');
     end;
     'w':
     begin
       if (map.canMove((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) and (map.isOccupied(
-        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
-
-
+        entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX - 1),
+        entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
           entities.entityList[id].posY);
+      ui.displayMessage('west');
     end
     else
       entities.moveNPC(id, entities.entityList[id].posX, entities.entityList[id].posY);
