@@ -21,7 +21,7 @@ const
 
 type
   TDist = array [1..MAXROWS, 1..MAXCOLUMNS] of smallint;
-  Tbkinds = (bWall, bClear);
+  Tbkinds = (bNone, bWall, bClear);
 
 var
   smellmap: array[1..MAXROWS, 1..MAXCOLUMNS] of smallint;
@@ -29,9 +29,9 @@ var
   (* Tracks the scent decaying over time *)
   smellCounter: byte;
 
-(* TESTING - Write smell map to text file *)
-  filename: ShortString;
-  myfile: Text;
+  (* TESTING - Write smell map to text file *)
+  { filename: ShortString;
+  myfile: Text; }
 
 function blockORnot(x, y: integer): Tbkinds;
 (* Calculate distance from player *)
@@ -53,12 +53,8 @@ begin
     Result := bWall
   else if (map.maparea[y][x].Glyph = '.') then
     Result := bClear
-  else if (map.maparea[y][x].Glyph = '<') then
-    Result := bClear
-  else if (map.maparea[y][x].Glyph = '>') then
-    Result := bClear
   else
-    Result := bWall;
+    Result := bNone;
 end;
 
 procedure calcDistances(x, y: smallint);
@@ -123,7 +119,7 @@ begin
 
 
   // Write map to text file for testing
-  filename := 'smellmap.txt';
+  (* filename := 'smellmap.txt';
   AssignFile(myfile, filename);
   rewrite(myfile);
   for r := 1 to MAXROWS do
@@ -134,7 +130,7 @@ begin
     end;
     Write(myfile, sLineBreak);
   end;
-  closeFile(myfile);
+  closeFile(myfile);  *)
 
 
 end;
@@ -160,13 +156,13 @@ begin
   surroundingArea[3] := smellmap[y][x - 1];
 
   (* Return direction with strongest scent *)
-  if (surroundingArea[0] = MaxValue(surroundingArea)) then
+  if (surroundingArea[0] = MinValue(surroundingArea)) then
     Result := 'n'
-  else if (surroundingArea[1] = MaxValue(surroundingArea)) then
+  else if (surroundingArea[1] = MinValue(surroundingArea)) then
     Result := 's'
-  else if (surroundingArea[2] = MaxValue(surroundingArea)) then
+  else if (surroundingArea[2] = MinValue(surroundingArea)) then
     Result := 'e'
-  else if (surroundingArea[3] = MaxValue(surroundingArea)) then
+  else if (surroundingArea[3] = MinValue(surroundingArea)) then
     Result := 'w';
 end;
 

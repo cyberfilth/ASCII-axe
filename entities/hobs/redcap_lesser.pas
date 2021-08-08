@@ -53,7 +53,7 @@ begin
     description := 'a short Hob wearing a red cap';
     glyph := 'h';
     glyphColour := 'lightMagenta';
-    maxHP := randomRange(3, 5);
+    maxHP := 20;//randomRange(3, 5);
     currentHP := maxHP;
     attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
     defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
@@ -116,14 +116,15 @@ begin
   { If not injured and player not in sight, smell them out }
   if (entityList[id].moveCount > 0) then
   begin
-    ui.displayMessage('hostile > chase');
+    (* Randomly display a message that you are being chased *)
+    if (randomRange(1, 5) = 3) then
+      ui.displayMessage('You hear sounds of pursuit');
     followScent(id);
   end
 
   {------------------------------- If health is below 25%, escape }
   else if (entityList[id].currentHP < 2) then
   begin
-    ui.displayMessage('hostile > escape');
     entityList[id].state := stateEscape;
     escapePlayer(id, entityList[id].posX, entityList[id].posY);
   end
@@ -132,7 +133,6 @@ begin
   else if (los.inView(entityList[id].posX, entityList[id].posY,
     entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) then
   begin
-    ui.displayMessage('hostile > can see you');
     {------------------------------- If next to the player }
     if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
       {------------------------------- Attack the Player }
@@ -143,11 +143,8 @@ begin
   end
 
   else
-  begin
     {------------------------------- Wander }
-    ui.displayMessage('hostile > wander');
     wander(id, entityList[id].posX, entityList[id].posY);
-  end;
 end;
 
 procedure decisionEscape(id: smallint);
@@ -344,8 +341,6 @@ procedure followScent(id: smallint);
 var
   smellDir: char;
 begin
-  ui.displayMessage('Hob number ' + IntToStr(id) + ', Move No: ' +
-    IntToStr(entityList[id].moveCount));   // just for testing
   Dec(entityList[id].moveCount);
   smellDir := scentDirection(entities.entityList[id].posY, entities.entityList[id].posX);
 
@@ -358,7 +353,6 @@ begin
         (entities.entityList[id].posY - 1)) = False)) then
         entities.moveNPC(id, entities.entityList[id].posX,
           (entities.entityList[id].posY - 1));
-      ui.displayMessage('north');
     end;
     'e':
     begin
@@ -368,7 +362,6 @@ begin
         entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
-      ui.displayMessage('east');
     end;
     's':
     begin
@@ -378,7 +371,6 @@ begin
         (entities.entityList[id].posY + 1)) = False)) then
         entities.moveNPC(id, entities.entityList[id].posX,
           (entities.entityList[id].posY + 1));
-      ui.displayMessage('south');
     end;
     'w':
     begin
@@ -386,9 +378,10 @@ begin
         entities.entityList[id].posY) and
         (map.isOccupied((entities.entityList[id].posX - 1),
         entities.entityList[id].posY) = False)) then
+
+
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
           entities.entityList[id].posY);
-      ui.displayMessage('west');
     end
     else
       entities.moveNPC(id, entities.entityList[id].posX, entities.entityList[id].posY);
