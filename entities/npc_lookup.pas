@@ -13,12 +13,9 @@ uses
 
 const
   (* Array of creatures found in a cave, ordered by cave level *)
-  caveNPC1: array[1..4] of string =
-    ('redcapLesser', 'redcapLesser', 'redcapLesser', 'redcapLesser');
-  //  REMOVED JUST FOR TESTING HOB NPC
-  //caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
-  caveNPC2: array[1..4] of string = ('caveRat', 'giantRat', 'giantRat', 'giantRat');
-  caveNPC3: array[1..4] of string = ('caveRat', 'giantRat', 'giantRat', 'giantRat');
+  caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
+  caveNPC2: array[1..5] of string = ('caveRat', 'giantRat', 'giantRat', 'redcapLesser', 'giantRat');
+  caveNPC3: array[1..4] of string = ('caveRat', 'redcapLesser', 'giantRat', 'redcapLesser');
 
 
 (* randomly choose a creature and call the generate code directly *)
@@ -52,7 +49,7 @@ begin
       end { Level 2 }
       else if (universe.currentDepth = 2) then
       begin
-        randSelect := globalUtils.randomRange(1, 4);
+        randSelect := globalUtils.randomRange(1, 5);
         monster := caveNPC2[randSelect];
       end { Level 3 }
       else if (universe.currentDepth = 3) then

@@ -7,8 +7,8 @@
 AddChild	file_handling.pas	/^  function AddChild(Node: TDOMNode; ChildName: shortstring): TDomNode;$/;"	f
 AddElement	file_handling.pas	/^  procedure AddElement(Node: TDOMNode; Name, Value: UnicodeString);$/;"	p
 AddElement	file_handling.pas	/^  procedure AddElement(Node: TDOMNode; Name, Value: shortstring);$/;"	p
-Creature.entityTakeTurn	entities.pas	/^Procedure Creature.entityTakeTurn(i: smallint);$/;"	p
-NPCgameLoop	entities.pas	/^Procedure NPCgameLoop;$/;"	p
+Creature.entityTakeTurn	entities.pas	/^procedure Creature.entityTakeTurn(i: smallint);$/;"	p
+NPCgameLoop	entities.pas	/^procedure NPCgameLoop;$/;"	p
 RIPInput	keyboardinput.pas	/^procedure RIPInput(Keypress: TKeyEvent);$/;"	p
 TextOut	ui.pas	/^procedure TextOut(X, Y: word; textcol: shortstring; const S: string);$/;"	p
 ascendStairs	map.pas	/^procedure ascendStairs;$/;"	p
@@ -19,7 +19,7 @@ canSee	map.pas	/^function canSee(checkX, checkY: smallint): boolean;$/;"	f
 clearStatusBar	ui.pas	/^procedure clearStatusBar;$/;"	p
 containsItem	items.pas	/^function containsItem(x, y: smallint): boolean;$/;"	f
 continue	main.pas	/^procedure continue;$/;"	p
-countLivingEntities	entities.pas	/^Function countLivingEntities: byte;$/;"	f
+countLivingEntities	entities.pas	/^function countLivingEntities: byte;$/;"	f
 countNonEmptyItems	items.pas	/^function countNonEmptyItems: byte;$/;"	f
 createNewDungeon	universe.pas	/^procedure createNewDungeon(levelType: dungeonTerrain);$/;"	p
 deleteGameData	file_handling.pas	/^procedure deleteGameData;$/;"	p
@@ -27,11 +27,11 @@ descendStairs	map.pas	/^procedure descendStairs;$/;"	p
 displayMessage	ui.pas	/^procedure displayMessage(message: shortstring);$/;"	p
 displayStatusEffect	ui.pas	/^procedure displayStatusEffect(onoff: byte; effectType: shortstring);$/;"	p
 drawItemsOnMap	items.pas	/^procedure drawItemsOnMap(id: byte);$/;"	p
-drawMap	camera.pas	/^Procedure drawMap;$/;"	p
-drawPlayer	camera.pas	/^Procedure drawPlayer;$/;"	p
+drawMap	camera.pas	/^procedure drawMap;$/;"	p
+drawPlayer	camera.pas	/^procedure drawPlayer;$/;"	p
 drawTile	map.pas	/^procedure drawTile(c, r: smallint; hiDef: byte);$/;"	p
 dropInput	keyboardinput.pas	/^procedure dropInput(Keypress: TKeyEvent);$/;"	p
-entityTakeTurn	entities.pas	/^    Procedure entityTakeTurn(i: smallint);$/;"	p
+entityTakeTurn	entities.pas	/^    procedure entityTakeTurn(i: smallint);$/;"	p
 exitApplication	main.pas	/^procedure exitApplication;$/;"	p
 exitMessage	ui.pas	/^procedure exitMessage;$/;"	p
 exitPrompt	ui.pas	/^procedure exitPrompt;$/;"	p
@@ -40,38 +40,38 @@ gameLoop	main.pas	/^procedure gameLoop;$/;"	p
 gameOver	main.pas	/^procedure gameOver;$/;"	p
 generateName	plot_gen.pas	/^procedure generateName;$/;"	p
 generateTitle	plot_gen.pas	/^procedure generateTitle;$/;"	p
-getCreatureHP	entities.pas	/^Function getCreatureHP(x, y: smallint): smallint;$/;"	f
-getCreatureID	entities.pas	/^Function getCreatureID(x, y: smallint): smallint;$/;"	f
-getCreatureMaxHP	entities.pas	/^Function getCreatureMaxHP(x, y: smallint): smallint;$/;"	f
-getCreatureName	entities.pas	/^Function getCreatureName(x, y: smallint): shortstring;$/;"	f
+getCreatureHP	entities.pas	/^function getCreatureHP(x, y: smallint): smallint;$/;"	f
+getCreatureID	entities.pas	/^function getCreatureID(x, y: smallint): smallint;$/;"	f
+getCreatureMaxHP	entities.pas	/^function getCreatureMaxHP(x, y: smallint): smallint;$/;"	f
+getCreatureName	entities.pas	/^function getCreatureName(x, y: smallint): shortstring;$/;"	f
 getItemDescription	items.pas	/^function getItemDescription(x, y: smallint): shortstring;$/;"	f
 getItemName	items.pas	/^function getItemName(x, y: smallint): shortstring;$/;"	f
 getTrollDate	plot_gen.pas	/^procedure getTrollDate;$/;"	p
-getX	camera.pas	/^Function getX(Xcoord: smallint): smallint;$/;"	f
-getY	camera.pas	/^Function getY(Ycoord: smallint): smallint;$/;"	f
+getX	camera.pas	/^function getX(Xcoord: smallint): smallint;$/;"	f
+getY	camera.pas	/^function getY(Ycoord: smallint): smallint;$/;"	f
 hasPlayer	map.pas	/^function hasPlayer(checkX, checkY: smallint): boolean;$/;"	f
 initialise	main.pas	/^procedure initialise;$/;"	p
 initialiseItems	items.pas	/^procedure initialiseItems;$/;"	p
 inventoryInput	keyboardinput.pas	/^procedure inventoryInput(Keypress: TKeyEvent);$/;"	p
-isCreatureVisible	entities.pas	/^Function isCreatureVisible(x, y: smallint): boolean;$/;"	f
+isCreatureVisible	entities.pas	/^function isCreatureVisible(x, y: smallint): boolean;$/;"	f
 isOccupied	map.pas	/^function isOccupied(checkX, checkY: smallint): boolean;$/;"	f
-killEntity	entities.pas	/^Procedure killEntity(id: smallint);$/;"	p
+killEntity	entities.pas	/^procedure killEntity(id: smallint);$/;"	p
 litterItems	universe.pas	/^procedure litterItems;$/;"	p
 loadDisplayedMap	map.pas	/^procedure loadDisplayedMap;$/;"	p
 loadDungeonLevel	file_handling.pas	/^procedure loadDungeonLevel(lvl: byte);$/;"	p
 loadGame	file_handling.pas	/^procedure loadGame;$/;"	p
 logAction	logging.pas	/^procedure logAction(textString: string);$/;"	p
 loop	main.pas	/^procedure loop;$/;"	p
-moveNPC	entities.pas	/^Procedure moveNPC(id, newX, newY: smallint);$/;"	p
-newFloorNPCs	entities.pas	/^Procedure newFloorNPCs;$/;"	p
+moveNPC	entities.pas	/^procedure moveNPC(id, newX, newY: smallint);$/;"	p
+newFloorNPCs	entities.pas	/^procedure newFloorNPCs;$/;"	p
 newGame	main.pas	/^procedure newGame;$/;"	p
 occupy	map.pas	/^procedure occupy(x, y: smallint);$/;"	p
-occupyUpdate	entities.pas	/^Procedure occupyUpdate;$/;"	p
+occupyUpdate	entities.pas	/^procedure occupyUpdate;$/;"	p
 quaffInput	keyboardinput.pas	/^procedure quaffInput(Keypress: TKeyEvent);$/;"	p
 quitInput	keyboardinput.pas	/^procedure quitInput(Keypress: TKeyEvent);$/;"	p
 randomRange	globalutils.pas	/^function randomRange(fromNumber, toNumber: smallint): smallint;$/;"	f
 redrawItems	items.pas	/^procedure redrawItems;$/;"	p
-redrawMapDisplay	entities.pas	/^Procedure redrawMapDisplay(id: byte);$/;"	p
+redrawMapDisplay	entities.pas	/^procedure redrawMapDisplay(id: byte);$/;"	p
 restoreMessages	ui.pas	/^procedure restoreMessages;$/;"	p
 returnToGameScreen	main.pas	/^procedure returnToGameScreen;$/;"	p
 rollDice	globalutils.pas	/^function rollDice(numberOfDice: byte): smallint;$/;"	f
@@ -85,7 +85,7 @@ setupScreen	ui.pas	/^procedure setupScreen(yn: byte);$/;"	p
 shutdownKeyboard	keyboardinput.pas	/^procedure shutdownKeyboard;$/;"	p
 shutdownScreen	ui.pas	/^procedure shutdownScreen;$/;"	p
 spawnDenizens	universe.pas	/^procedure spawnDenizens;$/;"	p
-spawnPlayer	entities.pas	/^Procedure spawnPlayer;$/;"	p
+spawnPlayer	entities.pas	/^procedure spawnPlayer;$/;"	p
 titleInput	keyboardinput.pas	/^procedure titleInput(Keypress: TKeyEvent);$/;"	p
 unoccupy	map.pas	/^procedure unoccupy(x, y: smallint);$/;"	p
 updateArmour	ui.pas	/^procedure updateArmour;$/;"	p

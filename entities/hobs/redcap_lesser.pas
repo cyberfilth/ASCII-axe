@@ -53,7 +53,7 @@ begin
     description := 'a short Hob wearing a red cap';
     glyph := 'h';
     glyphColour := 'lightMagenta';
-    maxHP := 20;//randomRange(3, 5);
+    maxHP := randomRange(3, 5);
     currentHP := maxHP;
     attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
     defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
@@ -122,8 +122,8 @@ begin
     followScent(id);
   end
 
-  {------------------------------- If health is below 25%, escape }
-  else if (entityList[id].currentHP < 2) then
+  {------------------------------- If health is below 50%, escape }
+  else if (entityList[id].currentHP < (entityList[id].maxHP div 2)) then
   begin
     entityList[id].state := stateEscape;
     escapePlayer(id, entityList[id].posX, entityList[id].posY);
