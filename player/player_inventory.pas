@@ -12,7 +12,7 @@ uses
 type
   (* Items in inventory *)
   Equipment = record
-    id, useID: smallint;
+    id, useID, sortIndex: smallint;
     Name, description, glyph, glyphColour: shortstring;
     itemType: tItem;
     itemMaterial: tMaterial;
@@ -33,6 +33,8 @@ procedure loadEquippedItems;
 function addToInventory(itemNumber: smallint): boolean;
 (* Remove from inventory *)
 function removeFromInventory(itemNumber: smallint): boolean;
+(* Sort inventory *)
+procedure sortInventory(iLo, iHi: integer);
 (* Display the inventory screen *)
 procedure showInventory;
 (* Display more information about an item *)
@@ -63,6 +65,7 @@ begin
   for i := 0 to 9 do
   begin
     inventory[i].id := i;
+    inventory[i].sortIndex := 10;
     inventory[i].Name := 'Empty';
     inventory[i].equipped := False;
     inventory[i].description := 'x';
@@ -112,6 +115,13 @@ begin
       itemList[itemNumber].onMap := False;
       (* Populate inventory with item description *)
       inventory[i].id := i;
+      (* Set sortIndex for sorting inventory *)
+      if (itemList[itemNumber].itemType = itmWeapon) then
+        inventory[i].sortIndex := 1
+      else if (itemList[itemNumber].itemType = itmArmour) then
+        inventory[i].sortIndex := 2
+      else if (itemList[itemNumber].itemType = itmDrink) then
+        inventory[i].sortIndex := 3;
       inventory[i].Name := itemList[itemNumber].itemname;
       inventory[i].description := itemList[itemNumber].itemDescription;
       inventory[i].itemType := itemList[itemNumber].itemType;
@@ -139,6 +149,8 @@ begin
         onMap := False;
         discovered := False;
       end;
+      (* Sort items in inventory *)
+      sortInventory(0, high(inventory));
       Result := True;
       exit;
     end;
@@ -176,6 +188,7 @@ begin
     ui.bufferMessage(ss);
 
     (* Remove from inventory *)
+    inventory[itemNumber].sortIndex := 10;
     inventory[itemNumber].Name := 'Empty';
     inventory[itemNumber].equipped := False;
     inventory[itemNumber].description := 'x';
@@ -186,6 +199,8 @@ begin
     inventory[itemNumber].inInventory := False;
     inventory[itemNumber].useID := 0;
     Result := True;
+    (* Sort items in inventory *)
+    sortInventory(0, high(inventory));
     (* Redraw the Drop menu *)
     drop;
   end
@@ -202,6 +217,34 @@ begin
     { only redraws the parts that have been updated }
     UpdateScreen(False);
   end;
+end;
+
+procedure sortInventory(iLo, iHi: integer);
+var
+  t: Equipment;
+  lo, hi, mid: integer;
+begin
+  lo := iLo;
+  hi := iHi;
+  mid := inventory[(lo + hi) shr 1].sortIndex;
+  repeat
+    while inventory[lo].sortIndex < mid do
+      Inc(lo);
+    while inventory[hi].sortIndex > mid do
+      Dec(hi);
+    if lo <= hi then
+    begin
+      t := inventory[lo];
+      inventory[lo] := inventory[hi];
+      inventory[hi] := t;
+      Inc(lo);
+      Dec(hi);
+    end;
+  until lo > hi;
+  if hi > iLo then
+    sortInventory(iLo, hi);
+  if lo < iHi then
+    sortInventory(lo, iHi);
 end;
 
 procedure showInventory;
@@ -261,6 +304,8 @@ end;
 
 procedure drop;
 begin
+  (* Sort items in inventory *)
+    sortInventory(0, high(inventory));
   { prepare changes to the screen }
   LockScreenUpdate;
   (* Clear the screen *)

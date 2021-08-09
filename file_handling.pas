@@ -495,6 +495,7 @@ begin
     for i := 0 to 9 do
     begin
       player_inventory.inventory[i].id := i;
+      player_inventory.inventory[i].sortIndex := StrToInt(UTF8Encode(InventoryNode.FindNode('sortIndex').TextContent));
       player_inventory.inventory[i].Name := UTF8Encode(InventoryNode.FindNode('Name').TextContent);
       player_inventory.inventory[i].equipped := StrToBool(UTF8Encode(InventoryNode.FindNode('equipped').TextContent));
       player_inventory.inventory[i].description := UTF8Encode(InventoryNode.FindNode('description').TextContent);
@@ -607,6 +608,7 @@ begin
     begin
       DataNode := AddChild(RootNode, 'playerInventory');
       TDOMElement(dataNode).SetAttribute('id', UTF8Decode(IntToStr(i)));
+      AddElement(DataNode, 'sortIndex', IntToStr(inventory[i].sortIndex));
       AddElement(DataNode, 'Name', inventory[i].Name);
       AddElement(DataNode, 'equipped', BoolToStr(inventory[i].equipped));
       AddElement(DataNode, 'description', inventory[i].description);
