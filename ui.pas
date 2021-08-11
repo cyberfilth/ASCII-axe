@@ -3,6 +3,7 @@
 unit ui;
 
 {$mode fpc}{$H+}
+{$IFOPT D+} {$DEFINE DEBUG} {$ENDIF}
 
 interface
 
@@ -360,6 +361,9 @@ end;
 procedure exitMessage;
 begin
   ClrScr;
+  {$IFDEF DEBUG}
+    writeln('DEBUG VERSION');
+  {$EndIf}
   writeln('Random seed: ' + IntToStr(RandSeed));
   writeln('Axes, Armour & Ale - Chris Hawkins');
   Exit;

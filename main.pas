@@ -5,13 +5,15 @@
 unit main;
 
 {$mode objfpc}{$H+}
+{$IFOPT D+} {$DEFINE DEBUG} {$ENDIF}
 
 interface
 
 uses
   SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
   universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling,
-  item_lookup, smell;
+  item_lookup, smell
+  {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
@@ -65,6 +67,9 @@ begin
   end
   else
     setSeed;
+  {$IFDEF DEBUG}
+    logging.beginLogging;
+  {$ENDIF}
 
   (* Check for previous save file *)
   if (FileExists(globalUtils.saveDirectory + DirectorySeparator +

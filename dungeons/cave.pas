@@ -283,9 +283,7 @@ begin
       repeat
         r := globalutils.randomRange(3, MAXROWS);
         c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
-      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
-        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
-        (terrainArray[r][c - 1] = '.');
+      until (terrainArray[r][c] = '.');
       (* Place the stairs *)
       terrainArray[r][c] := '>';
       (* Save location of stairs *)
@@ -314,9 +312,7 @@ begin
       repeat
         r := globalutils.randomRange(3, MAXROWS);
         c := globalutils.randomRange((MAXCOLUMNS div 2), MAXCOLUMNS);
-      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
-        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
-        (terrainArray[r][c - 1] = '.');
+      until (terrainArray[r][c] = '.');
       (* Place the stairs *)
       terrainArray[r][c] := '>';
       (* Save location of stairs *)
@@ -336,9 +332,7 @@ begin
       repeat
         r := globalutils.randomRange(3, MAXROWS);
         c := globalutils.randomRange(3, (MAXCOLUMNS div 2));
-      until (terrainArray[r][c] = '.') and (terrainArray[r + 1][c] = '.') and
-        (terrainArray[r - 1][c] = '.') and (terrainArray[r][c + 1] = '.') and
-        (terrainArray[r][c - 1] = '.');
+      until (terrainArray[r][c] = '.');
       (* Place the stairs *)
       terrainArray[r][c] := '>';
       (* Save location of stairs *)
