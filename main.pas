@@ -17,7 +17,7 @@ uses
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
-    stWearWield, stQuitMenu, stGameOver);
+    stWearWield, stQuitMenu, stGameOver, stDialog);
 
 var
   (* State machine for game menus / controls *)
@@ -156,6 +156,10 @@ begin
   ui.displayMessage('Good Luck...');
   ui.displayMessage('You enter the ' + UTF8Encode(universe.title));
   ui.displayMessage('It is ' + plot_gen.trollDate);
+
+  { TESTING }
+ // ui.displayDialog('  Info  ');
+
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }

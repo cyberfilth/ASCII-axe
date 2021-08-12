@@ -9,11 +9,13 @@ unit cave;
 
 {$mode objfpc}{$H+}
 {$RANGECHECKS OFF}
+{$IFOPT D+} {$DEFINE DEBUG} {$ENDIF}
 
 interface
 
 uses
-  SysUtils, globalutils, Classes;
+  SysUtils, globalutils, Classes
+  {$IFDEF DEBUG}, logging{$ENDIF};
 
 const
   BLOCKVALUE = 99;
@@ -43,6 +45,10 @@ procedure generate(idNumber: smallint; totalDepth: byte);
 function blockORnot(x, y: integer): Tbkinds;
 (* Floodfill cave to find unreachable areas *)
 procedure calcDistances(x, y: smallint);
+(* Check that the left side of the map contains floor tiles *)
+function leftHasFloor(): boolean;
+(* Check that the right side of the map contains floor tiles *)
+function rightHasFloor(): boolean;
 
 implementation
 
@@ -263,7 +269,8 @@ begin
       end;
     end;
 
-  until numOfFloorTiles > 1000;
+  until (numOfFloorTiles > 1000) and (leftHasFloor() = True) and
+    (rightHasFloor() = True);
 
 end;
 
@@ -279,6 +286,11 @@ begin
     begin
       (* Upper stairs, placed on players starting location *)
       terrainArray[map.startY][map.startX] := '<';
+
+      {$IFDEF DEBUG}
+      logging.logAction('Upstairs placed');
+      {$ENDIF}
+
       (* Down stairs, choose random location on the right side map *)
       repeat
         r := globalutils.randomRange(3, MAXROWS);
@@ -286,6 +298,11 @@ begin
       until (terrainArray[r][c] = '.');
       (* Place the stairs *)
       terrainArray[r][c] := '>';
+
+      {$IFDEF DEBUG}
+      logging.logAction('Downstairs placed');
+      {$ENDIF}
+
       (* Save location of stairs *)
       stairX := c;
       stairY := r;
@@ -330,8 +347,8 @@ begin
       terrainArray[stairY][stairX] := '<';
       (* Down stairs, choose random location on the left side map *)
       repeat
-        r := globalutils.randomRange(3, MAXROWS);
-        c := globalutils.randomRange(3, (MAXCOLUMNS div 2));
+        r := globalutils.randomRange(1, MAXROWS);
+        c := globalutils.randomRange(1, (MAXCOLUMNS div 2));
       until (terrainArray[r][c] = '.');
       (* Place the stairs *)
       terrainArray[r][c] := '>';
@@ -351,9 +368,9 @@ begin
       file_handling.writeNewDungeonLevel(idNumber, i, totalDepth, totalRooms, tCave);
     end;
 
-    (*
+
     { Write map to text file for testing }
-    filename := 'cave_level_' + IntToStr(i) + '.txt';
+   (* filename := 'cave_level_' + IntToStr(i) + '.txt';
     AssignFile(myfile, filename);
     rewrite(myfile);
     for r := 1 to MAXROWS do
@@ -364,9 +381,8 @@ begin
       end;
       Write(myfile, sLineBreak);
     end;
-    closeFile(myfile);
+    closeFile(myfile);    *)
     { end of writing map to text file }
-    *)
 
   end;
 end;
@@ -413,6 +429,36 @@ procedure calcDistances(x, y: smallint);
 begin
   distances[x, y] := 0;
   setaround(x, y, 1);
+end;
+
+function leftHasFloor(): boolean;
+var
+  r, c: smallint;
+begin
+  Result := False;
+  for r := 3 to MAXROWS do
+  begin
+    for c := 3 to (MAXCOLUMNS div 2) do
+    begin
+      if (terrainArray[r][c] = '.') then
+        Result := True;
+    end;
+  end;
+end;
+
+function rightHasFloor(): boolean;
+var
+  r, c: smallint;
+begin
+  Result := False;
+  for r := 3 to MAXROWS do
+  begin
+    for c := (MAXCOLUMNS div 2) to MAXCOLUMNS do
+    begin
+      if (terrainArray[r][c] = '.') then
+        Result := True;
+    end;
+  end;
 end;
 
 end.

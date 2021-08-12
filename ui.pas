@@ -59,6 +59,8 @@ procedure exitPrompt;
 procedure clearStatusBar;
 (* Clear screen and write exit message *)
 procedure exitMessage;
+(* Dialog box *)
+procedure displayDialog(message: shortstring);
 
 implementation
 
@@ -362,11 +364,34 @@ procedure exitMessage;
 begin
   ClrScr;
   {$IFDEF DEBUG}
-    writeln('DEBUG VERSION');
+  writeln('DEBUG VERSION');
   {$EndIf}
   writeln('Random seed: ' + IntToStr(RandSeed));
   writeln('Axes, Armour & Ale - Chris Hawkins');
   Exit;
+end;
+
+procedure displayDialog(message: shortstring);
+var
+  x, y: smallint;
+begin
+  x := 8;
+  y := 5;
+  (* Top border *)
+  TextOut(x, y, 'LgreyBGblack', chr(201));
+  for x := 9 to 45 do
+    TextOut(x, 5, 'LgreyBGblack', chr(205));
+  TextOut(46, y, 'LgreyBGblack', chr(187));
+  (* Vertical sides *)
+  for y := 6 to 12 do
+    TextOut(8, y, 'LgreyBGblack', chr(186) + '                                     ' +
+      chr(186));
+  (* Bottom border *)
+  TextOut(8, 13, 'LgreyBGblack', chr(200));
+  for x := 9 to 45 do
+    TextOut(x, y, 'LgreyBGblack', chr(205));
+  TextOut(46, y, 'LgreyBGblack', chr(188));
+
 end;
 
 end.

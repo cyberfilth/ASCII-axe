@@ -4,11 +4,13 @@ unit universe;
 
 {$mode objfpc}{$H+}
 {$modeswitch UnicodeStrings}
+{$IFOPT D+} {$DEFINE DEBUG} {$ENDIF}
 
 interface
 
 uses
-  SysUtils, globalUtils, cave;
+  SysUtils, globalUtils, cave
+  {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
   dungeonTerrain = (tCave, tDungeon);
@@ -57,6 +59,10 @@ begin
   dungeonType := levelType;
   totalDepth := 3;
   currentDepth := 1;
+
+  {$IFDEF DEBUG}
+    logging.logAction('About to generate cave');
+  {$ENDIF}
 
   (* generate the dungeon *)
   case levelType of
