@@ -158,7 +158,7 @@ begin
   ui.displayMessage('It is ' + plot_gen.trollDate);
 
   { TESTING }
- // ui.displayDialog('  Info  ');
+ // ui.displayDialog('Info', 'Welcome');
 
   { Write those changes to the screen }
   UnlockScreenUpdate;

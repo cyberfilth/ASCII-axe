@@ -60,7 +60,7 @@ procedure clearStatusBar;
 (* Clear screen and write exit message *)
 procedure exitMessage;
 (* Dialog box *)
-procedure displayDialog(message: shortstring);
+procedure displayDialog(title, message: shortstring);
 
 implementation
 
@@ -371,7 +371,7 @@ begin
   Exit;
 end;
 
-procedure displayDialog(message: shortstring);
+procedure displayDialog(title, message: shortstring);
 var
   x, y: smallint;
 begin
@@ -391,7 +391,10 @@ begin
   for x := 9 to 45 do
     TextOut(x, y, 'LgreyBGblack', chr(205));
   TextOut(46, y, 'LgreyBGblack', chr(188));
-
+  (* Write the title *)
+  TextOut(10, 5, 'LgreyBGblack', title);
+  (* Write the message *)
+  TextOut(10, 7, 'LgreyBGblack', message);
 end;
 
 end.

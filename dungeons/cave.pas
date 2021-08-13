@@ -287,10 +287,6 @@ begin
       (* Upper stairs, placed on players starting location *)
       terrainArray[map.startY][map.startX] := '<';
 
-      {$IFDEF DEBUG}
-      logging.logAction('Upstairs placed');
-      {$ENDIF}
-
       (* Down stairs, choose random location on the right side map *)
       repeat
         r := globalutils.randomRange(3, MAXROWS);
@@ -298,10 +294,6 @@ begin
       until (terrainArray[r][c] = '.');
       (* Place the stairs *)
       terrainArray[r][c] := '>';
-
-      {$IFDEF DEBUG}
-      logging.logAction('Downstairs placed');
-      {$ENDIF}
 
       (* Save location of stairs *)
       stairX := c;

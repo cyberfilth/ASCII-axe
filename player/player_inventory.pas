@@ -305,7 +305,7 @@ end;
 procedure drop;
 begin
   (* Sort items in inventory *)
-    sortInventory(0, high(inventory));
+  sortInventory(0, high(inventory));
   { prepare changes to the screen }
   LockScreenUpdate;
   (* Clear the screen *)
@@ -358,6 +358,8 @@ begin
     inventory[selection].glyphColour := 'x';
     inventory[selection].inInventory := False;
     inventory[selection].useID := 0;
+    (* Sort items in inventory *)
+    sortInventory(0, high(inventory));
     (* Redraw the Quaff menu *)
     quaff;
   end;
