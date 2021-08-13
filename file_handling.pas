@@ -237,7 +237,13 @@ begin
           AddElement(DataNode, 'npcID', IntToStr(entities.entityList[i].npcID));
           AddElement(DataNode, 'race', entities.entityList[i].race);
           AddElement(DataNode, 'description', entities.entityList[i].description);
-          AddElement(DataNode, 'glyph', entities.entityList[i].glyph);
+
+           { Convert extended ASCII to plain text }
+          if (entities.entityList[i].glyph = chr(1)) then
+            AddElement(DataNode, 'glyph', 'h')
+          else
+            AddElement(DataNode, 'glyph', entities.entityList[i].glyph);
+
           AddElement(DataNode, 'glyphColour', entities.entityList[i].glyphColour);
           AddElement(DataNode, 'maxHP', IntToStr(entities.entityList[i].maxHP));
           AddElement(DataNode, 'currentHP', IntToStr(entities.entityList[i].currentHP));
@@ -380,7 +386,13 @@ begin
         entities.entityList[i].npcID := StrToInt(UTF8Encode(NPCnode.FindNode('npcID').TextContent));
         entities.entityList[i].race := UTF8Encode(NPCnode.FindNode('race').TextContent);
         entities.entityList[i].description := UTF8Encode(NPCnode.FindNode('description').TextContent);
-        entities.entityList[i].glyph := UTF8Encode(char(widechar(NPCnode.FindNode('glyph').TextContent[1])));
+
+        { Convert plain text to extended ASCII }
+        if (NPCnode.FindNode('glyph').TextContent[1] = 'h') then
+          entities.entityList[i].glyph := chr(1)
+        else
+          entities.entityList[i].glyph := UTF8Encode(char(widechar(NPCnode.FindNode('glyph').TextContent[1])));
+
         entities.entityList[i].glyphColour := UTF8Encode(NPCnode.FindNode('glyphColour').TextContent);
         entities.entityList[i].maxHP := StrToInt(UTF8Encode(NPCnode.FindNode('maxHP').TextContent));
         entities.entityList[i].currentHP := StrToInt(UTF8Encode(NPCnode.FindNode('currentHP').TextContent));

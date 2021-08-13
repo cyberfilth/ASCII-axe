@@ -51,7 +51,7 @@ begin
     npcID := uniqueid;
     race := 'Hob';
     description := 'a short Hob wearing a red cap';
-    glyph := 'h';
+    glyph := chr(1);
     glyphColour := 'lightMagenta';
     maxHP := randomRange(3, 5);
     currentHP := maxHP;
@@ -357,9 +357,8 @@ begin
     'e':
     begin
       if (map.canMove((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
     end;
@@ -375,9 +374,10 @@ begin
     'w':
     begin
       if (map.canMove((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
+
+
 
 
         entities.moveNPC(id, (entities.entityList[id].posX - 1),

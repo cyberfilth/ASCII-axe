@@ -81,6 +81,7 @@ begin
     'cyan': tint := video.Cyan;
     'cyanBGblackTXT': tint := ($03 shl 4);
     'red': tint := video.Red;
+    'pink' : tint := video.LightRed;
     'magenta': tint := video.Magenta;
     'lightMagenta': tint := video.LightMagenta;
     'brown': tint := video.Brown;
@@ -387,10 +388,10 @@ begin
     TextOut(8, y, 'LgreyBGblack', chr(186) + '                                     ' +
       chr(186));
   (* Bottom border *)
-  TextOut(8, 13, 'LgreyBGblack', chr(200));
+  TextOut(8, y + 1, 'LgreyBGblack', chr(200)); // bottom left corner
   for x := 9 to 45 do
-    TextOut(x, y, 'LgreyBGblack', chr(205));
-  TextOut(46, y, 'LgreyBGblack', chr(188));
+    TextOut(x, y + 1, 'LgreyBGblack', chr(205));
+  TextOut(46, y + 1, 'LgreyBGblack', chr(188)); // bottom right corner
   (* Write the title *)
   TextOut(10, 5, 'LgreyBGblack', title);
   (* Write the message *)
