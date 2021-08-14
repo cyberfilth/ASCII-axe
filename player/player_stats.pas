@@ -18,12 +18,13 @@ procedure checkLevel;
 implementation
 
 uses
-  ui, entities;
+  ui, entities, main;
 
 procedure checkLevel;
 begin
-  if (playerLevel = 1) and (entityList[0].xpReward >= 10) then
+  if (playerLevel = 1) and (entityList[0].xpReward >= 2) then
   begin
+    main.gameState := stDialogLevel;
     { prepare changes to the screen }
     LockScreenUpdate;
     ui.displayDialog('level', IntToStr(playerLevel + 1));

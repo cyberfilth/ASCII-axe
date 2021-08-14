@@ -17,7 +17,7 @@ procedure levelUpDialog(message: shortstring);
 implementation
 
 uses
-  ui;
+  ui, entities;
 
 procedure infoDialog(message: shortstring);
 var
@@ -57,7 +57,7 @@ begin
     TextOut(x, 5, 'LgreyBGblack', chr(205));
   TextOut(47, y, 'LgreyBGblack', chr(187));
   (* Vertical sides *)
-  for y := 6 to 12 do
+  for y := 6 to 16 do
     TextOut(8, y, 'LgreyBGblack', chr(186) + '                                      ' +
       chr(186));
   (* Bottom border *)
@@ -72,6 +72,17 @@ begin
   TextOut(10, 7, 'LgreyBGblack', 'Your experiences have sharpened your');
   TextOut(10, 8, 'LgreyBGblack', 'skills.');
   TextOut(10, 9, 'LgreyBGblack', 'You have advanced to level ' + message);
+  TextOut(10, 11, 'LgreyBGblack', 'Increase one of the following:');
+  { Increase max health by 10 % }
+  TextOut(10, 12, 'LgreyBGblack', 'A - Increase Max Health by ' + IntToStr(round((entityList[0].maxHP / 100) * 10)));
+  { Increase attack strength by level number }
+  TextOut(10, 13, 'LgreyBGblack', 'B - Increase Attack by ' + message);
+  { Increase defence by level number }
+  TextOut(10, 14, 'LgreyBGblack', 'C - Increase Defence by ' + message);
+   { Increase both attack and defence by half of level number }
+  TextOut(10, 15, 'LgreyBGblack', 'D - Increase Attack & Defence by ' + IntToStr(StrToInt(message) DIV 2));
+  { Options }
+  TextOut(18, 17, 'LgreyBGblack', '[A]   [B]   [C]   [D]');
 end;
 
 end.

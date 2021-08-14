@@ -27,6 +27,8 @@ procedure quaffInput(Keypress: TKeyEvent);
 procedure wearWieldInput(Keypress: TKeyEvent);
 (* Input in the GAME OVER state *)
 procedure RIPInput(Keypress: TKeyEvent);
+(* Input in the LEVEL UP state *)
+procedure LevelUpInput(Keypress: TKeyEvent);
 (* Input in GAME state *)
 procedure gameInput(Keypress: TKeyEvent);
 
@@ -218,6 +220,11 @@ begin
       main.exitApplication;
     end;
   end;
+end;
+
+procedure LevelUpInput(Keypress: TKeyEvent);
+begin
+
 end;
 
 procedure gameInput(Keypress: TKeyEvent);

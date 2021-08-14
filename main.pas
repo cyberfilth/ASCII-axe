@@ -17,7 +17,7 @@ uses
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
-    stWearWield, stQuitMenu, stGameOver, stDialog);
+    stWearWield, stQuitMenu, stGameOver, stDialogLevel);
 
 var
   (* State machine for game menus / controls *)
@@ -236,9 +236,10 @@ begin
       stQuaffMenu: quaffInput(Keypress);
       { ---------------------------------    In the Wear / Wield menu }
       stWearWield: wearWieldInput(Keypress);
+       { ---------------------------------    In the Quaff menu }
+      stDialogLevel: LevelUpInput(Keypress);
       { ---------------------------------    Gameplay controls }
-      stGame:
-        gameInput(Keypress);
+      stGame: gameInput(Keypress);
     end;
   end;
 end;
