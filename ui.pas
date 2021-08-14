@@ -8,7 +8,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle,
+  SysUtils, video, keyboard, scrTitle, dlgInfo, player_stats,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -41,6 +41,8 @@ procedure bufferMessage(message: shortstring);
 procedure writeBufferedMessages;
 (* Restore message window after showing a menu *)
 procedure restoreMessages;
+(* Update Level number *)
+procedure updateLevel;
 (* Update Experience points display *)
 procedure updateXP;
 (* Update player health display *)
@@ -223,13 +225,22 @@ begin
   TextOut(1, 25, 'darkGrey', messageArray[5]);
 end;
 
+procedure updateLevel;
+begin
+  (* Paint over previous stats *)
+  TextOut(67, 4, 'LgreyBGblack', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219));
+  (* Write out Level number *)
+  TextOut(67, 4, 'cyan', IntToStr(player_stats.playerLevel));
+end;
+
 procedure updateXP;
 begin
   (* Paint over previous stats *)
-  TextOut(72, 5, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(72, 6, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(72, 5, 'cyan', IntToStr(entities.entityList[0].xpReward));
+  TextOut(72, 6, 'cyan', IntToStr(entities.entityList[0].xpReward));
 end;
 
 procedure updateHealth;
@@ -244,14 +255,14 @@ begin
     Exit;
   end;
   (* Paint over previous stats *)
-  TextOut(68, 6, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(68, 7, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219));
   (* Write stats *)
-  TextOut(68, 6, 'cyan', IntToStr(entities.entityList[0].currentHP) +
+  TextOut(68, 7, 'cyan', IntToStr(entities.entityList[0].currentHP) +
     '/' + IntToStr(entities.entityList[0].maxHP));
   (* Paint over health bar *)
-  TextOut(60, 7, 'black', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+  TextOut(60, 8, 'black', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
     Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
     Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
   (* Length of health bar *)
@@ -294,26 +305,26 @@ begin
     bars := 16;
   (* Draw health bar *)
   for i := 1 to bars do
-    TextOut(59 + i, 7, 'green', Chr(223));
+    TextOut(59 + i, 8, 'green', Chr(223));
 end;
 
 procedure updateAttack;
 begin
   (* Paint over previous stats *)
-  TextOut(68, 8, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(68, 9, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(68, 8, 'cyan', IntToStr(entities.entityList[0].attack));
+  TextOut(68, 9, 'cyan', IntToStr(entities.entityList[0].attack));
 end;
 
 procedure updateDefence;
 begin
   (* Paint over previous stats *)
-  TextOut(69, 9, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(69, 10, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(69, 9, 'cyan', IntToStr(entities.entityList[0].defence));
+  TextOut(69, 10, 'cyan', IntToStr(entities.entityList[0].defence));
 end;
 
 procedure updateWeapon;
@@ -373,29 +384,11 @@ begin
 end;
 
 procedure displayDialog(title, message: shortstring);
-var
-  x, y: smallint;
 begin
-  x := 8;
-  y := 5;
-  (* Top border *)
-  TextOut(x, y, 'LgreyBGblack', chr(201));
-  for x := 9 to 45 do
-    TextOut(x, 5, 'LgreyBGblack', chr(205));
-  TextOut(46, y, 'LgreyBGblack', chr(187));
-  (* Vertical sides *)
-  for y := 6 to 12 do
-    TextOut(8, y, 'LgreyBGblack', chr(186) + '                                     ' +
-      chr(186));
-  (* Bottom border *)
-  TextOut(8, y + 1, 'LgreyBGblack', chr(200)); // bottom left corner
-  for x := 9 to 45 do
-    TextOut(x, y + 1, 'LgreyBGblack', chr(205));
-  TextOut(46, y + 1, 'LgreyBGblack', chr(188)); // bottom right corner
-  (* Write the title *)
-  TextOut(10, 5, 'LgreyBGblack', title);
-  (* Write the message *)
-  TextOut(10, 7, 'LgreyBGblack', message);
+  case title of
+    'info': dlgInfo.infoDialog(message);
+    'level': dlgInfo.levelUpDialog(message);
+  end;
 end;
 
 end.

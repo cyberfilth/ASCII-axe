@@ -24,6 +24,7 @@ countNonEmptyItems	items.pas	/^function countNonEmptyItems: byte;$/;"	f
 createNewDungeon	universe.pas	/^procedure createNewDungeon(levelType: dungeonTerrain);$/;"	p
 deleteGameData	file_handling.pas	/^procedure deleteGameData;$/;"	p
 descendStairs	map.pas	/^procedure descendStairs;$/;"	p
+displayDialog	ui.pas	/^procedure displayDialog(title, message: shortstring);$/;"	p
 displayMessage	ui.pas	/^procedure displayMessage(message: shortstring);$/;"	p
 displayStatusEffect	ui.pas	/^procedure displayStatusEffect(onoff: byte; effectType: shortstring);$/;"	p
 drawItemsOnMap	items.pas	/^procedure drawItemsOnMap(id: byte);$/;"	p
@@ -92,6 +93,7 @@ updateArmour	ui.pas	/^procedure updateArmour;$/;"	p
 updateAttack	ui.pas	/^procedure updateAttack;$/;"	p
 updateDefence	ui.pas	/^procedure updateDefence;$/;"	p
 updateHealth	ui.pas	/^procedure updateHealth;$/;"	p
+updateLevel	ui.pas	/^procedure updateLevel;$/;"	p
 updateWeapon	ui.pas	/^procedure updateWeapon;$/;"	p
 updateXP	ui.pas	/^procedure updateXP;$/;"	p
 wearWieldInput	keyboardinput.pas	/^procedure wearWieldInput(Keypress: TKeyEvent);$/;"	p

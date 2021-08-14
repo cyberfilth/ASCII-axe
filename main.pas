@@ -11,8 +11,8 @@ interface
 
 uses
   SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, scrRIP, plot_gen, file_handling,
-  item_lookup, smell
+  universe, fov, player, player_inventory, player_stats, scrRIP, plot_gen,
+  file_handling, item_lookup, smell
   {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
@@ -131,6 +131,8 @@ begin
   smell.smellCounter := 0;
   (* Create the Player *)
   entities.spawnPlayer;
+  (* Set player stats *)
+  player_stats.playerLevel := 1;
   (* Spawn game entities *)
   universe.spawnDenizens;
   (* Initialise items list *)
@@ -157,9 +159,6 @@ begin
   ui.displayMessage('You enter the ' + UTF8Encode(universe.title));
   ui.displayMessage('It is ' + plot_gen.trollDate);
 
-  { TESTING }
- ui.displayDialog('Info', 'Welcome');
-
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
@@ -167,7 +166,6 @@ begin
 end;
 
 procedure continue;
-
 var
   i: byte;
 begin
@@ -216,7 +214,6 @@ end;
 
 (* Take input from player *)
 procedure loop;
-
 var
   Keypress: TKeyEvent;
 begin
@@ -247,7 +244,6 @@ begin
 end;
 
 procedure gameLoop;
-
 var
   i: byte;
 begin
@@ -294,6 +290,8 @@ begin
     gameState := stGameOver;
     gameOver;
   end;
+  (* Check if the player has levelled up *)
+  player_stats.checkLevel;
 end;
 
 procedure returnToGameScreen;

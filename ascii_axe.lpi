@@ -103,7 +103,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="35">
+    <Units Count="37">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -250,6 +250,15 @@
         <Filename Value="vision\smell.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit34>
+      <Unit35>
+        <Filename Value="screens\dlginfo.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="dlgInfo"/>
+      </Unit35>
+      <Unit36>
+        <Filename Value="player\player_stats.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit36>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

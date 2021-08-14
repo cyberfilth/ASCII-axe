@@ -66,12 +66,14 @@ begin
   (* Write stat titles *)
   TextOut(60, 2, 'cyan', entities.entityList[0].race);
   TextOut(60, 3, 'cyan', 'The ' + entities.entityList[0].description);
-  TextOut(60, 5, 'cyan', 'Experience:');
-  TextOut(60, 6, 'cyan', 'Health:');
-  TextOut(60, 8, 'cyan', 'Attack:');
-  TextOut(60, 9, 'cyan', 'Defence:');
+  TextOut(60, 4, 'cyan', 'Level:');
+  TextOut(60, 6, 'cyan', 'Experience:');
+  TextOut(60, 7, 'cyan', 'Health:');
+  TextOut(60, 9, 'cyan', 'Attack:');
+  TextOut(60, 10, 'cyan', 'Defence:');
 
   (* Write stats *)
+  ui.updateLevel;
   ui.updateXP;
   ui.updateHealth;
   ui.updateAttack;
