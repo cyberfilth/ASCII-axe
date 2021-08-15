@@ -117,6 +117,8 @@ begin
 end;
 
 procedure newGame;
+var
+  i: byte;
 begin
   (* Game state = game running *)
   gameState := stGame;
@@ -146,6 +148,26 @@ begin
   ui.screenBlank;
   (* Draw the game screen *)
   scrGame.displayGameScreen;
+  (* Place the NPC's *)
+  entities.NPCgameLoop;
+  (* Redraw all items *)
+  for i := 1 to items.itemAmount do
+    if (map.canSee(items.itemList[i].posX, items.itemList[i].posY) = True) then
+    begin
+      items.itemList[i].inView := True;
+      items.drawItemsOnMap(i);
+      (* Display a message if this is the first time seeing this item *)
+      if (items.itemList[i].discovered = False) then
+      begin
+        ui.displayMessage('You see a ' + items.itemList[i].itemName);
+        items.itemList[i].discovered := True;
+      end;
+    end
+    else
+    begin
+      items.itemList[i].inView := False;
+      map.drawTile(itemList[i].posX, itemList[i].posY, 0);
+    end;
 
   (* draw map through the camera *)
   camera.drawMap;
