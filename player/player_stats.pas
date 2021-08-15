@@ -78,6 +78,7 @@ begin
   Inc(entityList[0].maxHP, NewMaxHP);
   Inc(entityList[0].currentHP, player_stats.playerLevel);
   ui.updateHealth;
+  Inc(entityList[0].visionRange);
 end;
 
 procedure increaseAttack;
@@ -86,6 +87,7 @@ begin
   Inc(entityList[0].currentHP, player_stats.playerLevel);
   ui.updateAttack;
   ui.updateHealth;
+  Inc(entityList[0].visionRange);
 end;
 
 procedure increaseDefence;
@@ -94,6 +96,7 @@ begin
   Inc(entityList[0].currentHP, player_stats.playerLevel);
   ui.updateDefence;
   ui.updateHealth;
+  Inc(entityList[0].visionRange);
 end;
 
 procedure increaseAttackDefence;
@@ -104,6 +107,7 @@ begin
   ui.updateAttack;
   ui.updateDefence;
   ui.updateHealth;
+  Inc(entityList[0].visionRange);
 end;
 
 end.
