@@ -63,6 +63,8 @@ procedure clearStatusBar;
 procedure exitMessage;
 (* Dialog box *)
 procedure displayDialog(title, message: shortstring);
+(* Display welcome message *)
+procedure welcome;
 
 implementation
 
@@ -389,6 +391,11 @@ begin
     'info': dlgInfo.infoDialog(message);
     'level': dlgInfo.levelUpDialog(message);
   end;
+end;
+
+procedure welcome;
+begin
+  dlgInfo.newGame;
 end;
 
 end.

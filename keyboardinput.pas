@@ -7,7 +7,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player, player_inventory, player_stats, map, entities;
+  Keyboard, player, player_inventory, player_stats, map;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;

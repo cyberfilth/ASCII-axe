@@ -14,8 +14,7 @@ unit cave;
 interface
 
 uses
-  SysUtils, globalutils, Classes
-  {$IFDEF DEBUG}, logging{$ENDIF};
+  SysUtils, globalutils, Classes;
 
 const
   BLOCKVALUE = 99;

@@ -64,7 +64,7 @@ procedure redrawItems;
 implementation
 
 uses
-  map, universe;
+  map;
 
 procedure initialiseItems;
 begin
