@@ -98,6 +98,7 @@ updateLevel	ui.pas	/^procedure updateLevel;$/;"	p
 updateWeapon	ui.pas	/^procedure updateWeapon;$/;"	p
 updateXP	ui.pas	/^procedure updateXP;$/;"	p
 wearWieldInput	keyboardinput.pas	/^procedure wearWieldInput(Keypress: TKeyEvent);$/;"	p
+welcome	ui.pas	/^procedure welcome;$/;"	p
 withinBounds	map.pas	/^function withinBounds(x, y: smallint): boolean;$/;"	f
 writeBufferedMessages	ui.pas	/^procedure writeBufferedMessages;$/;"	p
 writeNewDungeonLevel	file_handling.pas	/^procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;$/;"	p

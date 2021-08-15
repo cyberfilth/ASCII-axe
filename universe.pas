@@ -9,7 +9,7 @@ unit universe;
 interface
 
 uses
-  SysUtils, globalUtils, cave
+  SysUtils, globalUtils, cave, smell
   {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
@@ -79,6 +79,8 @@ var
   { Number of NPC's to create }
   NPCnumber, i: byte;
 begin
+  { Generate a smell map so NPC's aren't initially placed next to the player }
+  sniff;
   { Based on number of rooms in current level, dungeon type & dungeon level }
   NPCnumber := totalRooms + currentDepth;
   { player level is considered when generating the NPCs }

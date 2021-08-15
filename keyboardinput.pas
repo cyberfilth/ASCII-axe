@@ -228,24 +228,28 @@ begin
     'a', 'A': { Increase max health }
     begin
       player_stats.increaseMaxHealth;
+      ui.displayMessage('You find you can see further.');
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
     'b', 'B': { Increase attack strength }
     begin
       player_stats.increaseAttack;
+      ui.displayMessage('You find you can see further.');
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
     'c', 'C': { Increase defence strength }
     begin
       player_stats.increaseDefence;
+      ui.displayMessage('You find you can see further.');
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
     'd', 'D': { Increase attack & defence strength }
     begin
       player_stats.increaseAttackDefence;
+      ui.displayMessage('You find you can see further.');
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
