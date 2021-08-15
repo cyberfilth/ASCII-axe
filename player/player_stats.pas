@@ -16,6 +16,14 @@ var
 procedure checkLevel;
 (* Show level up dialog *)
 procedure showLevelUpOptions;
+(* Increase maximum health *)
+procedure increaseMaxHealth;
+(* Increase attack strength *)
+procedure increaseAttack;
+(* Increase defence strength *)
+procedure increaseDefence;
+(* Increase attack & defence *)
+procedure increaseAttackDefence;
 
 implementation
 
@@ -58,6 +66,44 @@ begin
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
   UpdateScreen(False);
+end;
+
+procedure increaseMaxHealth;
+var
+  tempValue: real;
+  NewMaxHP: smallint;
+begin
+  tempValue := (entityList[0].maxHP / 100) * 10;
+  NewMaxHP := trunc(tempValue);
+  Inc(entityList[0].maxHP, NewMaxHP);
+  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  ui.updateHealth;
+end;
+
+procedure increaseAttack;
+begin
+  Inc(entityList[0].attack, player_stats.playerLevel);
+  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  ui.updateAttack;
+  ui.updateHealth;
+end;
+
+procedure increaseDefence;
+begin
+  Inc(entityList[0].defence, player_stats.playerLevel);
+  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  ui.updateDefence;
+  ui.updateHealth;
+end;
+
+procedure increaseAttackDefence;
+begin
+  Inc(entityList[0].defence, (player_stats.playerLevel div 2));
+  Inc(entityList[0].attack, (player_stats.playerLevel div 2));
+  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  ui.updateAttack;
+  ui.updateDefence;
+  ui.updateHealth;
 end;
 
 end.

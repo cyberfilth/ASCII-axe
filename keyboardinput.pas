@@ -223,47 +223,29 @@ begin
 end;
 
 procedure LevelUpInput(Keypress: TKeyEvent);
-var
-  tempValue: real;
-  NewMaxHP: smallint;
 begin
   case GetKeyEventChar(Keypress) of
     'a', 'A': { Increase max health }
     begin
-      tempValue := (entityList[0].maxHP / 100) * 10;
-      NewMaxHP := trunc(tempValue);
-      Inc(entityList[0].maxHP, NewMaxHP);
-      Inc(entityList[0].currentHP, player_stats.playerLevel);
-      ui.updateHealth;
+      player_stats.increaseMaxHealth;
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
     'b', 'B': { Increase attack strength }
     begin
-      Inc(entityList[0].attack, player_stats.playerLevel);
-      Inc(entityList[0].currentHP, player_stats.playerLevel);
-      ui.updateAttack;
-      ui.updateHealth;
+      player_stats.increaseAttack;
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
     'c', 'C': { Increase defence strength }
     begin
-      Inc(entityList[0].defence, player_stats.playerLevel);
-      Inc(entityList[0].currentHP, player_stats.playerLevel);
-      ui.updateDefence;
-      ui.updateHealth;
+      player_stats.increaseDefence;
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
     'd', 'D': { Increase attack & defence strength }
     begin
-      Inc(entityList[0].defence, (player_stats.playerLevel DIV 2));
-      Inc(entityList[0].attack, (player_stats.playerLevel DIV 2));
-      Inc(entityList[0].currentHP, player_stats.playerLevel);
-      ui.updateAttack;
-      ui.updateDefence;
-      ui.updateHealth;
+      player_stats.increaseAttackDefence;
       main.gameState := stGame;
       main.returnToGameScreen;
     end;
