@@ -8,7 +8,7 @@ interface
 
 uses
   SysUtils, DOM, XMLWrite, XMLRead, TypInfo, globalutils, universe,
-  cave, items, entities, player_inventory;
+  cave, items, entities, player_inventory, player_stats;
 
 (* Write a newly generate level of a dungeon to disk *)
 procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
@@ -500,6 +500,9 @@ begin
     entities.entityList[0].posX := StrToInt(UTF8Encode(PlayerDataNode.FindNode('posX').TextContent));
     entities.entityList[0].posY := StrToInt(UTF8Encode(PlayerDataNode.FindNode('posY').TextContent));
 
+    (* Player stats *)
+    player_stats.playerLevel := StrToInt(UTF8Encode(PlayerDataNode.FindNode('playerLevel').TextContent));
+
     (* Player Inventory *)
     player_inventory.initialiseInventory;
 
@@ -614,6 +617,9 @@ begin
     AddElement(DataNode, 'tmrPoison', IntToStr(entities.entityList[0].tmrPoison));
     AddElement(DataNode, 'posX', IntToStr(entities.entityList[0].posX));
     AddElement(DataNode, 'posY', IntToStr(entities.entityList[0].posY));
+
+    (* Player stats *)
+    AddElement(DataNode, 'playerLevel', IntToStr(player_stats.playerLevel));
 
     (* Player inventory *)
     for i := 0 to 9 do
