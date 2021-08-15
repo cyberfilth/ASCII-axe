@@ -8,6 +8,7 @@ AddChild	file_handling.pas	/^  function AddChild(Node: TDOMNode; ChildName: shor
 AddElement	file_handling.pas	/^  procedure AddElement(Node: TDOMNode; Name, Value: UnicodeString);$/;"	p
 AddElement	file_handling.pas	/^  procedure AddElement(Node: TDOMNode; Name, Value: shortstring);$/;"	p
 Creature.entityTakeTurn	entities.pas	/^procedure Creature.entityTakeTurn(i: smallint);$/;"	p
+LevelUpInput	keyboardinput.pas	/^procedure LevelUpInput(Keypress: TKeyEvent);$/;"	p
 NPCgameLoop	entities.pas	/^procedure NPCgameLoop;$/;"	p
 RIPInput	keyboardinput.pas	/^procedure RIPInput(Keypress: TKeyEvent);$/;"	p
 TextOut	ui.pas	/^procedure TextOut(X, Y: word; textcol: shortstring; const S: string);$/;"	p
