@@ -7,7 +7,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player, player_inventory, map;
+  Keyboard, player, player_inventory, player_stats, map, entities;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -67,7 +67,7 @@ begin
     begin
       main.exitApplication;
     end;
-    'x', 'X': { Exit to main menu, quit without saving }
+    'x', 'X': { Exit to main menu }
     begin
       { TODO : Add pop-up window }
     end;
@@ -223,8 +223,51 @@ begin
 end;
 
 procedure LevelUpInput(Keypress: TKeyEvent);
+var
+  tempValue: real;
+  NewMaxHP: smallint;
 begin
-
+  case GetKeyEventChar(Keypress) of
+    'a', 'A': { Increase max health }
+    begin
+      tempValue := (entityList[0].maxHP / 100) * 10;
+      NewMaxHP := trunc(tempValue);
+      Inc(entityList[0].maxHP, NewMaxHP);
+      Inc(entityList[0].currentHP, player_stats.playerLevel);
+      ui.updateHealth;
+      main.gameState := stGame;
+      main.returnToGameScreen;
+    end;
+    'b', 'B': { Increase attack strength }
+    begin
+      Inc(entityList[0].attack, player_stats.playerLevel);
+      Inc(entityList[0].currentHP, player_stats.playerLevel);
+      ui.updateAttack;
+      ui.updateHealth;
+      main.gameState := stGame;
+      main.returnToGameScreen;
+    end;
+    'c', 'C': { Increase defence strength }
+    begin
+      Inc(entityList[0].defence, player_stats.playerLevel);
+      Inc(entityList[0].currentHP, player_stats.playerLevel);
+      ui.updateDefence;
+      ui.updateHealth;
+      main.gameState := stGame;
+      main.returnToGameScreen;
+    end;
+    'd', 'D': { Increase attack & defence strength }
+    begin
+      Inc(entityList[0].defence, (player_stats.playerLevel DIV 2));
+      Inc(entityList[0].attack, (player_stats.playerLevel DIV 2));
+      Inc(entityList[0].currentHP, player_stats.playerLevel);
+      ui.updateAttack;
+      ui.updateDefence;
+      ui.updateHealth;
+      main.gameState := stGame;
+      main.returnToGameScreen;
+    end;
+  end;
 end;
 
 procedure gameInput(Keypress: TKeyEvent);
