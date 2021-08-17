@@ -52,6 +52,8 @@ end;
 
 procedure initialise;
 begin
+  (* Set save directory *)
+  globalutils.saveDirectory := getUserDir + 'axesData';
   gameState := stTitle;
   Randomize;
   { Check if seed set as command line parameter }
