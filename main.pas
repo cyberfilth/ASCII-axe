@@ -48,12 +48,23 @@ begin
   {$IFDEF Windows}
   RandSeed := ((RandSeed shl 8) or GetProcessID);
   {$ENDIF}
+  {$IFDEF Darwin}
+  RandSeed := RandSeed shl 8;
+  {$ENDIF}
 end;
 
 procedure initialise;
 begin
   (* Set save directory *)
+  {$IFDEF Linux}
+  globalutils.saveDirectory := getUserDir + '.axesData';
+  {$ENDIF}
+  {$IFDEF Darwin}
+  globalutils.saveDirectory := getUserDir + '.axesData';
+  {$ENDIF}
+  {$IFDEF Windows}
   globalutils.saveDirectory := getUserDir + 'axesData';
+  {$ENDIF}
   gameState := stTitle;
   Randomize;
   { Check if seed set as command line parameter }
