@@ -237,7 +237,7 @@ begin
     (* Else if tile does not contain player, check for another entity *)
     else if (map.isOccupied(newX, newY) = True) then
     begin
-      ui.bufferMessage('The giant rat bumps into ' + getCreatureName(newX, newY));
+      ui.bufferMessage('The hob bumps into ' + getCreatureName(newX, newY));
       entities.moveNPC(id, spx, spy);
     end
     (* if map is unoccupied, move to that tile *)
