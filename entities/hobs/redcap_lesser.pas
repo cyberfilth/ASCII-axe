@@ -7,7 +7,7 @@ unit redcap_lesser;
 interface
 
 uses
-  SysUtils, Math, smell;
+  SysUtils, Math, smell, universe;
 
 (* Create a Redcap Hob *)
 procedure createRedcap(uniqueid, npcx, npcy: smallint);
@@ -53,9 +53,9 @@ begin
     description := 'a short Hob wearing a red cap';
     glyph := chr(1);
     glyphColour := 'lightMagenta';
-    maxHP := randomRange(3, 5);
+    maxHP := randomRange(3, 5) + universe.currentDepth;
     currentHP := maxHP;
-    attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
+    attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 2);
     defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
     weaponDice := 0;
     weaponAdds := 0;
