@@ -18,8 +18,6 @@ const
   MAXCOLUMNS = 57;
   (* Rows of the game map *)
   MAXROWS = 19;
-  (* Save game directory *)
-  saveDirectory = 'axesData';
   (* Save game file *)
   saveFile = 'saveGame.dat';
 
@@ -27,6 +25,8 @@ var
   dungeonArray: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
   (* Number of rooms in the current dungeon *)
   currentDgnTotalRooms: smallint;
+  (* Save game directory *)
+  saveDirectory: string;
   (* Name of entity or item that killed the player *)
   killer: shortstring;
 
