@@ -11,7 +11,7 @@ interface
 uses
   SysUtils, ui, globalUtils,
   { List of creatures }
-  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser;
+  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_archer;
 
 type { NPC attitudes }
   Tattitudes = (stateNeutral, stateHostile, stateEscape);
@@ -314,7 +314,9 @@ begin
   else if (entityList[i].race = 'Green Fungus') then
     green_fungus.takeTurn(i)
   else if (entityList[i].race = 'Hob') then
-    redcap_lesser.takeTurn(i);
+    redcap_lesser.takeTurn(i)
+   else if (entityList[i].race = 'Hob archer') then
+    redcap_lesser_archer.takeTurn(i);
 
   occupyUpdate;
 end;

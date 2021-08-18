@@ -106,12 +106,12 @@ begin
     TextOut(3, y, 'LgreyBGblack', chr(186)
     + '                                                  ' + chr(186));
   (* Bottom border *)
-  TextOut(3, y + 1, 'LgreyBGblack', chr(200)); // bottom left corner
+  TextOut(3, 13, 'LgreyBGblack', chr(200)); // bottom left corner
   for x := 4 to 53 do
-    TextOut(x, y + 1, 'LgreyBGblack', chr(205));
-  TextOut(54, y + 1, 'LgreyBGblack', chr(188)); // bottom right corner
+    TextOut(x, 13, 'LgreyBGblack', chr(205));
+  TextOut(54, 13, 'LgreyBGblack', chr(188)); // bottom right corner
   (* Write the title *)
-  TextOut(5, 5, 'LgreyBGblack', 'Welcome');
+  TextOut(5, 5, 'LgreyBGblack', ' Welcome ');
   (* Write the message *)
   TextOut(5, 7, 'LgreyBGblack', 'It is ' + plot_gen.trollDate);
   TextOut(5, 8, 'LgreyBGblack', 'You enter the ' + UTF8Encode(universe.title));

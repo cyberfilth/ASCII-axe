@@ -230,7 +230,7 @@ end;
 procedure updateLevel;
 begin
   (* Paint over previous stats *)
-  TextOut(67, 4, 'LgreyBGblack', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(67, 4, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219));
   (* Write out Level number *)
   TextOut(67, 4, 'cyan', IntToStr(player_stats.playerLevel));

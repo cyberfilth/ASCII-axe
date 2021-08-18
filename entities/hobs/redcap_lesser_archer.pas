@@ -1,6 +1,6 @@
-(* Intelligent enemy with scent tracking *)
+(* Hunter enemy, fires projectiles *)
 
-unit redcap_lesser;
+unit redcap_lesser_archer;
 
 {$mode objfpc}{$H+}
 
@@ -31,6 +31,8 @@ procedure escapePlayer(id, spx, spy: smallint);
 procedure combat(id: smallint);
 (* Sniff out the player *)
 procedure followScent(id: smallint);
+(* Fire missile at player *)
+procedure fireMissile(id: smallint);
 
 implementation
 
@@ -38,24 +40,20 @@ uses
   entities, globalutils, ui, los, map;
 
 procedure createRedcap(uniqueid, npcx, npcy: smallint);
-var
-  mood: byte;
 begin
-  (* Determine hostility *)
-  mood := randomRange(1, 2);
   (* Add a redcap to the list of creatures *)
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
   with entities.entityList[entities.listLength] do
   begin
     npcID := uniqueid;
-    race := 'Hob';
-    description := 'a short Hob wearing a red cap';
+    race := 'Hob archer';
+    description := 'a Redcap Hob';
     glyph := chr(1);
     glyphColour := 'lightMagenta';
     maxHP := randomRange(3, 5) + universe.currentDepth;
     currentHP := maxHP;
-    attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 2);
+    attack := randomRange(entityList[0].attack - 1, entityList[0].attack);
     defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
     weaponDice := 0;
     weaponAdds := 0;
@@ -68,10 +66,7 @@ begin
     inView := False;
     blocks := False;
     faction := redcapFaction;
-    if (mood = 1) then
-      state := stateHostile
-    else
-      state := stateNeutral;
+    state := stateHostile;
     discovered := False;
     weaponEquipped := False;
     armourEquipped := False;
@@ -122,15 +117,16 @@ begin
       {------------------------------- Attack the Player }
       combat(id)
     else
-      {------------------------------- Chase the player }
+      {------------------------------- Get within firing range }
       chaseTarget(id, entityList[id].posX, entityList[id].posY);
   end
+
 
   { If not injured and player not in sight, smell them out }
   else if (entityList[id].moveCount > 0) then
   begin
     (* Randomly display a message that you are being chased *)
-    if (randomRange(1, 5) = 3) then
+    if (randomRange(1, 8) = 3) then
       ui.displayMessage('You hear sounds of pursuit');
     followScent(id);
   end
@@ -141,6 +137,8 @@ begin
     entityList[id].state := stateEscape;
     escapePlayer(id, entityList[id].posX, entityList[id].posY);
   end
+
+
 
   else
     {------------------------------- Wander }
@@ -219,10 +217,26 @@ begin
   else
   begin
     distance := sqrt(dx ** 2 + dy ** 2);
-    dx := round(dx / distance);
-    dy := round(dy / distance);
-    newX := spx + dx;
-    newY := spy + dy;
+    (* If in range of the player *)
+    if (round(distance) = 3) then
+    begin
+      fireMissile(id);
+      exit;
+    end
+    (* If too close to the player *)
+    else if (round(distance) < 3) then
+    begin
+      escapePlayer(id, spx, spy);
+      exit;
+    end
+    else
+      (* If too far from the player *)
+    begin
+      dx := round(dx / distance);
+      dy := round(dy / distance);
+      newX := spx + dx;
+      newY := spy + dy;
+    end;
   end;
   (* New coordinates set. Check if they are walkable *)
   if (map.canMove(newX, newY) = True) then
@@ -384,6 +398,11 @@ begin
     else
       entities.moveNPC(id, entities.entityList[id].posX, entities.entityList[id].posY);
   end;
+end;
+
+procedure fireMissile(id: smallint);
+begin
+  ui.displayMessage(IntToStr(id) + ' fires an arrow');
 end;
 
 end.

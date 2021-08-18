@@ -9,11 +9,12 @@ interface
 uses
   globalUtils, universe, map, smell,
   { List of creatures }
-  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser;
+  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_archer;
 
 const
   (* Array of creatures found in a cave, ordered by cave level *)
-  caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
+  //caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
+  caveNPC1: array[1..4] of string = ('redcapLsrArchr', 'redcapLsrArchr', 'redcapLsrArchr', 'redcapLsrArchr');
   caveNPC2: array[1..5] of string = ('caveRat', 'giantRat', 'giantRat', 'redcapLesser', 'giantRat');
   caveNPC3: array[1..4] of string = ('caveRat', 'redcapLesser', 'giantRat', 'redcapLesser');
 
@@ -71,6 +72,7 @@ begin
     'greenFungus': green_fungus.createGreenFungus(i, c, r);
     'giantRat': giant_cave_rat.createGiantCaveRat(i, c, r);
     'redcapLesser': redcap_lesser.createRedcap(i, c, r);
+    'redcapLsrArchr': redcap_lesser_archer.createRedcap(i, c, r);
   end;
 end;
 
