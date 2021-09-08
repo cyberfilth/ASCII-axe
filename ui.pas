@@ -8,7 +8,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle, dlgInfo, player_stats,
+  SysUtils, video, keyboard, scrTitle, dlgInfo, player_stats, globalUtils,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -379,9 +379,10 @@ begin
   ClrScr;
   {$IFDEF DEBUG}
   writeln('DEBUG VERSION');
-  {$EndIf}
   writeln('Random seed: ' + IntToStr(RandSeed));
-  writeln('Axes, Armour & Ale - Chris Hawkins');
+  {$EndIf}
+  writeln('Axes, Armour & Ale - Version ' + globalUtils.VERSION);
+  writeln('by Chris Hawkins');
   Exit;
 end;
 

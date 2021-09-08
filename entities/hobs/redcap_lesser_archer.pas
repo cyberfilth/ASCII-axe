@@ -7,7 +7,7 @@ unit redcap_lesser_archer;
 interface
 
 uses
-  SysUtils, Math, smell, universe;
+  SysUtils, Math, smell, globalUtils, universe;
 
 (* Create a Redcap Hob *)
 procedure createRedcap(uniqueid, npcx, npcy: smallint);
@@ -37,7 +37,7 @@ procedure fireMissile(id: smallint);
 implementation
 
 uses
-  entities, globalutils, ui, los, map;
+  entities, ui, los, map;
 
 procedure createRedcap(uniqueid, npcx, npcy: smallint);
 begin
@@ -58,7 +58,7 @@ begin
     weaponDice := 0;
     weaponAdds := 0;
     xpReward := maxHP;
-    visionRange := 4;
+    visionRange := 5;
     (* Counts number of turns the NPC is in pursuit *)
     moveCount := 0;
     targetX := 0;
@@ -138,8 +138,6 @@ begin
     escapePlayer(id, entityList[id].posX, entityList[id].posY);
   end
 
-
-
   else
     {------------------------------- Wander }
     wander(id, entityList[id].posX, entityList[id].posY);
@@ -169,8 +167,6 @@ procedure wander(id, spx, spy: smallint);
 var
   direction, attempts, testx, testy: smallint;
 begin
-  { Set NPC state }
-  entityList[id].state := stateNeutral;
   attempts := 0;
   testx := 0;
   testy := 0;
@@ -204,7 +200,8 @@ var
   newX, newY, dx, dy: smallint;
   distance: double;
 begin
-  newX := 0;
+  if (isNextToPlayer(spx, spy) = True) then
+    newX := 0;
   newY := 0;
   (* Get new coordinates to chase the player *)
   dx := entityList[0].posX - spx;
@@ -218,7 +215,7 @@ begin
   begin
     distance := sqrt(dx ** 2 + dy ** 2);
     (* If in range of the player *)
-    if (round(distance) = 3) then
+    if (round(distance) = 4) then
     begin
       fireMissile(id);
       exit;
@@ -371,9 +368,8 @@ begin
     'e':
     begin
       if (map.canMove((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
     end;
@@ -389,9 +385,8 @@ begin
     'w':
     begin
       if (map.canMove((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
           entities.entityList[id].posY);
     end
@@ -403,6 +398,7 @@ end;
 procedure fireMissile(id: smallint);
 begin
   ui.displayMessage(IntToStr(id) + ' fires an arrow');
+  los.firingLine(id, entityList[id].posX, entityList[id].posY, entityList[0].posX, entityList[0].posY);
 end;
 
 end.

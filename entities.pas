@@ -95,7 +95,6 @@ function countLivingEntities: byte;
 (* Call Creatures.takeTurn procedure *)
 procedure NPCgameLoop;
 
-
 implementation
 
 uses
@@ -292,7 +291,6 @@ begin
 end;
 
 procedure NPCgameLoop;
-
 var
   i: smallint;
 begin
@@ -315,7 +313,7 @@ begin
     green_fungus.takeTurn(i)
   else if (entityList[i].race = 'Hob') then
     redcap_lesser.takeTurn(i)
-   else if (entityList[i].race = 'Hob archer') then
+  else if (entityList[i].race = 'Hob archer') then
     redcap_lesser_archer.takeTurn(i);
 
   occupyUpdate;
