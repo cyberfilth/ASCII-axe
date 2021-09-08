@@ -1,6 +1,6 @@
 (* Hunter enemy, fires projectiles *)
 
-unit redcap_lesser_archer;
+unit redcap_lesser_lobber;
 
 {$mode objfpc}{$H+}
 
@@ -47,8 +47,8 @@ begin
   with entities.entityList[entities.listLength] do
   begin
     npcID := uniqueid;
-    race := 'Hob archer';
-    description := 'a Redcap Hob';
+    race := 'Hob lobber';
+    description := 'a Hob holding rocks';
     glyph := chr(1);
     glyphColour := 'lightMagenta';
     maxHP := randomRange(3, 5) + universe.currentDepth;
@@ -56,7 +56,8 @@ begin
     attack := randomRange(entityList[0].attack - 1, entityList[0].attack);
     defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
     weaponDice := 0;
-    weaponAdds := 0;
+    (* Weapon Adds are used in place of ammo *)
+    weaponAdds := 3;
     xpReward := maxHP;
     visionRange := 5;
     (* Counts number of turns the NPC is in pursuit *)
@@ -215,7 +216,7 @@ begin
   begin
     distance := sqrt(dx ** 2 + dy ** 2);
     (* If in range of the player *)
-    if (round(distance) = 4) then
+    if (round(distance) = 4) and (entityList[id].weaponAdds > 0) then
     begin
       fireMissile(id);
       exit;
@@ -368,8 +369,9 @@ begin
     'e':
     begin
       if (map.canMove((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) and (map.isOccupied(
-        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX + 1),
+        entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
     end;
@@ -385,8 +387,9 @@ begin
     'w':
     begin
       if (map.canMove((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) and (map.isOccupied(
-        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX - 1),
+        entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
           entities.entityList[id].posY);
     end
@@ -396,8 +399,38 @@ begin
 end;
 
 procedure fireMissile(id: smallint);
+var
+  damageAmount: smallint;
 begin
-  los.firingLine(id, entityList[id].posX, entityList[id].posY, entityList[0].posX, entityList[0].posY);
+  los.firingLine(id, entityList[id].posX, entityList[id].posY,
+    entityList[0].posX, entityList[0].posY);
+  (* Check if rock has hit the player *)
+  damageAmount := globalutils.randomRange(1, entities.entityList[id].attack + 3) -
+    entities.entityList[0].defence;
+  if (damageAmount > 0) then
+  begin
+    entities.entityList[0].currentHP :=
+      (entities.entityList[0].currentHP - damageAmount);
+    if (entities.entityList[0].currentHP < 1) then
+    begin
+      killer := entityList[id].race;
+      exit;
+    end
+    else
+    begin
+      if (damageAmount = 1) then
+        ui.displayMessage('The rock slightly wounds you')
+      else
+        ui.displayMessage('The rock hits you, dealing ' +
+          IntToStr(damageAmount) + ' damage');
+      (* Update health display to show damage *)
+      ui.updateHealth;
+    end;
+  end
+  else
+    ui.displayMessage('The rock misses');
+  (* Remove a rock from inventory *)
+  Dec(entityList[id].weaponAdds);
 end;
 
 end.

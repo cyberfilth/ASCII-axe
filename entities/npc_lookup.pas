@@ -9,14 +9,13 @@ interface
 uses
   globalUtils, universe, map, smell,
   { List of creatures }
-  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_archer;
+  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_lobber;
 
 const
   (* Array of creatures found in a cave, ordered by cave level *)
-  //caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
-  caveNPC1: array[1..4] of string = ('redcapLsrArchr', 'redcapLsrArchr', 'redcapLsrArchr', 'redcapLsrArchr');
+  caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
   caveNPC2: array[1..5] of string = ('caveRat', 'giantRat', 'giantRat', 'redcapLesser', 'giantRat');
-  caveNPC3: array[1..4] of string = ('caveRat', 'redcapLesser', 'giantRat', 'redcapLesser');
+  caveNPC3: array[1..5] of string = ('caveRat', 'redcapLesser', 'giantRat', 'redcapLesser', 'redcapLsrLbr');
 
 
 (* randomly choose a creature and call the generate code directly *)
@@ -55,7 +54,7 @@ begin
       end { Level 3 }
       else if (universe.currentDepth = 3) then
       begin
-        randSelect := globalUtils.randomRange(1, 4);
+        randSelect := globalUtils.randomRange(1, 5);
         monster := caveNPC3[randSelect];
       end;
     end;
@@ -72,7 +71,7 @@ begin
     'greenFungus': green_fungus.createGreenFungus(i, c, r);
     'giantRat': giant_cave_rat.createGiantCaveRat(i, c, r);
     'redcapLesser': redcap_lesser.createRedcap(i, c, r);
-    'redcapLsrArchr': redcap_lesser_archer.createRedcap(i, c, r);
+    'redcapLsrLbr': redcap_lesser_lobber.createRedcap(i, c, r);
   end;
 end;
 

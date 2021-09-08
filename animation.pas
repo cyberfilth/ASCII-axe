@@ -7,7 +7,7 @@ unit animation;
 interface
 
 uses
-  SysUtils, Classes, video, ui, entities, main;
+  SysUtils, Classes, video, ui, entities, main, fov, map;
 
 type
   a = array[1..10] of TPoint;
@@ -19,10 +19,18 @@ implementation
 
 procedure throwRock(id: smallint; var flightPath: a);
 var
-  i: byte;
+  i, p: byte;
 begin
   (* Change game state to stop receiving inputs *)
   main.gameState := stAnim;
+  (* Draw player, FOV & NPC's *)
+  LockScreenUpdate;
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+  (* Redraw all NPC'S *)
+  for p := 1 to entities.npcAmount do
+    entities.redrawMapDisplay(p);
+  UnlockScreenUpdate;
+  UpdateScreen(False);
   ui.displayMessage(entityList[id].race + ' throws a rock at you');
   for i := 2 to 10 do
   begin
@@ -31,8 +39,8 @@ begin
     begin
       (* Paint over previous rock *)
       if (i > 2) then
-        TextOut(flightPath[i - 1].X, flightPath[i - 1].Y, 'lightGrey', '.');
-
+        TextOut(flightPath[i - 1].X, flightPath[i - 1].Y, 'lightGrey',
+          map.maparea[flightPath[i - 1].Y][flightPath[i - 1].X].Glyph);
       (* Draw rock *)
       TextOut(flightPath[i].X, flightPath[i].Y, 'white', '*');
       sleep(125);
@@ -42,6 +50,11 @@ begin
   end;
   (* Restore game state *)
   main.gameState := stGame;
+  (* Draw player and FOV *)
+  LockScreenUpdate;
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+  UnlockScreenUpdate;
+  UpdateScreen(False);
 end;
 
 end.

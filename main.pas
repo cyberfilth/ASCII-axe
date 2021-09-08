@@ -325,7 +325,6 @@ begin
 end;
 
 procedure returnToGameScreen;
-
 var
   i: byte;
 begin
