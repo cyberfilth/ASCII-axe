@@ -88,6 +88,7 @@ shutdownKeyboard	keyboardinput.pas	/^procedure shutdownKeyboard;$/;"	p
 shutdownScreen	ui.pas	/^procedure shutdownScreen;$/;"	p
 spawnDenizens	universe.pas	/^procedure spawnDenizens;$/;"	p
 spawnPlayer	entities.pas	/^procedure spawnPlayer;$/;"	p
+throwRock	animation.pas	/^procedure throwRock(id: smallint; var flightPath: a);$/;"	p
 titleInput	keyboardinput.pas	/^procedure titleInput(Keypress: TKeyEvent);$/;"	p
 unoccupy	map.pas	/^procedure unoccupy(x, y: smallint);$/;"	p
 updateArmour	ui.pas	/^procedure updateArmour;$/;"	p

@@ -397,7 +397,6 @@ end;
 
 procedure fireMissile(id: smallint);
 begin
-  ui.displayMessage(IntToStr(id) + ' fires an arrow');
   los.firingLine(id, entityList[id].posX, entityList[id].posY, entityList[0].posX, entityList[0].posY);
 end;
 
