@@ -7,7 +7,7 @@ unit animation;
 interface
 
 uses
-  SysUtils, Classes, video, ui, entities, map;
+  SysUtils, Classes, video, ui, entities, main;
 
 type
   a = array[1..10] of TPoint;
@@ -21,6 +21,8 @@ procedure throwRock(id: smallint; var flightPath: a);
 var
   i: byte;
 begin
+  (* Change game state to stop receiving inputs *)
+  main.gameState := stAnim;
   ui.displayMessage(entityList[id].race + ' throws a rock at you');
   for i := 2 to 10 do
   begin
@@ -38,6 +40,8 @@ begin
     UnlockScreenUpdate;
     UpdateScreen(False);
   end;
+  (* Restore game state *)
+  main.gameState := stGame;
 end;
 
 end.

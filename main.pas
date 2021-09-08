@@ -17,7 +17,7 @@ uses
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
-    stWearWield, stQuitMenu, stGameOver, stDialogLevel);
+    stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim);
 
 var
   (* State machine for game menus / controls *)
