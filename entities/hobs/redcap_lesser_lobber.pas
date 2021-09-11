@@ -219,7 +219,6 @@ begin
     if (round(distance) = 4) and (entityList[id].weaponAdds > 0) then
     begin
       fireMissile(id);
-      exit;
     end
     (* If too close to the player *)
     else if (round(distance) < 3) then
@@ -369,9 +368,8 @@ begin
     'e':
     begin
       if (map.canMove((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
     end;
@@ -387,9 +385,8 @@ begin
     'w':
     begin
       if (map.canMove((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
           entities.entityList[id].posY);
     end
@@ -414,7 +411,6 @@ begin
     if (entities.entityList[0].currentHP < 1) then
     begin
       killer := entityList[id].race;
-      exit;
     end
     else
     begin
@@ -431,6 +427,7 @@ begin
     ui.displayMessage('The rock misses');
   (* Remove a rock from inventory *)
   Dec(entityList[id].weaponAdds);
+  entities.moveNPC(id, entityList[id].posX, entityList[id].posY);
 end;
 
 end.
