@@ -13,8 +13,7 @@ uses
 
 const
   (* Array of creatures found in a cave, ordered by cave level *)
-  caveNPC1: array[1..4] of string = ('redcapLsrLbr', 'redcapLsrLbr', 'redcapLsrLbr', 'redcapLsrLbr');
-  //caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
+  caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
   caveNPC2: array[1..5] of string = ('caveRat', 'giantRat', 'giantRat', 'redcapLesser', 'giantRat');
   caveNPC3: array[1..5] of string = ('caveRat', 'redcapLesser', 'giantRat', 'redcapLesser', 'redcapLsrLbr');
 

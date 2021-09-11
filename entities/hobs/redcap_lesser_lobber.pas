@@ -201,8 +201,7 @@ var
   newX, newY, dx, dy: smallint;
   distance: double;
 begin
-  if (isNextToPlayer(spx, spy) = True) then
-    newX := 0;
+  newX := 0;
   newY := 0;
   (* Get new coordinates to chase the player *)
   dx := entityList[0].posX - spx;
@@ -387,6 +386,8 @@ begin
       if (map.canMove((entities.entityList[id].posX - 1),
         entities.entityList[id].posY) and (map.isOccupied(
         (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
+
+
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
           entities.entityList[id].posY);
     end
