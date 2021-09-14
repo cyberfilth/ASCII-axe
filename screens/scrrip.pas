@@ -13,13 +13,15 @@ procedure displayRIPscreen;
 procedure drawSkull;
 (* Draw a bat on the screen *)
 procedure drawBat;
+(* Draw a gravestone on the screen *)
+procedure drawGrave;
 
 implementation
 
 procedure displayRIPscreen;
 var
   epitaph, deathMessage: shortstring;
-  prefix: smallint;
+  prefix, img: smallint;
 begin
   (* Create a farewell message *)
   epitaph := entityList[0].race + ' the ' + entityList[0].description;
@@ -34,7 +36,6 @@ begin
   (* Show which creature killed the player *)
   deathMessage := 'Killed by a ' + globalUtils.killer + ', after ' +
     IntToStr(entityList[0].moveCount) + ' moves.';
-
 
   { Closing screen update as in game loop }
   UnlockScreenUpdate;
@@ -58,12 +59,16 @@ begin
   LockScreenUpdate;
 
   (* Randomly choose an image *)
-  if (randomRange(1, 3) = 2) then
+  img := randomRange(1, 4);
+  if (img = 1) then
     drawBat
+  else if (img = 2) then
+    drawSkull
   else
-    drawSkull;
+    drawGrave;
 
   TextOut(centreX(deathMessage), 18, 'cyan', deathMessage);
+  TextOut(15, 24, 'cyan', 'x - Exit game');
   UnlockScreenUpdate;
   UpdateScreen(False);
 end;
@@ -101,6 +106,25 @@ begin
   TextOut(x, 11, col, ' / `''=) (=''` \');
   TextOut(x, 12, col, '/.-.-.\ /.-.-.\');
   TextOut(x, 13, col, '`      "      `');
+end;
+
+procedure drawGrave;
+var
+  col: shortstring;
+  x: byte;
+begin
+  col := 'darkGrey';
+  x := 32;
+  TextOut(x, 7, col, '       -|-');
+  TextOut(x, 8, col, '    .-''~~~`-.');
+  TextOut(x, 9, col, '  .''         `.');
+  TextOut(x, 10, col, '  |  R  I  P  |');
+  TextOut(x, 11, col, '  |           |');
+  TextOut(x, 12, col, '  |           |');
+  TextOut(x, 13, col, '\\|           |//');
+  (* Write name on grave if it fits *)
+  if (Length(entityList[0].race) <= 11) then
+    TextOut(centreX(entityList[0].race), 11, col, entityList[0].race);
 end;
 
 end.
