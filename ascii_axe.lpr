@@ -19,6 +19,8 @@ Program ascii_axe;
 Uses
 main;
 
+{$R *.res}
+
 Begin
   (* Initialise the display, keyboard and game variables *)
   main.initialise;

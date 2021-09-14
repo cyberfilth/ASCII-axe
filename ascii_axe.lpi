@@ -15,6 +15,7 @@
       <Title Value="ascii_axe"/>
       <UseAppBundle Value="False"/>
       <ResourceType Value="res"/>
+      <Icon Value="0"/>
     </General>
     <BuildModes Count="3">
       <Item1 Name="Default" Default="True"/>
