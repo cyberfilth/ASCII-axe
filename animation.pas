@@ -7,7 +7,7 @@ unit animation;
 interface
 
 uses
-  SysUtils, Classes, video, ui, entities, main, fov, map;
+  SysUtils, Classes, video, ui, entities, main, fov, map, camera;
 
 type
   a = array[1..10] of TPoint;
@@ -25,10 +25,11 @@ begin
   main.gameState := stAnim;
   (* Draw player, FOV & NPC's *)
   LockScreenUpdate;
-  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
   (* Redraw all NPC'S *)
   for p := 1 to entities.npcAmount do
     entities.redrawMapDisplay(p);
+  camera.drawMap;
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
   UnlockScreenUpdate;
   UpdateScreen(False);
   ui.displayMessage(entityList[id].race + ' throws a rock at you');
@@ -43,7 +44,7 @@ begin
           map.maparea[flightPath[i - 1].Y][flightPath[i - 1].X].Glyph);
       (* Draw rock *)
       TextOut(flightPath[i].X, flightPath[i].Y, 'white', '*');
-      sleep(125);
+      sleep(100);
     end;
     UnlockScreenUpdate;
     UpdateScreen(False);

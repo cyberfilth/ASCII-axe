@@ -284,12 +284,6 @@ begin
     gameOver;
   end;
 
-  (* Update player position on map *)
-  LockScreenUpdate;
-  camera.drawMap;
-  UnlockScreenUpdate;
-  UpdateScreen(False);
-
   (* move NPC's *)
   entities.NPCgameLoop;
   (* Process status effects *)

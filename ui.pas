@@ -2,7 +2,7 @@
 
 unit ui;
 
-{$mode fpc}{$H+}
+{$mode objfpc}{$H+}
 {$IFOPT D+} {$DEFINE DEBUG} {$ENDIF}
 
 interface
@@ -65,6 +65,8 @@ procedure exitMessage;
 procedure displayDialog(title, message: shortstring);
 (* Display welcome message *)
 procedure welcome;
+(* Get X coordinate to centre a string *)
+function centreX(textstring: shortstring): byte;
 
 implementation
 
@@ -85,7 +87,7 @@ begin
     'cyan': tint := video.Cyan;
     'cyanBGblackTXT': tint := ($03 shl 4);
     'red': tint := video.Red;
-    'pink' : tint := video.LightRed;
+    'pink': tint := video.LightRed;
     'magenta': tint := video.Magenta;
     'lightMagenta': tint := video.LightMagenta;
     'brown': tint := video.Brown;
@@ -397,6 +399,11 @@ end;
 procedure welcome;
 begin
   dlgInfo.newGame;
+end;
+
+function centreX(textstring: shortstring): byte;
+begin
+  Result := 40 - (Length(textstring) div 2);
 end;
 
 end.
