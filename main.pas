@@ -11,7 +11,7 @@ interface
 
 uses
   SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, player_stats, scrRIP,
+  universe, fov, player, player_inventory, player_stats, scrRIP, plot_gen,
   file_handling, item_lookup, smell
   {$IFDEF DEBUG}, logging{$ENDIF};
 
@@ -234,7 +234,10 @@ begin
   (* draw map through the camera *)
   camera.drawMap;
   (* Generate the welcome message *)
-  ui.welcome;
+  plot_gen.getTrollDate;
+  ui.displayMessage('Good Luck...');
+  ui.displayMessage('You are in the ' + UTF8Encode(universe.title));
+  ui.displayMessage('It is ' + plot_gen.trollDate);
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
