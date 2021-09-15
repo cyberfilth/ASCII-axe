@@ -17,6 +17,7 @@ beginLogging	logging.pas	/^procedure beginLogging;$/;"	p
 bufferMessage	ui.pas	/^procedure bufferMessage(message: shortstring);$/;"	p
 canMove	map.pas	/^function canMove(checkX, checkY: smallint): boolean;$/;"	f
 canSee	map.pas	/^function canSee(checkX, checkY: smallint): boolean;$/;"	f
+centreX	ui.pas	/^function centreX(textstring: shortstring): byte;$/;"	f
 clearStatusBar	ui.pas	/^procedure clearStatusBar;$/;"	p
 containsItem	items.pas	/^function containsItem(x, y: smallint): boolean;$/;"	f
 continue	main.pas	/^procedure continue;$/;"	p
