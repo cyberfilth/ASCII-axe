@@ -1,3 +1,5 @@
+(* Main game screen *)
+
 unit scrGame;
 
 {$mode fpc}{$H+}

@@ -1,3 +1,5 @@
+(* Title screen *)
+
 unit scrTitle;
 
 {$mode fpc}{$H+}
@@ -34,13 +36,13 @@ begin
   (* Check if a save file exists and display menu *)
   if (yn = 0) then
   begin
-    TextOut(18, 22, 'cyan', 'N - New Game');
-    TextOut(18, 23, 'cyan', 'Q - Quit');
+    TextOut(18, 22, 'cyan', 'n - New Game');
+    TextOut(18, 23, 'cyan', 'q - Quit');
   end
   else
   begin
-    TextOut(18, 22, 'cyan', 'L - Load Last Game       N - New Game');
-    TextOut(18, 23, 'cyan', 'Q - Quit');
+    TextOut(18, 22, 'cyan', 'l - Load Last Game       n - New Game');
+    TextOut(18, 23, 'cyan', 'q - Quit');
   end;
 end;
 

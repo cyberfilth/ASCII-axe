@@ -1,3 +1,5 @@
+(* Game over screen *)
+
 unit scrRIP;
 
 {$mode fpc}{$H+}

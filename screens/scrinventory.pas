@@ -1,3 +1,5 @@
+(* Inventory screen *)
+
 unit scrInventory;
 
 {$mode fpc}{$H+}
