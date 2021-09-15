@@ -6,6 +6,9 @@ unit scrInventory;
 
 interface
 
+uses
+  SysUtils, entities;
+
 (* Draw the outline of the screen *)
 procedure drawOutline;
 (* Show the main inventory screen *)
@@ -119,6 +122,10 @@ begin
   TextOut(25, 23, 'cyanBGblackTXT', ' D - Drop item ');
   TextOut(42, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
   TextOut(64, 23, 'cyanBGblackTXT', ' X - Exit ');
+  (* Display current health *)
+  TextOut(55, 6, 'cyan', 'Current health:');
+  TextOut(55, 7, 'cyan', IntToStr(entities.entityList[0].currentHP) +
+    '/' + IntToStr(entities.entityList[0].maxHP));
 
   { Display items in inventory }
   y := 6;
