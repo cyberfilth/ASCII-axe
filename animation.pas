@@ -53,6 +53,8 @@ begin
   main.gameState := stGame;
   (* Draw player and FOV *)
   LockScreenUpdate;
+  (* Paint out NPC to fix a glitch with updating the display *)
+  TextOut(flightPath[1].X, flightPath[1].Y, 'lightGrey', '.');
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
   UnlockScreenUpdate;
   UpdateScreen(False);

@@ -259,7 +259,6 @@ end;
 
 procedure redrawMapDisplay(id: byte);
 begin
-
 (* Redrawing NPC directly to map display as looping through
      entity list in the camera unit wasn't working *)
   if (entityList[id].isDead = False) and (entityList[id].inView = True) then
