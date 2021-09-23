@@ -13,7 +13,7 @@ type
 
 const
   (* Version info - a = Alpha, d = Debug, r = Release *)
-  VERSION = '35a';
+  VERSION = '37a';
   (* Columns of the game map *)
   MAXCOLUMNS = 57;
   (* Rows of the game map *)

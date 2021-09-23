@@ -7,7 +7,7 @@ unit dlgInfo;
 interface
 
 uses
-  SysUtils, plot_gen, universe;
+  SysUtils, video, plot_gen, universe, globalUtils;
 
 (* Display Info dialog box *)
 procedure infoDialog(message: shortstring);
@@ -15,6 +15,8 @@ procedure infoDialog(message: shortstring);
 procedure levelUpDialog(message: shortstring);
 (* Display welcome text *)
 procedure newGame;
+(* Display a warning when starting a new game *)
+procedure newWarning;
 
 implementation
 
@@ -96,15 +98,15 @@ begin
   plot_gen.getTrollDate;
   x := 3;
   y := 5;
-  (* Top border *)         // 45 = 53
+  (* Top border *)
   TextOut(x, y, 'LgreyBGblack', chr(201));
   for x := 4 to 53 do
     TextOut(x, 5, 'LgreyBGblack', chr(205));
   TextOut(54, y, 'LgreyBGblack', chr(187));
   (* Vertical sides *)
   for y := 6 to 12 do
-    TextOut(3, y, 'LgreyBGblack', chr(186)
-    + '                                                  ' + chr(186));
+    TextOut(3, y, 'LgreyBGblack', chr(186) +
+      '                                                  ' + chr(186));
   (* Bottom border *)
   TextOut(3, 13, 'LgreyBGblack', chr(200)); // bottom left corner
   for x := 4 to 53 do
@@ -116,6 +118,36 @@ begin
   TextOut(5, 7, 'LgreyBGblack', 'It is ' + plot_gen.trollDate);
   TextOut(5, 8, 'LgreyBGblack', 'You enter the ' + UTF8Encode(universe.title));
   TextOut(5, 10, 'LgreyBGblack', 'Good Luck...');
+end;
+
+procedure newWarning;
+var
+  y, warning: smallint;
+  warningText: shortstring;
+begin
+  y := 8;
+  (* Select a warning message *)
+  warning := randomRange(1, 3);
+  if (warning = 1) then
+    warningText := ' Watch your step! '
+  else if (warning = 2) then
+    warningText := ' Careful now! '
+  else
+    warningText := ' Beware adventurer! ';
+
+  ClearScreen;
+  (* prepare changes to the screen *)
+  LockScreenUpdate;
+  TextOut(centreX(warningText), y, 'cyanBGblackTXT', warningText);
+  TextOut(centreX('If you start a new game, you will'), y + 2, 'cyan', 'If you start a new game, you will');
+  TextOut(centreX('lose your existing save file.....'), y + 3, 'cyan', 'lose your existing save file.....');
+  TextOut(centreX('Do you wish to proceed?'), y + 5, 'cyan', 'Do you wish to proceed?');
+  TextOut(centreX('y / n'), y + 6, 'cyan', 'y / n');
+
+  (* Write those changes to the screen *)
+  UnlockScreenUpdate;
+  (* only redraws the parts that have been updated *)
+  UpdateScreen(False);
 end;
 
 end.

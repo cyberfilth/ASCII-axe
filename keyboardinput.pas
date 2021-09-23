@@ -7,7 +7,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player, player_inventory, player_stats, map;
+  Keyboard, player, player_inventory, player_stats, map, dlgInfo;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -31,6 +31,8 @@ procedure RIPInput(Keypress: TKeyEvent);
 procedure LevelUpInput(Keypress: TKeyEvent);
 (* Input in GAME state *)
 procedure gameInput(Keypress: TKeyEvent);
+(* Input in LOSE SAVE state *)
+procedure LoseSaveInput(Keypress: TKeyEvent);
 
 implementation
 
@@ -50,7 +52,17 @@ end;
 procedure titleInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
-    'n': main.newGame;
+    'n':
+    begin
+      (* Check to see if there's an existing save *)
+      if (main.saveExists = True) then
+      begin
+        gameState := stLoseSave;
+        dlgInfo.newWarning;
+      end
+      else
+        main.newGame;
+    end;
     'l': { Load previously saved game }
     begin
       if (main.saveExists = True) then
@@ -69,7 +81,7 @@ begin
     end;
     'x', 'X': { Exit to main menu }
     begin
-      { TODO : Add pop-up window }
+      main.exitToTitleMenu;
     end;
     #27: { Escape key - Cancel }
     begin
@@ -161,7 +173,7 @@ begin
       gameState := stGame;
       main.returnToGameScreen;
     end;
-     'I': { Inventory menu }
+    'I': { Inventory menu }
     begin
       gameState := stInventory;
       player_inventory.showInventory;
@@ -377,6 +389,19 @@ begin
     begin
       gameState := stQuitMenu;
       ui.exitPrompt;
+    end;
+  end;
+end;
+
+procedure LoseSaveInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
+    'y', 'Y': { Start new game }
+      main.newGame;
+    'n', 'N': { Return to title menu }
+    begin
+      gameState := stTitle;
+      main.exitToTitleMenu;
     end;
   end;
 end;

@@ -12,12 +12,12 @@ interface
 uses
   SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
   universe, fov, player, player_inventory, player_stats, scrRIP, plot_gen,
-  file_handling, smell
+  file_handling, smell, scrTitle
   {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
   gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
-    stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim);
+    stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim, stLoseSave);
 
 var
   (* State machine for game menus / controls *)
@@ -28,6 +28,7 @@ var
 procedure setSeed;
 procedure initialise;
 procedure exitApplication;
+procedure exitToTitleMenu;
 procedure newGame;
 procedure continue;
 procedure loop;
@@ -81,7 +82,7 @@ begin
   else
     setSeed;
   {$IFDEF DEBUG}
-    logging.beginLogging;
+  logging.beginLogging;
   {$ENDIF}
 
   (* Check for previous save file *)
@@ -127,6 +128,46 @@ begin
   (* Clear screen and display author message *)
   ui.exitMessage;
   halt;
+end;
+
+procedure exitToTitleMenu;
+begin
+  (* Don't attempt to save game from Title screen *)
+  if (gameState <> stTitle) then
+  begin
+    if (gameState <> stGameOver) then
+    begin
+      file_handling.saveGame;
+      (* Clear arrays *)
+      entityList := nil;
+      itemList := nil;
+    end;
+  end;
+  gameState := stTitle;
+  ClearScreen;
+  (* prepare changes to the screen *)
+  LockScreenUpdate;
+  (* Check for previous save file *)
+  if (FileExists(globalUtils.saveDirectory + DirectorySeparator +
+    globalutils.saveFile)) then
+  begin
+    saveExists := True;
+    scrtitle.displayTitleScreen(1);
+  end
+  else
+  begin
+    try
+      { create directory }
+      CreateDir(globalUtils.saveDirectory);
+    finally
+      { Initialise video unit and show title screen }
+      scrtitle.displayTitleScreen(0);
+    end;
+  end;
+  (* Write those changes to the screen *)
+  UnlockScreenUpdate;
+  (* only redraws the parts that have been updated *)
+  UpdateScreen(False);
 end;
 
 procedure newGame;
@@ -268,10 +309,12 @@ begin
       stQuaffMenu: quaffInput(Keypress);
       { ---------------------------------    In the Wear / Wield menu }
       stWearWield: wearWieldInput(Keypress);
-       { ---------------------------------    In the Quaff menu }
+      { ---------------------------------    In the Quaff menu }
       stDialogLevel: LevelUpInput(Keypress);
       { ---------------------------------    Gameplay controls }
       stGame: gameInput(Keypress);
+      { ---------------------------------    Confirm overwrite game }
+      stLoseSave: LoseSaveInput(Keypress);
     end;
   end;
 end;
