@@ -28,7 +28,7 @@ procedure increaseAttackDefence;
 implementation
 
 uses
-  ui, entities, main;
+  ui, entities, main, player;
 
 procedure checkLevel;
 begin
@@ -76,7 +76,7 @@ begin
   tempValue := (entityList[0].maxHP / 100) * 10;
   NewMaxHP := trunc(tempValue);
   Inc(entityList[0].maxHP, NewMaxHP);
-  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  player.levelupHealth(player_stats.playerLevel);
   ui.updateHealth;
   Inc(entityList[0].visionRange);
 end;
@@ -84,7 +84,7 @@ end;
 procedure increaseAttack;
 begin
   Inc(entityList[0].attack, player_stats.playerLevel);
-  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  player.levelupHealth(player_stats.playerLevel);
   ui.updateAttack;
   ui.updateHealth;
   Inc(entityList[0].visionRange);
@@ -93,7 +93,7 @@ end;
 procedure increaseDefence;
 begin
   Inc(entityList[0].defence, player_stats.playerLevel);
-  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  player.levelupHealth(player_stats.playerLevel);
   ui.updateDefence;
   ui.updateHealth;
   Inc(entityList[0].visionRange);
@@ -103,7 +103,7 @@ procedure increaseAttackDefence;
 begin
   Inc(entityList[0].defence, (player_stats.playerLevel div 2));
   Inc(entityList[0].attack, (player_stats.playerLevel div 2));
-  Inc(entityList[0].currentHP, player_stats.playerLevel);
+  player.levelupHealth(player_stats.playerLevel);
   ui.updateAttack;
   ui.updateDefence;
   ui.updateHealth;

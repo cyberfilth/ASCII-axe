@@ -9,7 +9,7 @@ unit entities;
 interface
 
 uses
-  SysUtils, ui, globalUtils,
+  SysUtils, globalUtils,
   { List of creatures }
   cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_lobber;
 
@@ -98,7 +98,7 @@ procedure NPCgameLoop;
 implementation
 
 uses
-  player, map;
+  player, map, ui;
 
 procedure spawnPlayer;
 begin

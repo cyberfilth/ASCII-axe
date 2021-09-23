@@ -7,7 +7,7 @@ unit player_inventory;
 interface
 
 uses
-  SysUtils, StrUtils, video, entities, items, item_lookup, ui;
+  SysUtils, StrUtils, video, entities, items, item_lookup;
 
 type
   (* Items in inventory *)
@@ -55,7 +55,7 @@ procedure wearWieldSelection(selection: smallint);
 implementation
 
 uses
-  scrInventory;
+  scrInventory, ui;
 
 procedure initialiseInventory;
 

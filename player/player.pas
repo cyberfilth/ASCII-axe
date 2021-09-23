@@ -20,6 +20,8 @@ function combatCheck(x, y: smallint): boolean;
 procedure pickUp;
 (*Increase Health, no more than maxHP *)
 procedure increaseHealth(amount: smallint);
+(* Increase health without messages *)
+procedure levelupHealth(amount: smallint);
 
 implementation
 
@@ -236,6 +238,18 @@ begin
   end
   else
     ui.bufferMessage('You are already at full health');
+end;
+
+procedure levelupHealth(amount: smallint);
+begin
+  if (entities.entityList[0].currentHP <> entities.entityList[0].maxHP) then
+  begin
+    if ((entities.entityList[0].currentHP + amount) >= entities.entityList[0].maxHP) then
+      entities.entityList[0].currentHP := entities.entityList[0].maxHP
+    else
+      entities.entityList[0].currentHP := entities.entityList[0].currentHP + amount;
+    ui.updateHealth;
+  end;
 end;
 
 end.
