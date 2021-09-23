@@ -49,7 +49,7 @@ begin
   { draw outline }
   drawOutline;
   { Inventory title }
-  TextOut(15, 3, 'cyan', 'Inventory - Select a slot to examine item');
+  TextOut(15, 3, 'cyan', 'Inventory ' + chr(240) + ' [a - j] select item to examine');
 
   { Footer menu }
   TextOut(6, 23, 'cyanBGblackTXT', ' D - Drop item ');
@@ -80,12 +80,12 @@ begin
   invItem := 0;
   drawOutline;
   { Inventory title }
-  TextOut(15, 3, 'cyan', 'Select item to drop');
+  TextOut(15, 3, 'cyan', 'Drop      ' + chr(240) + ' [a - j] select item to drop');
   { Footer menu }
-  TextOut(5, 23, 'cyanBGblackTXT', ' a-j Select item ');
-  TextOut(24, 23, 'cyanBGblackTXT', ' Q - Quaff/drink ');
-  TextOut(43, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
-  TextOut(65, 23, 'cyanBGblackTXT', ' X - Exit ');
+  TextOut(5, 23, 'cyanBGblackTXT', ' I - Examine item ');
+  TextOut(25, 23, 'cyanBGblackTXT', ' Q - Quaff/drink ');
+  TextOut(44, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
+  TextOut(66, 23, 'cyanBGblackTXT', ' X - Exit ');
 
   { Display items in inventory }
   y := 6;
@@ -116,9 +116,9 @@ begin
   invItem := 0;
   drawOutline;
   { Inventory title }
-  TextOut(15, 3, 'cyan', 'Select drink to quaff');
+  TextOut(15, 3, 'cyan', 'Quaff     ' + chr(240) + ' [a - j] select item to drink');
   { Footer menu }
-  TextOut(6, 23, 'cyanBGblackTXT', ' a-j Select item ');
+  TextOut(5, 23, 'cyanBGblackTXT', ' I - Examine item ');
   TextOut(25, 23, 'cyanBGblackTXT', ' D - Drop item ');
   TextOut(42, 23, 'cyanBGblackTXT', ' W - Weapons/Armour ');
   TextOut(64, 23, 'cyanBGblackTXT', ' X - Exit ');
@@ -156,9 +156,9 @@ begin
   invItem := 0;
   drawOutline;
   { Inventory title }
-  TextOut(15, 3, 'cyan', 'Select weapon / armour');
+  TextOut(14, 3, 'cyan', 'Wear/Wield ' + chr(240) + ' [a - j] select item to equip');
   { Footer menu }
-  TextOut(8, 23, 'cyanBGblackTXT', ' a-j Select item ');
+  TextOut(7, 23, 'cyanBGblackTXT', ' I - Examine item ');
   TextOut(27, 23, 'cyanBGblackTXT', ' D - Drop item ');
   TextOut(44, 23, 'cyanBGblackTXT', ' Q - Quaff menu ');
   TextOut(62, 23, 'cyanBGblackTXT', ' X - Exit ');

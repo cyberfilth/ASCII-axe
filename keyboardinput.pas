@@ -124,6 +124,11 @@ begin
       gameState := stGame;
       main.returnToGameScreen;
     end;
+    'I': { Inventory menu }
+    begin
+      gameState := stInventory;
+      player_inventory.showInventory;
+    end;
     'Q': { Quaff menu }
     begin
       gameState := stQuaffMenu;
@@ -156,6 +161,11 @@ begin
       gameState := stGame;
       main.returnToGameScreen;
     end;
+     'I': { Inventory menu }
+    begin
+      gameState := stInventory;
+      player_inventory.showInventory;
+    end;
     'D': { Drop menu }
     begin
       gameState := stDropMenu;
@@ -187,6 +197,11 @@ begin
     begin
       gameState := stGame;
       main.returnToGameScreen;
+    end;
+    'I': { Inventory menu }
+    begin
+      gameState := stInventory;
+      player_inventory.showInventory;
     end;
     'D': { Drop menu }
     begin
