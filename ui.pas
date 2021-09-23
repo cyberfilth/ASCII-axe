@@ -8,7 +8,7 @@ unit ui;
 interface
 
 uses
-  SysUtils, video, keyboard, scrTitle, dlgInfo, player_stats, globalUtils,
+  SysUtils, StrUtils, video, keyboard, scrTitle, dlgInfo, player_stats, globalUtils,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -166,6 +166,9 @@ begin
 end;
 
 procedure displayMessage(message: shortstring);
+var
+  tempStr: shortstring;
+  tempCounter: smallint;
 begin
   (* Catch duplicate messages *)
   if (message = messageArray[1]) then
@@ -176,6 +179,20 @@ begin
       TextOut(x, 21, 'black', ' ');
     end;
     messageArray[1] := messageArray[1] + ' x2';
+    TextOut(1, 21, 'white', messageArray[1]);
+  end
+  else if (ansistartstext(message, messageArray[1]) = True) then
+  begin
+    (* Clear first line *)
+    for x := 1 to 80 do
+    begin
+      TextOut(x, 21, 'black', ' ');
+    end;
+    tempStr := rightstr(messageArray[1], Length(messageArray[1]) -
+      lastdelimiter('x', messageArray[1]));
+    tempCounter := StrToInt(tempStr);
+    Inc(tempCounter);
+    messageArray[1] := message + ' x' + IntToStr(tempCounter);
     TextOut(1, 21, 'white', messageArray[1]);
   end
   else

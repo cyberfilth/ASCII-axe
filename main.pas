@@ -12,7 +12,7 @@ interface
 uses
   SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
   universe, fov, player, player_inventory, player_stats, scrRIP, plot_gen,
-  file_handling, item_lookup, smell
+  file_handling, smell
   {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
@@ -139,7 +139,7 @@ begin
   (* Initialise the game world and create 1st cave *)
   universe.dlistLength := 0;
   (* first map type is always a cave *)
-  map.mapType := tCave;
+  map.mapType := universe.tCave;
   (* Create the dungeon *)
   universe.createNewDungeon(map.mapType);
   (* Set smell counter to zero *)

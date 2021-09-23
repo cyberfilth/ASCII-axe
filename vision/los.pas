@@ -8,7 +8,7 @@ unit los;
 interface
 
 uses
-  Classes, map, entities, animation;
+  Classes, map, animation;
 
 var
   totalSpaces: smallint;
