@@ -125,6 +125,8 @@ var
   y, warning: smallint;
   warningText: shortstring;
 begin
+  (* Clear screen & set background to black *)
+  ui.screenBlank;
   y := 8;
   (* Select a warning message *)
   warning := randomRange(1, 3);
@@ -135,7 +137,6 @@ begin
   else
     warningText := ' Beware adventurer! ';
 
-  ClearScreen;
   (* prepare changes to the screen *)
   LockScreenUpdate;
   TextOut(centreX(warningText), y, 'cyanBGblackTXT', warningText);

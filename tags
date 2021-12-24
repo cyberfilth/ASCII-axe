@@ -9,6 +9,7 @@ AddElement	file_handling.pas	/^  procedure AddElement(Node: TDOMNode; Name, Valu
 AddElement	file_handling.pas	/^  procedure AddElement(Node: TDOMNode; Name, Value: shortstring);$/;"	p
 Creature.entityTakeTurn	entities.pas	/^procedure Creature.entityTakeTurn(i: smallint);$/;"	p
 LevelUpInput	keyboardinput.pas	/^procedure LevelUpInput(Keypress: TKeyEvent);$/;"	p
+LoseSaveInput	keyboardinput.pas	/^procedure LoseSaveInput(Keypress: TKeyEvent);$/;"	p
 NPCgameLoop	entities.pas	/^procedure NPCgameLoop;$/;"	p
 RIPInput	keyboardinput.pas	/^procedure RIPInput(Keypress: TKeyEvent);$/;"	p
 TextOut	ui.pas	/^procedure TextOut(X, Y: word; textcol: shortstring; const S: string);$/;"	p
@@ -38,6 +39,7 @@ entityTakeTurn	entities.pas	/^    procedure entityTakeTurn(i: smallint);$/;"	p
 exitApplication	main.pas	/^procedure exitApplication;$/;"	p
 exitMessage	ui.pas	/^procedure exitMessage;$/;"	p
 exitPrompt	ui.pas	/^procedure exitPrompt;$/;"	p
+exitToTitleMenu	main.pas	/^procedure exitToTitleMenu;$/;"	p
 gameInput	keyboardinput.pas	/^procedure gameInput(Keypress: TKeyEvent);$/;"	p
 gameLoop	main.pas	/^procedure gameLoop;$/;"	p
 gameOver	main.pas	/^procedure gameOver;$/;"	p
