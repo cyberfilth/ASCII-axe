@@ -111,7 +111,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="39">
+    <Units Count="40">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -275,6 +275,11 @@
         <Filename Value="animation.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit38>
+      <Unit39>
+        <Filename Value="screens\scrintro.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="scrIntro"/>
+      </Unit39>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

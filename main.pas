@@ -1,4 +1,4 @@
-(* Axes, Armour & Ale - Roguelike for Linux and Windows.
+(* Axes, Armour & Ale - A low-fantasy roguelike.
    @author (Chris Hawkins)
 *)
 
@@ -16,7 +16,7 @@ uses
   {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
-  gameStatus = (stTitle, stGame, stInventory, stDropMenu, stQuaffMenu,
+  gameStatus = (stTitle, stIntro, stGame, stInventory, stDropMenu, stQuaffMenu,
     stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim, stLoseSave);
 
 var
@@ -297,6 +297,8 @@ begin
     case gameState of
       { ----------------------------------   Title menu }
       stTitle: titleInput(Keypress);
+      { ----------------------------------   Intro screen }
+      stIntro: introInput(Keypress);
       { -----------------------------------  Game Over screen }
       stGameOver: RIPInput(Keypress);
       { ----------------------------------   Prompt to quit game }

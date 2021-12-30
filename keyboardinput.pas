@@ -7,7 +7,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player, player_inventory, player_stats, map, dlgInfo;
+  Keyboard, player, player_inventory, player_stats, map, dlgInfo, scrIntro;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -15,6 +15,8 @@ procedure setupKeyboard;
 procedure shutdownKeyboard;
 (* Input in TITLE Menu state *)
 procedure titleInput(Keypress: TKeyEvent);
+(* Input in the INTRO Menu state *)
+procedure introInput(Keypress: TKeyEvent);
 (* Input for QUIT Menu state *)
 procedure quitInput(Keypress: TKeyEvent);
 (* Input in INVENTORY Menu state *)
@@ -61,7 +63,11 @@ begin
         dlgInfo.newWarning;
       end
       else
-        main.newGame;
+      begin
+        (* Game state = Intro screen *)
+        gameState := stIntro;
+        scrIntro.displayIntroScreen;
+      end;
     end;
     'l': { Load previously saved game }
     begin
@@ -69,6 +75,16 @@ begin
         main.continue;
     end;
     'q': main.exitApplication;
+  end;
+end;
+
+procedure introInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
+    #32: { Space key - Cancel }
+    begin
+      main.newGame; { Start a new game }
+    end;
   end;
 end;
 
@@ -397,7 +413,10 @@ procedure LoseSaveInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
     'y', 'Y': { Start new game }
-      main.newGame;
+    begin
+      gameState := stIntro;
+      scrIntro.displayIntroScreen;
+    end;
     'n', 'N': { Return to title menu }
     begin
       gameState := stTitle;
