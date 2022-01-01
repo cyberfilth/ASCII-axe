@@ -17,7 +17,8 @@ uses
 
 type
   gameStatus = (stTitle, stIntro, stGame, stInventory, stDropMenu, stQuaffMenu,
-    stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim, stLoseSave);
+    stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim, stLoseSave,
+    stCharSelect);
 
 var
   (* State machine for game menus / controls *)
@@ -105,6 +106,9 @@ begin
   end;
   { Initialise keyboard unit }
   keyboardinput.setupKeyboard;
+
+  (* Set a Dwarven clan name *)
+  plot_gen.generateClanName;
 end;
 
 procedure exitApplication;
@@ -299,6 +303,8 @@ begin
       stTitle: titleInput(Keypress);
       { ----------------------------------   Intro screen }
       stIntro: introInput(Keypress);
+      { ----------------------------------   Character select screen }
+      stCharSelect: charSelInput(Keypress);
       { -----------------------------------  Game Over screen }
       stGameOver: RIPInput(Keypress);
       { ----------------------------------   Prompt to quit game }

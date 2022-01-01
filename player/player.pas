@@ -6,7 +6,7 @@ unit player;
 interface
 
 uses
-  SysUtils, player_inventory, plot_gen, combat_resolver, items;
+  SysUtils, player_inventory, player_stats, plot_gen, combat_resolver, items;
 
 (* Create player character *)
 procedure createPlayer;
@@ -30,25 +30,47 @@ uses
 
 procedure createPlayer;
 begin
-  plot_gen.generateName;
   { Add Player to the list of creatures }
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
   with entities.entityList[0] do
   begin
     npcID := 0;
+    (* race is used for the player name, actual race is stored in player stats unit *)
     race := plot_gen.playerName;
     description := plot_gen.playerTitle;
     glyph := '@';
     glyphColour := 'yellow';
-    maxHP := 20;
-    currentHP := 20;
-    attack := 5;
-    defence := 2;
+    (* Elf stats *)
+    if (player_stats.playerRace = 'Elf') then
+    begin
+      maxHP := 15;
+      attack := 6;
+      defence := 2;
+    end
+    (* Dwarf stats *)
+    else if (player_stats.playerRace = 'Dwarf') then
+    begin
+      maxHP := 25;
+      attack := 5;
+      defence := 4;
+    end
+    else
+      (* Human stats *)
+    begin
+      maxHP := 20;
+      attack := 5;
+      defence := 2;
+    end;
+    currentHP := maxHP;
     weaponDice := 0;
     weaponAdds := 0;
     xpReward := 0;
-    visionRange := 4;
+    (* Non-human characters can see further *)
+    if (player_stats.playerRace = 'Human') then
+      visionRange := 4
+    else
+      visionRange := 5;
     moveCount := 0;
     targetX := 0;
     targetY := 0;

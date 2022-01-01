@@ -502,6 +502,8 @@ begin
 
     (* Player stats *)
     player_stats.playerLevel := StrToInt(UTF8Encode(PlayerDataNode.FindNode('playerLevel').TextContent));
+    player_stats.playerRace:=UTF8Encode(PlayerDataNode.FindNode('playerRace').TextContent);
+    player_stats.clanName:=UTF8Encode(PlayerDataNode.FindNode('clanName').TextContent);
 
     (* Player Inventory *)
     player_inventory.initialiseInventory;
@@ -620,6 +622,8 @@ begin
 
     (* Player stats *)
     AddElement(DataNode, 'playerLevel', IntToStr(player_stats.playerLevel));
+    AddElement(DataNode, 'playerRace', player_stats.playerRace);
+    AddElement(DataNode, 'clanName', player_stats.clanName);
 
     (* Player inventory *)
     for i := 0 to 9 do

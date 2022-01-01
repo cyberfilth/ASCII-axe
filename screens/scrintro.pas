@@ -54,15 +54,15 @@ begin
   screenBlank;
   TextOut(ui.centreX(header), 2, 'cyan', header);
   { Flavour text }
-  TextOut(3, 4, 'cyan',
+  TextOut(3, 6, 'cyan',
     'The smugglers roughly grab you and throw you down the crudely carved');
-  TextOut(3, 5, 'cyan',
+  TextOut(3, 7, 'cyan',
     'stairs, into the cavern. You gaze around, struggling to penetrate the');
-  TextOut(3, 6, 'cyan', 'darkness by your feeble torchlight.');
-  TextOut(3, 7, 'cyan', '"Somewhere down there is the map, stolen by those thieving imps.');
-  TextOut(4, 8, 'cyan', 'Find it and bring it back, you little ' + insult + '"');
-  TextOut(3, 10, 'cyan', 'The door slams firmly closed behind you. Ignoring the sound of');
-  TextOut(3, 11, 'cyan', sounds + ' coming from the darkness, you step forward...');
+  TextOut(3, 8, 'cyan', 'darkness by your feeble torchlight.');
+  TextOut(3, 9, 'cyan', '"Somewhere down there is the map, stolen by those thieving imps.');
+  TextOut(4, 10, 'cyan', 'Find it and bring it back, you little ' + insult + '"');
+  TextOut(3, 12, 'cyan', 'The door slams firmly closed behind you. Ignoring the sound of');
+  TextOut(3, 13, 'cyan', sounds + ' coming from the darkness, you step forward...');
 
   TextOut(ui.centreX('[SPACE] to continue'), 24, 'cyan', '[SPACE] to continue');
   (* Write those changes to the screen *)

@@ -7,7 +7,8 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player, player_inventory, player_stats, map, dlgInfo, scrIntro;
+  Keyboard, player, player_inventory, player_stats, map, dlgInfo,
+  scrIntro, scrCharSelect;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -15,6 +16,8 @@ procedure setupKeyboard;
 procedure shutdownKeyboard;
 (* Input in TITLE Menu state *)
 procedure titleInput(Keypress: TKeyEvent);
+(* Input in the CHARACTER SELECT state *)
+procedure charSelInput(Keypress: TKeyEvent);
 (* Input in the INTRO Menu state *)
 procedure introInput(Keypress: TKeyEvent);
 (* Input for QUIT Menu state *)
@@ -64,9 +67,9 @@ begin
       end
       else
       begin
-        (* Game state = Intro screen *)
-        gameState := stIntro;
-        scrIntro.displayIntroScreen;
+        (* Game state = Character Select screen *)
+        gameState := stCharSelect;
+        scrCharSelect.choose;
       end;
     end;
     'l': { Load previously saved game }
@@ -78,10 +81,33 @@ begin
   end;
 end;
 
+procedure charSelInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
+    'a', 'A': { Dwarf }
+    begin
+      scrCharSelect.displayDwarf;
+    end;
+    'b', 'B': { Elf }
+    begin
+      scrCharSelect.displayElf;
+    end;
+    'c', 'C': { Human }
+    begin
+      scrCharSelect.displayHuman;
+    end;
+    #32: { Space key - Confirm selection }
+    begin
+      gameState := stIntro;
+      scrIntro.displayIntroScreen; { Go to Intro screen }
+    end;
+  end;
+end;
+
 procedure introInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
-    #32: { Space key - Cancel }
+    #32: { Space key }
     begin
       main.newGame; { Start a new game }
     end;
@@ -414,8 +440,8 @@ begin
   case GetKeyEventChar(Keypress) of
     'y', 'Y': { Start new game }
     begin
-      gameState := stIntro;
-      scrIntro.displayIntroScreen;
+      gameState := stCharSelect;
+      scrCharSelect.choose;
     end;
     'n', 'N': { Return to title menu }
     begin

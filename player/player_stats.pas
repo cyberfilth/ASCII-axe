@@ -11,6 +11,8 @@ uses
 
 var
   playerLevel: smallint;
+  (* clanName is only used for Dwarven characters *)
+  playerRace, clanName: shortstring;
 
 (* Check if the player has levelled up *)
 procedure checkLevel;
