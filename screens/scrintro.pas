@@ -1,4 +1,4 @@
-(* Intro screen *)
+(* Introduction screen *)
 
 unit scrIntro;
 

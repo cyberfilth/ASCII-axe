@@ -111,7 +111,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="41">
+    <Units Count="42">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -285,6 +285,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="scrCharSelect"/>
       </Unit40>
+      <Unit41>
+        <Filename Value="screens\scrcharintro.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="scrCharIntro"/>
+      </Unit41>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

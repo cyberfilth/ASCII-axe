@@ -2,7 +2,7 @@
 
 unit plot_gen;
 
-{$mode fpc}{$H+}
+{$mode objfpc}{$H+}
 
 interface
 
@@ -216,6 +216,27 @@ var
     'Shield', 'Biter', 'Bane', 'Weaver', 'Mage', 'Spear', 'Seeker',
     'Sword', 'Crafter', 'Breaker', 'Born', 'Helm', 'Hold', 'Fist');
 
+  elvenHomea: array[0..13] of
+  string = ('the Vale of', 'the Whispering Forest of', 'the forest of',
+    'the white peaks of', 'the woods of', 'the Cinderlands of',
+    'the Frostspike of', 'the snow pass of', 'the green fortress of',
+    'the Waterways of', 'the sorrowful streams of', 'the Whispering Glade of',
+    'the Hidden Spires of', 'the Shimmering of');
+
+  elvenHomeb: array[0..42] of
+  string = ('Felamae', 'Lorrom', 'Anorel', 'Weneres', 'Rathel',
+    'Lasbreg-Dwyr', 'Renamar', 'Sarriel', 'Vius', 'Viusand', 'Ethgal',
+    'Renfin', 'Syldar', 'Thrantor', 'Paceledrel', 'Borntae', 'Mai-Ionla',
+    'Marrion', 'Thorndal', 'Ladkur', 'Imorvo', 'Rescir', 'Godan',
+    'Vadan', 'Daggil', 'Saner', 'Evnall', 'Lexa', 'Alta', 'Lorandwyr',
+    'Saand-Riel', 'Mardír', 'Dorril', 'Thallor', 'Wingdal', 'Duil',
+    'Glanduil', 'Iliphar', 'Ilrune', 'Saleh', 'Urijyre', 'Inamys', 'Caiwraek');
+
+  villageName: array[0..11] of
+  string = ('PigSpit', 'FootRot', 'MudLands', 'SquelchBottom',
+    'DungMould', 'Belchford', 'Goatstone', 'Kloggington', 'Ordure Field',
+    'Clagstone', 'Dogmire', 'Klart');
+
   aquilonianMaleFirst: array[0..187] of
   string = ('Abant', 'Abantiad', 'Ac', 'Acris', 'Act', 'Alc', 'Alcid',
     'Am', 'Andr', 'Andr', 'Arct', 'Arct', 'Arp', 'Asclep', 'Atab',
@@ -293,6 +314,10 @@ procedure generateElfName;
 procedure generateDwarfName;
 (* Generate Dwarven clan name *)
 procedure generateClanName;
+(* Generate name of an Elven home *)
+function elvenTown: string;
+(* Generate name of small village *)
+function smallVillage: string;
 (* Generate a title or honorfic for the player *)
 procedure generateTitle;
 (* Get the current date and display it in the in-game calendar *)
@@ -329,6 +354,23 @@ begin
   a := Random(17);
   b := Random(19);
   player_stats.clanName := clanFirst[a] + clanSecond[b];
+end;
+
+function elvenTown: string;
+var
+  a, b: byte;
+begin
+  a := Random(19);
+  b := Random(13);
+  Result := elvenHomea[a] + ' ' + elvenHomeb[b];
+end;
+
+function smallVillage: string;
+var
+  a: byte;
+begin
+  a := Random(11);
+  Result := villageName[a];
 end;
 
 procedure generateTitle;

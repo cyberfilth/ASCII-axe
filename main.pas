@@ -18,7 +18,7 @@ uses
 type
   gameStatus = (stTitle, stIntro, stGame, stInventory, stDropMenu, stQuaffMenu,
     stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim, stLoseSave,
-    stCharSelect);
+    stCharSelect, stCharIntro);
 
 var
   (* State machine for game menus / controls *)
@@ -301,10 +301,12 @@ begin
     case gameState of
       { ----------------------------------   Title menu }
       stTitle: titleInput(Keypress);
-      { ----------------------------------   Intro screen }
-      stIntro: introInput(Keypress);
       { ----------------------------------   Character select screen }
       stCharSelect: charSelInput(Keypress);
+      { ----------------------------------   Intro screen }
+      stIntro: introInput(Keypress);
+      { ----------------------------------   Character Intro screen }
+      stCharIntro: charIntroInput(Keypress);
       { -----------------------------------  Game Over screen }
       stGameOver: RIPInput(Keypress);
       { ----------------------------------   Prompt to quit game }

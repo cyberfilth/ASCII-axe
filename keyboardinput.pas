@@ -8,7 +8,7 @@ interface
 
 uses
   Keyboard, player, player_inventory, player_stats, map, dlgInfo,
-  scrIntro, scrCharSelect;
+  scrIntro, scrCharSelect, scrCharIntro;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -18,6 +18,8 @@ procedure shutdownKeyboard;
 procedure titleInput(Keypress: TKeyEvent);
 (* Input in the CHARACTER SELECT state *)
 procedure charSelInput(Keypress: TKeyEvent);
+(* Input in the CHARACTER INTRO Menu state *)
+procedure charIntroInput(Keypress: TKeyEvent);
 (* Input in the INTRO Menu state *)
 procedure introInput(Keypress: TKeyEvent);
 (* Input for QUIT Menu state *)
@@ -98,8 +100,23 @@ begin
     end;
     #32: { Space key - Confirm selection }
     begin
-      gameState := stIntro;
-      scrIntro.displayIntroScreen; { Go to Intro screen }
+      gameState := stCharIntro;
+      scrCharIntro.setTheScene; { Go to Character Intro screen }
+    end;
+  end;
+end;
+
+procedure charIntroInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
+    #32: { Space key }
+    begin
+      gameState := stIntro; { Continue }
+      scrIntro.displayIntroScreen;
+    end;
+    's', 'S': { Skip intro }
+    begin
+      main.newGame;
     end;
   end;
 end;
