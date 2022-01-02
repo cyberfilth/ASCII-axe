@@ -149,6 +149,14 @@ begin
   end;
   gameState := stTitle;
   ClearScreen;
+  (* Clear the message array *)
+  ui.messageArray[1]:=' ';
+  ui.messageArray[2]:=' ';
+  ui.messageArray[3]:=' ';
+  ui.messageArray[4]:=' ';
+  ui.messageArray[5]:=' ';
+  ui.messageArray[6]:=' ';
+  ui.messageArray[7]:=' ';
   (* prepare changes to the screen *)
   LockScreenUpdate;
   (* Check for previous save file *)

@@ -27,7 +27,7 @@ procedure saveGame;
 implementation
 
 uses
-  map;
+  map, main;
 
 procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
   dtype: dungeonTerrain);
@@ -440,7 +440,10 @@ begin
   (* Set the save game file name *)
   dfileName := (globalUtils.saveDirectory + PathDelim + globalutils.saveFile);
   if (FileExists(dfileName)) then
+  begin
     DeleteFile(dfileName);
+    main.saveExists := False;
+  end;
 end;
 
 procedure loadGame;

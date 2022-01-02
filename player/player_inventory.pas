@@ -7,7 +7,7 @@ unit player_inventory;
 interface
 
 uses
-  SysUtils, StrUtils, video, entities, items, item_lookup;
+  SysUtils, StrUtils, video, entities, items, item_lookup, player_stats;
 
 type
   (* Items in inventory *)
@@ -377,7 +377,9 @@ begin
   if (message = 'w') then
     TextOut(6, 20, 'cyan', 'You must first unequip the weapon you already hold')
   else if (message = 'a') then
-    TextOut(6, 20, 'cyan', 'You must first remove the armour you already wear');
+    TextOut(6, 20, 'cyan', 'You must first remove the armour you already wear')
+  else if (message = 'i') then
+    TextOut(6, 20, 'cyan', 'You are unable to use iron items');
   { Write those changes to the screen }
   UnlockScreenUpdate;
   { only redraws the parts that have been updated }
@@ -386,11 +388,12 @@ end;
 
 procedure wearWieldSelection(selection: smallint);
 var
-  { Flag to display message if armour or weapon is equipped }
+  { Flag to display message if unable to equip item }
   msg: char;
 begin
   (* Set default flag *)
   msg := 'n';
+
   (* Check that the slot is not empty *)
   if (inventory[selection].inInventory = True) then
   begin
@@ -399,8 +402,16 @@ begin
       (inventory[selection].itemType = itmArmour) then
     begin
 
-(* If the item is an unequipped weapon, and the player already has a weapon equipped
-         prompt the player to unequip their weapon first *)
+      (* Check if an elf is trying to use an iron item *)
+      if (inventory[selection].itemMaterial = matIron) and
+        (player_stats.playerRace = 'Elf') then
+      begin
+        wield('i');
+        exit;
+      end;
+
+    (* If the item is an unequipped weapon, and the player already has a weapon
+    equipped prompt the player to unequip their weapon first *)
       if (inventory[selection].equipped = False) and
         (inventory[selection].itemType = itmWeapon) and
         (entityList[0].weaponEquipped = True) then
