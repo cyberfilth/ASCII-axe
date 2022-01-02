@@ -360,8 +360,8 @@ function elvenTown: string;
 var
   a, b: byte;
 begin
-  a := Random(19);
-  b := Random(13);
+  a := Random(13);
+  b := Random(42);
   Result := elvenHomea[a] + ' ' + elvenHomeb[b];
 end;
 
