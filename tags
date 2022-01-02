@@ -19,6 +19,8 @@ bufferMessage	ui.pas	/^procedure bufferMessage(message: shortstring);$/;"	p
 canMove	map.pas	/^function canMove(checkX, checkY: smallint): boolean;$/;"	f
 canSee	map.pas	/^function canSee(checkX, checkY: smallint): boolean;$/;"	f
 centreX	ui.pas	/^function centreX(textstring: shortstring): byte;$/;"	f
+charIntroInput	keyboardinput.pas	/^procedure charIntroInput(Keypress: TKeyEvent);$/;"	p
+charSelInput	keyboardinput.pas	/^procedure charSelInput(Keypress: TKeyEvent);$/;"	p
 clearStatusBar	ui.pas	/^procedure clearStatusBar;$/;"	p
 containsItem	items.pas	/^function containsItem(x, y: smallint): boolean;$/;"	f
 continue	main.pas	/^procedure continue;$/;"	p
@@ -35,6 +37,7 @@ drawMap	camera.pas	/^procedure drawMap;$/;"	p
 drawPlayer	camera.pas	/^procedure drawPlayer;$/;"	p
 drawTile	map.pas	/^procedure drawTile(c, r: smallint; hiDef: byte);$/;"	p
 dropInput	keyboardinput.pas	/^procedure dropInput(Keypress: TKeyEvent);$/;"	p
+elvenTown	plot_gen.pas	/^function elvenTown: string;$/;"	f
 entityTakeTurn	entities.pas	/^    procedure entityTakeTurn(i: smallint);$/;"	p
 exitApplication	main.pas	/^procedure exitApplication;$/;"	p
 exitMessage	ui.pas	/^procedure exitMessage;$/;"	p
@@ -43,7 +46,10 @@ exitToTitleMenu	main.pas	/^procedure exitToTitleMenu;$/;"	p
 gameInput	keyboardinput.pas	/^procedure gameInput(Keypress: TKeyEvent);$/;"	p
 gameLoop	main.pas	/^procedure gameLoop;$/;"	p
 gameOver	main.pas	/^procedure gameOver;$/;"	p
-generateName	plot_gen.pas	/^procedure generateName;$/;"	p
+generateClanName	plot_gen.pas	/^procedure generateClanName;$/;"	p
+generateDwarfName	plot_gen.pas	/^procedure generateDwarfName;$/;"	p
+generateElfName	plot_gen.pas	/^procedure generateElfName;$/;"	p
+generateHumanName	plot_gen.pas	/^procedure generateHumanName;$/;"	p
 generateTitle	plot_gen.pas	/^procedure generateTitle;$/;"	p
 getCreatureHP	entities.pas	/^function getCreatureHP(x, y: smallint): smallint;$/;"	f
 getCreatureID	entities.pas	/^function getCreatureID(x, y: smallint): smallint;$/;"	f
@@ -57,6 +63,7 @@ getY	camera.pas	/^function getY(Ycoord: smallint): smallint;$/;"	f
 hasPlayer	map.pas	/^function hasPlayer(checkX, checkY: smallint): boolean;$/;"	f
 initialise	main.pas	/^procedure initialise;$/;"	p
 initialiseItems	items.pas	/^procedure initialiseItems;$/;"	p
+introInput	keyboardinput.pas	/^procedure introInput(Keypress: TKeyEvent);$/;"	p
 inventoryInput	keyboardinput.pas	/^procedure inventoryInput(Keypress: TKeyEvent);$/;"	p
 isCreatureVisible	entities.pas	/^function isCreatureVisible(x, y: smallint): boolean;$/;"	f
 isOccupied	map.pas	/^function isOccupied(checkX, checkY: smallint): boolean;$/;"	f
@@ -89,6 +96,7 @@ setupMap	map.pas	/^procedure setupMap;$/;"	p
 setupScreen	ui.pas	/^procedure setupScreen(yn: byte);$/;"	p
 shutdownKeyboard	keyboardinput.pas	/^procedure shutdownKeyboard;$/;"	p
 shutdownScreen	ui.pas	/^procedure shutdownScreen;$/;"	p
+smallVillage	plot_gen.pas	/^function smallVillage: string;$/;"	f
 spawnDenizens	universe.pas	/^procedure spawnDenizens;$/;"	p
 spawnPlayer	entities.pas	/^procedure spawnPlayer;$/;"	p
 throwRock	animation.pas	/^procedure throwRock(id: smallint; var flightPath: a);$/;"	p

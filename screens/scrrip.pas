@@ -7,7 +7,7 @@ unit scrRIP;
 interface
 
 uses
-  SysUtils, video, ui, globalUtils, entities, file_handling;
+  SysUtils, video, globalUtils, entities, file_handling;
 
 (* Show the game over screen screen *)
 procedure displayRIPscreen;
@@ -20,13 +20,20 @@ procedure drawGrave;
 
 implementation
 
+uses
+  ui, player_stats;
+
 procedure displayRIPscreen;
+
 var
-  epitaph, deathMessage: shortstring;
+  epitaph, deathMessage, raceLevel, exitMessage: shortstring;
   prefix, img: smallint;
 begin
   (* Create a farewell message *)
   epitaph := entityList[0].race + ' the ' + entityList[0].description;
+  raceLevel := 'Level ' + IntToStr(player_stats.playerLevel) + ' ' +
+    player_stats.playerRace;
+  exitMessage := 'q - Quit game   |    x - Exit to menu';
   prefix := randomRange(1, 3);
   if (prefix = 1) then
     epitaph := 'Fare thee well, ' + epitaph
@@ -39,7 +46,7 @@ begin
   deathMessage := 'Killed by a ' + globalUtils.killer + ', after ' +
     IntToStr(entityList[0].moveCount) + ' moves.';
 
-  { Closing screen update as in game loop }
+  { Closing screen update as it is currently in the main game loop }
   UnlockScreenUpdate;
   UpdateScreen(False);
 
@@ -47,8 +54,9 @@ begin
   LockScreenUpdate;
 
   ui.screenBlank;
-  TextOut(36, 3, 'cyan', 'You Died!');
-  TextOut(ui.centreX(epitaph), 4, 'cyan', epitaph);
+  TextOut(36, 2, 'cyan', 'You Died!');
+  TextOut(ui.centreX(epitaph), 3, 'cyan', epitaph);
+  TextOut(ui.centreX(raceLevel), 4, 'cyan', raceLevel);
 
   (* Write those changes to the screen *)
   UnlockScreenUpdate;
@@ -70,12 +78,13 @@ begin
     drawGrave;
 
   TextOut(centreX(deathMessage), 18, 'cyan', deathMessage);
-  TextOut(15, 24, 'cyan', 'x - Exit game');
+  TextOut(centreX(exitMessage), 24, 'cyan', exitMessage);
   UnlockScreenUpdate;
   UpdateScreen(False);
 end;
 
 procedure drawSkull;
+
 var
   col: shortstring;
   x: byte;
@@ -98,6 +107,7 @@ begin
 end;
 
 procedure drawBat;
+
 var
   col: shortstring;
   x: byte;
@@ -111,6 +121,7 @@ begin
 end;
 
 procedure drawGrave;
+
 var
   col: shortstring;
   x: byte;

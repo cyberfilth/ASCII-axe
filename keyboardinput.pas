@@ -301,7 +301,11 @@ end;
 procedure RIPInput(Keypress: TKeyEvent);
 begin
   case GetKeyEventChar(Keypress) of
-    'x', 'X': { Exit menu }
+    'x', 'X': { Exit to menu }
+    begin
+      main.exitToTitleMenu;
+    end;
+    'q', 'Q': { Quit game }
     begin
       main.exitApplication;
     end;

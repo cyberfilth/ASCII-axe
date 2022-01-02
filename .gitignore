@@ -25,6 +25,10 @@ fp.cfg
 fp.dsk
 fp.ini
 
+# Free Pascal IDE error logs
+*.err
+*.out
+
 # Lazarus backups and unit output folders.
 # These can be changed by user in Lazarus/project options.
 backup/
@@ -55,6 +59,3 @@ axesData/
 
 # Notes and logs
 *.txt
-
-# Commandline tools
-!tidyUp.sh
