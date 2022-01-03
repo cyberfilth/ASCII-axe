@@ -9,7 +9,7 @@ interface
 uses
   universe, globalUtils,
   { List of drinks }
-  ale_tankard,
+  ale_tankard, potion_curePoison,
   { List of weapons }
   crude_dagger, basic_club,
   { List of armour }
@@ -18,7 +18,7 @@ uses
 const
   (* Array of items found in a cave, ordered by cave level *)
   caveItems1: array[1..4] of string =
-    ('aleTankard', 'clothArmour1', 'aleTankard', 'basicClub');
+    ('aleTankard', 'clothArmour1', 'curePotion', 'basicClub');
   caveItems2: array[1..4] of string =
     ('aleTankard', 'aleTankard', 'crudeDagger', 'leatherArmour1');
   caveItems3: array[1..4] of string =
@@ -80,6 +80,7 @@ begin
   (* Create Item *)
   case thing of
     'aleTankard': ale_tankard.createAleTankard(i, c, r);
+    'curePotion': potion_curePoison.createCurePotion(i, c, r);
     'crudeDagger': crude_dagger.createDagger(i, c, r);
     'leatherArmour1': leather_armour1.createLeatherArmour(i, c, r);
     'basicClub': basic_club.createClub(i, c, r);
@@ -95,6 +96,7 @@ begin
     3: leather_armour1.useItem(equipped);
     4: basic_club.useItem(equipped);
     5: cloth_armour1.useItem(equipped);
+    6: potion_curePoison.useItem;
   end;
 end;
 

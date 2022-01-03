@@ -42,7 +42,7 @@ begin
   player.increaseHealth(5);
   entities.entityList[0].stsDrunk := True;
   Inc(entities.entityList[0].tmrDrunk, 5);
-  ui.displayMessage('You quaff the ale. The alcohol slows your reactions');
+  ui.displayMessage('You quaff the ale. The alcohol slows your reactions.');
 end;
 
 end.

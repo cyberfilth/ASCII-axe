@@ -111,7 +111,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="42">
+    <Units Count="43">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -290,6 +290,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="scrCharIntro"/>
       </Unit41>
+      <Unit42>
+        <Filename Value="items\potion_curepoison.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="potion_curePoison"/>
+      </Unit42>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
