@@ -24,7 +24,6 @@ procedure NPCpicker(i: byte; dungeon: dungeonTerrain);
 implementation
 
 procedure NPCpicker(i: byte; dungeon: dungeonTerrain);
-
 var
   r, c: smallint;
   randSelect: byte;
