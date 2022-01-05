@@ -71,6 +71,8 @@ begin
       visionRange := 4
     else
       visionRange := 5;
+    (* Set max vision range *)
+    player_stats.maxVisionRange := visionRange;
     moveCount := 0;
     targetX := 0;
     targetY := 0;

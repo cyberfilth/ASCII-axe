@@ -10,8 +10,9 @@ uses
   SysUtils, video;
 
 var
-  playerLevel: smallint;
-  (* clanName is only used for Dwarven characters *)
+  (* Player level and the maximum vision range (before the light fails and range decreases) *)
+  playerLevel, maxVisionRange: smallint;
+  (* Is the player Elf, Dwarf or Human. clanName is only used for Dwarven characters *)
   playerRace, clanName: shortstring;
 
 (* Check if the player has levelled up *)
@@ -63,6 +64,8 @@ begin
   LockScreenUpdate;
   ui.displayDialog('level', IntToStr(playerLevel + 1));
   Inc(playerLevel);
+  Inc(entityList[0].visionRange);
+  Inc(maxVisionRange);
   ui.updateLevel;
   { Write those changes to the screen }
   UnlockScreenUpdate;
@@ -80,7 +83,6 @@ begin
   Inc(entityList[0].maxHP, NewMaxHP);
   player.levelupHealth(player_stats.playerLevel);
   ui.updateHealth;
-  Inc(entityList[0].visionRange);
 end;
 
 procedure increaseAttack;
@@ -89,7 +91,6 @@ begin
   player.levelupHealth(player_stats.playerLevel);
   ui.updateAttack;
   ui.updateHealth;
-  Inc(entityList[0].visionRange);
 end;
 
 procedure increaseDefence;
@@ -98,7 +99,6 @@ begin
   player.levelupHealth(player_stats.playerLevel);
   ui.updateDefence;
   ui.updateHealth;
-  Inc(entityList[0].visionRange);
 end;
 
 procedure increaseAttackDefence;
@@ -109,8 +109,6 @@ begin
   ui.updateAttack;
   ui.updateDefence;
   ui.updateHealth;
-  Inc(entityList[0].visionRange);
 end;
 
 end.
-
