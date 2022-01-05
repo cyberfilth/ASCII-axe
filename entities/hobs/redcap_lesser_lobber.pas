@@ -7,7 +7,7 @@ unit redcap_lesser_lobber;
 interface
 
 uses
-  SysUtils, Math, smell, globalUtils, universe;
+  SysUtils, Math, smell, globalUtils, universe, combat_resolver;
 
 (* Create a Redcap Hob *)
 procedure createRedcap(uniqueid, npcx, npcy: smallint);
@@ -344,7 +344,10 @@ begin
     end;
   end
   else
-    ui.displayMessage('The hob misses');
+  begin
+    ui.displayMessage('The hob screams curses');
+    combat_resolver.spiteDMG(id);
+  end;
 end;
 
 procedure followScent(id: smallint);
@@ -367,8 +370,9 @@ begin
     'e':
     begin
       if (map.canMove((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) and (map.isOccupied(
-        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX + 1),
+        entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
     end;
@@ -384,8 +388,9 @@ begin
     'w':
     begin
       if (map.canMove((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) and (map.isOccupied(
-        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and
+        (map.isOccupied((entities.entityList[id].posX - 1),
+        entities.entityList[id].posY) = False)) then
 
 
         entities.moveNPC(id, (entities.entityList[id].posX - 1),

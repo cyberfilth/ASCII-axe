@@ -7,7 +7,7 @@ unit blood_bat;
 interface
 
 uses
-  SysUtils, Math;
+  SysUtils, Math, combat_resolver;
 
 (* Create a blood bat *)
 procedure createBloodBat(uniqueid, npcx, npcy: smallint);
@@ -62,7 +62,7 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
-    faction:=animalFaction;
+    faction := animalFaction;
     if (mood = 1) then
       state := stateHostile
     else
@@ -299,7 +299,10 @@ begin
     end;
   end
   else
-    ui.displayMessage('The bat attacks but misses');
+  begin
+    ui.displayMessage('The bat strikes but misses');
+    combat_resolver.spiteDMG(id);
+  end;
 end;
 
 end.

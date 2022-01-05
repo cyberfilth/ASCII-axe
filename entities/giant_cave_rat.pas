@@ -7,7 +7,7 @@ unit giant_cave_rat;
 interface
 
 uses
-  SysUtils, Math;
+  SysUtils, Math, combat_resolver;
 
 (* Create a cave rat *)
 procedure createGiantCaveRat(uniqueid, npcx, npcy: smallint);
@@ -64,7 +64,7 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
-    faction:=animalFaction;
+    faction := animalFaction;
     if (mood = 1) then
       state := stateNeutral
     else
@@ -321,7 +321,10 @@ begin
     end;
   end
   else
+  begin
     ui.displayMessage('The giant rat misses');
+    combat_resolver.spiteDMG(id);
+  end;
 end;
 
 end.

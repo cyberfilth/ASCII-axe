@@ -7,7 +7,7 @@ unit redcap_lesser;
 interface
 
 uses
-  SysUtils, Math, smell, universe;
+  SysUtils, Math, smell, universe, combat_resolver;
 
 (* Create a Redcap Hob *)
 procedure createRedcap(uniqueid, npcx, npcy: smallint);
@@ -334,7 +334,10 @@ begin
     end;
   end
   else
-    ui.displayMessage('The hob misses');
+  begin
+    ui.displayMessage('The hob attacks wildly but misses');
+    combat_resolver.spiteDMG(id);
+  end;
 end;
 
 procedure followScent(id: smallint);

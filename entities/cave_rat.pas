@@ -7,7 +7,7 @@ unit cave_rat;
 interface
 
 uses
-  SysUtils, Math;
+  SysUtils, Math, combat_resolver;
 
 (* Create a cave rat *)
 procedure createCaveRat(uniqueid, npcx, npcy: smallint);
@@ -120,8 +120,7 @@ begin
 
   { If NPC can see the player }
   else if (los.inView(entityList[id].posX, entityList[id].posY,
-    entityList[0].posX, entityList[0].posY, entityList[id].visionRange) =
-    True) then
+    entityList[0].posX, entityList[0].posY, entityList[id].visionRange) = True) then
   begin
     { If next to the player }
     if (isNextToPlayer(entityList[id].posX, entityList[id].posY) = True) then
@@ -227,8 +226,7 @@ begin
     (* Else if tile does not contain player, check for another entity *)
     else if (map.isOccupied(newX, newY) = True) then
     begin
-      ui.bufferMessage('The cave rat bumps into ' +
-        getCreatureName(newX, newY));
+      ui.bufferMessage('The cave rat bumps into ' + getCreatureName(newX, newY));
       entities.moveNPC(id, spx, spy);
     end
     (* if map is unoccupied, move to that tile *)
@@ -325,7 +323,10 @@ begin
     end;
   end
   else
+  begin
     ui.displayMessage('The cave rat attacks but misses');
+    combat_resolver.spiteDMG(id);
+  end;
 end;
 
 end.
