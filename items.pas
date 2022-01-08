@@ -10,10 +10,10 @@ uses
   ui;
 
 type
-  tItem = (itmDrink, itmWeapon, itmArmour, itmEmptySlot);
+  tItem = (itmDrink, itmWeapon, itmArmour, itmQuest, itmEmptySlot);
 
 type
-  tMaterial = (matSteel, matIron, matWood, matLeather, matWool, matEmpty);
+  tMaterial = (matSteel, matIron, matWood, matLeather, matWool, matPaper, matEmpty);
 
 (* Store information about items *)
 type

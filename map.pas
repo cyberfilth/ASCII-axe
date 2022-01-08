@@ -138,7 +138,9 @@ begin
   begin
     (* Check the exit is blocked *)
     if (universe.currentDepth = 1) and (universe.canExitDungeon = False) then
-      ui.displayMessage('The stairs appear to be blocked')
+      ui.displayMessage('The exit is locked...')
+    else if (universe.currentDepth = 1) and (universe.canExitDungeon = True) then
+      ui.displayMessage('You leave the smugglers cave!')
     else
     begin
       (* Ascend the stairs *)

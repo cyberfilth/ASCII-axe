@@ -13,7 +13,9 @@ uses
   { List of weapons }
   crude_dagger, basic_club,
   { List of armour }
-  leather_armour1, cloth_armour1;
+  leather_armour1, cloth_armour1,
+  { Quest items }
+  smugglersMap;
 
 const
   (* Array of items found in a cave, ordered by cave level *)
@@ -76,7 +78,6 @@ begin
     end;
   end;
 
-
   (* Create Item *)
   case thing of
     'aleTankard': ale_tankard.createAleTankard(i, c, r);
@@ -97,6 +98,7 @@ begin
     4: basic_club.useItem(equipped);
     5: cloth_armour1.useItem(equipped);
     6: potion_curePoison.useItem;
+    7: smugglersMap.obtainMap;
   end;
 end;
 
@@ -110,10 +112,13 @@ begin
     c := globalutils.randomRange(3, (MAXCOLUMNS - 3));
     (* choose a location that is not a wall or occupied *)
   until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False);
-
   items.listLength := Length(items.itemList);
   SetLength(items.itemList, items.itemAmount + 1);
-  ale_tankard.createAleTankard(itemAmount, c, r);
+  (* Drop the quest object *)
+  if (universe.currentDepth = 3) then
+    smugglersMap.createSmugglersMap(itemAmount, c, r)
+  else
+    ale_tankard.createAleTankard(itemAmount, c, r);
 end;
 
 end.

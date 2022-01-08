@@ -107,53 +107,81 @@ function addToInventory(itemNumber: smallint): boolean;
 var
   i: smallint;
 begin
-  Result := False;
-  for i := 0 to 9 do
+  (* If this is not a quest item *)
+  if (itemList[itemNumber].itemType <> itmQuest) then
   begin
-    if (inventory[i].Name = 'Empty') then
+    Result := False;
+    for i := 0 to 9 do
     begin
-      itemList[itemNumber].onMap := False;
-      (* Populate inventory with item description *)
-      inventory[i].id := i;
-      (* Set sortIndex for sorting inventory *)
-      if (itemList[itemNumber].itemType = itmWeapon) then
-        inventory[i].sortIndex := 1
-      else if (itemList[itemNumber].itemType = itmArmour) then
-        inventory[i].sortIndex := 2
-      else if (itemList[itemNumber].itemType = itmDrink) then
-        inventory[i].sortIndex := 3;
-      inventory[i].Name := itemList[itemNumber].itemname;
-      inventory[i].description := itemList[itemNumber].itemDescription;
-      inventory[i].itemType := itemList[itemNumber].itemType;
-      inventory[i].itemMaterial := itemList[itemNumber].itemMaterial;
-      inventory[i].useID := itemList[itemNumber].useID;
-      inventory[i].glyph := itemList[itemNumber].glyph;
-      inventory[i].glyphColour := itemList[itemNumber].glyphColour;
-      inventory[i].inInventory := True;
-      ui.displayMessage('You pick up the ' + inventory[i].Name);
+      if (inventory[i].Name = 'Empty') then
+      begin
+        itemList[itemNumber].onMap := False;
+        (* Populate inventory with item description *)
+        inventory[i].id := i;
+        (* Set sortIndex for sorting inventory *)
+        if (itemList[itemNumber].itemType = itmWeapon) then
+          inventory[i].sortIndex := 1
+        else if (itemList[itemNumber].itemType = itmArmour) then
+          inventory[i].sortIndex := 2
+        else if (itemList[itemNumber].itemType = itmDrink) then
+          inventory[i].sortIndex := 3;
+        inventory[i].Name := itemList[itemNumber].itemname;
+        inventory[i].description := itemList[itemNumber].itemDescription;
+        inventory[i].itemType := itemList[itemNumber].itemType;
+        inventory[i].itemMaterial := itemList[itemNumber].itemMaterial;
+        inventory[i].useID := itemList[itemNumber].useID;
+        inventory[i].glyph := itemList[itemNumber].glyph;
+        inventory[i].glyphColour := itemList[itemNumber].glyphColour;
+        inventory[i].inInventory := True;
+        ui.displayMessage('You pick up the ' + inventory[i].Name);
       (* Set an empty flag for the item on the map, this
          gets deleted when saving the map *)
-      with itemList[itemNumber] do
-      begin
-        itemID := itemNumber;
-        itemName := 'empty';
-        itemDescription := '';
-        itemType := itmEmptySlot;
-        itemMaterial := matEmpty;
-        useID := 1;
-        glyph := 'x';
-        glyphColour := 'lightCyan';
-        inView := False;
-        posX := 1;
-        posY := 1;
-        onMap := False;
-        discovered := False;
+        with itemList[itemNumber] do
+        begin
+          itemID := itemNumber;
+          itemName := 'empty';
+          itemDescription := '';
+          itemType := itmEmptySlot;
+          itemMaterial := matEmpty;
+          useID := 1;
+          glyph := 'x';
+          glyphColour := 'lightCyan';
+          inView := False;
+          posX := 1;
+          posY := 1;
+          onMap := False;
+          discovered := False;
+        end;
+        (* Sort items in inventory *)
+        sortInventory(0, high(inventory));
+        Result := True;
+        exit;
       end;
-      (* Sort items in inventory *)
-      sortInventory(0, high(inventory));
-      Result := True;
-      exit;
     end;
+  end
+  else
+  begin
+    item_lookup.lookupUse(itemList[itemNumber].useID, False);
+       (* Set an empty flag for the item on the map, this
+         gets deleted when saving the map *)
+    with itemList[itemNumber] do
+    begin
+      itemID := itemNumber;
+      itemName := 'empty';
+      itemDescription := '';
+      itemType := itmEmptySlot;
+      itemMaterial := matEmpty;
+      useID := 1;
+      glyph := 'x';
+      glyphColour := 'lightCyan';
+      inView := False;
+      posX := 1;
+      posY := 1;
+      onMap := False;
+      discovered := False;
+    end;
+    Result := True;
+    exit;
   end;
 end;
 

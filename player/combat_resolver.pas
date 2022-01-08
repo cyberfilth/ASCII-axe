@@ -5,8 +5,11 @@
   Then modifiers are added, for example, a 1D6+4 axe will roll a 6 sided die and
   add the result plus 4 to the total damage amount. This is then removed from the
   opponents defence rating. If the opponents defence doesn't soak up the whole damage
-  amount, the remainder is taken from their Health. This is partly inspired by the
-  Tunnels & Trolls rules, my favourite tabletop RPG.
+  amount, the remainder is taken from their Health.
+  Spite damage is when an entity loses a combat round and the player can roll a 6,
+  dealing damage 'in spite' of losing the round.
+
+  This is partly inspired by the Tunnels & Trolls rules, my favourite tabletop RPG.
 *)
 
 unit combat_resolver;
