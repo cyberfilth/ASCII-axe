@@ -11,7 +11,7 @@ Alpha version, most features aren't implemented yet and what there is may change
  - Small, self-contained binary with no external dependencies.
  - Can be run without needing to be installed
 
-There is a more mature graphical version at [Axes GUI](https://github.com/cyberfilth/Axes-Armour-Ale).
+The latest release can be downloaded from [Releases page] (https://github.com/cyberfilth/ASCII-axe/releases/tag/Alpha40)
 
 ![Ubuntu screenshot](GITscreenshots/LinuxAAA.gif)
 
