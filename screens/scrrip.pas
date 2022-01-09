@@ -9,7 +9,7 @@ interface
 uses
   SysUtils, video, globalUtils, entities, file_handling;
 
-(* Show the game over screen screen *)
+(* Show the game over screen *)
 procedure displayRIPscreen;
 (* Draw a skull on screen *)
 procedure drawSkull;

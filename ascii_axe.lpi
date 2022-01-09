@@ -90,7 +90,7 @@
           <CodeGeneration>
             <SmartLinkUnit Value="True"/>
             <Optimizations>
-              <OptimizationLevel Value="4"/>
+              <OptimizationLevel Value="3"/>
             </Optimizations>
             <SmallerCode Value="True"/>
           </CodeGeneration>
@@ -115,7 +115,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="44">
+    <Units Count="45">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -304,6 +304,11 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="smugglersMap"/>
       </Unit43>
+      <Unit44>
+        <Filename Value="screens\scrwinalpha.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="scrWinAlpha"/>
+      </Unit44>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

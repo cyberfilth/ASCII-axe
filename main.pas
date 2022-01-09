@@ -12,13 +12,13 @@ interface
 uses
   SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
   universe, fov, player, player_inventory, player_stats, scrRIP, plot_gen,
-  file_handling, smell, scrTitle
+  file_handling, smell, scrTitle, scrWinAlpha
   {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
   gameStatus = (stTitle, stIntro, stGame, stInventory, stDropMenu, stQuaffMenu,
     stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim, stLoseSave,
-    stCharSelect, stCharIntro);
+    stCharSelect, stCharIntro, stWinAlpha);
 
 var
   (* State machine for game menus / controls *)
@@ -36,6 +36,7 @@ procedure loop;
 procedure gameLoop;
 procedure returnToGameScreen;
 procedure gameOver;
+procedure WinningScreen;
 
 implementation
 
@@ -150,13 +151,13 @@ begin
   gameState := stTitle;
   ClearScreen;
   (* Clear the message array *)
-  ui.messageArray[1]:=' ';
-  ui.messageArray[2]:=' ';
-  ui.messageArray[3]:=' ';
-  ui.messageArray[4]:=' ';
-  ui.messageArray[5]:=' ';
-  ui.messageArray[6]:=' ';
-  ui.messageArray[7]:=' ';
+  ui.messageArray[1] := ' ';
+  ui.messageArray[2] := ' ';
+  ui.messageArray[3] := ' ';
+  ui.messageArray[4] := ' ';
+  ui.messageArray[5] := ' ';
+  ui.messageArray[6] := ' ';
+  ui.messageArray[7] := ' ';
   (* prepare changes to the screen *)
   LockScreenUpdate;
   (* Check for previous save file *)
@@ -333,6 +334,8 @@ begin
       stGame: gameInput(Keypress);
       { ---------------------------------    Confirm overwrite game }
       stLoseSave: LoseSaveInput(Keypress);
+      { ---------------------------------    Winning Alpha version of game }
+      stWinAlpha: WinAlphaInput(Keypress);
     end;
   end;
 end;
@@ -347,6 +350,10 @@ begin
     gameState := stGameOver;
     gameOver;
   end;
+
+  (* ALPHA VERSION ONLY - Check if player has won *)
+  if (gameState = stWinAlpha) then
+    Exit;
 
   (* move NPC's *)
   entities.NPCgameLoop;
@@ -446,6 +453,12 @@ end;
 procedure gameOver;
 begin
   scrRIP.displayRIPscreen;
+end;
+
+procedure WinningScreen;
+begin
+  gameState := stWinAlpha;
+  scrWinAlpha.displayWinscreen;
 end;
 
 end.

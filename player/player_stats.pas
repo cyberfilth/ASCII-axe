@@ -14,6 +14,8 @@ var
   playerLevel, maxVisionRange: smallint;
   (* Is the player Elf, Dwarf or Human. clanName is only used for Dwarven characters *)
   playerRace, clanName: shortstring;
+  (* Is it possible to leave the current dungeon *)
+  canExitDungeon: boolean;
 
 (* Check if the player has levelled up *)
 procedure checkLevel;

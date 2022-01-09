@@ -9,7 +9,7 @@ unit universe;
 interface
 
 uses
-  SysUtils, globalUtils, cave, smell
+  SysUtils, globalUtils, cave, smell, player_stats
   {$IFDEF DEBUG}, logging{$ENDIF};
 
 type
@@ -23,8 +23,6 @@ var
   dungeonType: dungeonTerrain;
   (* Name of the current dungeon *)
   title: string;
-  (* Is it possible to leave the current dungeon *)
-  canExitDungeon: boolean;
   (* Used when a dungeon is first generated *)
   currentDungeon: array[1..MAXROWS, 1..MAXCOLUMNS] of shortstring;
   (* Flag to show if this level has been visited before *)
@@ -51,7 +49,9 @@ begin
   Inc(dlistLength);
   (* First dungeon is locked when you enter *)
   if (dlistLength = 1) then
-    canExitDungeon := False;
+    player_stats.canExitDungeon := False
+  else
+    player_stats.canExitDungeon := True;
   (* Dungeons unique ID number becomes the highest dungeon amount number *)
   uniqueID := dlistLength;
   // hardcoded values for testing
@@ -61,7 +61,7 @@ begin
   currentDepth := 1;
 
   {$IFDEF DEBUG}
-    logging.logAction('About to generate cave');
+  logging.logAction('About to generate cave');
   {$ENDIF}
 
   (* generate the dungeon *)

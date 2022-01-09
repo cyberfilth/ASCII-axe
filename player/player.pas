@@ -53,7 +53,7 @@ begin
     begin
       maxHP := 25;
       attack := 5;
-      defence := 4;
+      defence := 3;
     end
     else
       (* Human stats *)

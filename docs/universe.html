@@ -16,7 +16,7 @@
 <p>
 Generate each dungeon, its levels and related info</p>
 <span id="PasDoc-Uses"></span><h2 class="uses">Uses</h2>
-<ul class="useslist"><li>SysUtils</li><li><a  href="globalUtils.html">globalUtils</a></li><li>cave</li><li><a  href="smell.html">smell</a></li><li><a  href="logging.html">logging</a></li></ul><h2 class="overview">Overview</h2>
+<ul class="useslist"><li>SysUtils</li><li><a  href="globalUtils.html">globalUtils</a></li><li>cave</li><li><a  href="smell.html">smell</a></li><li><a  href="player_stats.html">player_stats</a></li><li><a  href="logging.html">logging</a></li></ul><h2 class="overview">Overview</h2>
 <span id="PasDoc-FuncsProcs"></span><h3 class="summary">Functions and Procedures</h3>
 <table class="summary wide_list">
 <tr class="list">
@@ -59,12 +59,9 @@ Generate each dungeon, its levels and related info</p>
 <td class="itemcode"><code><b><a  href="universe.html#title">title</a></b>: string;</code></td>
 </tr>
 <tr class="list2">
-<td class="itemcode"><code><b><a  href="universe.html#canExitDungeon">canExitDungeon</a></b>: boolean;</code></td>
-</tr>
-<tr class="list">
 <td class="itemcode"><code><b><a  href="universe.html#currentDungeon">currentDungeon</a></b>: array[1..<a  href="globalUtils.html#MAXROWS">MAXROWS</a>, 1..<a  href="globalUtils.html#MAXCOLUMNS">MAXCOLUMNS</a>] of shortstring;</code></td>
 </tr>
-<tr class="list2">
+<tr class="list">
 <td class="itemcode"><code><b><a  href="universe.html#levelVisited">levelVisited</a></b>: boolean;</code></td>
 </tr>
 </table>
@@ -172,15 +169,6 @@ Info about current dungeon</p>
 <tr><td colspan="1">
 <p>
 Name of the current dungeon</p>
-</td></tr>
-</table>
-<table class="detail wide_list">
-<tr class="list">
-<td class="itemcode"><span id="canExitDungeon"></span><code><b>canExitDungeon</b>: boolean;</code></td>
-</tr>
-<tr><td colspan="1">
-<p>
-Is it possible to leave the current dungeon</p>
 </td></tr>
 </table>
 <table class="detail wide_list">

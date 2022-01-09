@@ -13,6 +13,8 @@ LoseSaveInput	keyboardinput.pas	/^procedure LoseSaveInput(Keypress: TKeyEvent);$
 NPCgameLoop	entities.pas	/^procedure NPCgameLoop;$/;"	p
 RIPInput	keyboardinput.pas	/^procedure RIPInput(Keypress: TKeyEvent);$/;"	p
 TextOut	ui.pas	/^procedure TextOut(X, Y: word; textcol: shortstring; const S: string);$/;"	p
+WinAlphaInput	keyboardinput.pas	/^procedure WinAlphaInput(Keypress: TKeyEvent);$/;"	p
+WinningScreen	main.pas	/^procedure WinningScreen;$/;"	p
 ascendStairs	map.pas	/^procedure ascendStairs;$/;"	p
 beginLogging	logging.pas	/^procedure beginLogging;$/;"	p
 bufferMessage	ui.pas	/^procedure bufferMessage(message: shortstring);$/;"	p

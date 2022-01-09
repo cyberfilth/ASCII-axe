@@ -6,7 +6,7 @@ unit smugglersMap;
 
 interface
 
-uses sysutils, logging;
+uses sysutils, player_stats;
 
 (* Create the map *)
 procedure createSmugglersMap(uniqueid, itmx, itmy: smallint);
@@ -16,7 +16,7 @@ procedure obtainMap;
 implementation
 
 uses
-  items, ui, universe;
+  items, ui;
 
 procedure createSmugglersMap(uniqueid, itmx, itmy: smallint);
 begin
@@ -44,10 +44,7 @@ procedure obtainMap;
 begin
   ui.displayMessage('now you can leave the cave');
   ui.displayMessage('You have found the map');
-  logAction(BoolToStr(universe.canExitDungeon));
-  logAction('Setting canExitDungeon := True');
-  universe.canExitDungeon := True;
-  logAction(BoolToStr(universe.canExitDungeon));
+  player_stats.canExitDungeon := True;
 end;
 
 end.

@@ -8,7 +8,7 @@ unit map;
 interface
 
 uses
-  SysUtils, globalUtils, universe, ui, file_handling;
+  SysUtils, globalUtils, universe, ui, file_handling, player_stats;
 
 type
   (* Tiles that make up the game world *)
@@ -75,7 +75,7 @@ procedure setupMap;
 implementation
 
 uses
-  entities, items, fov;
+  entities, items, fov, main;
 
 procedure occupy(x, y: smallint);
 begin
@@ -136,12 +136,18 @@ begin
   if (maparea[entities.entityList[0].posY][entities.entityList[0].posX].Glyph =
     '<') then
   begin
-    (* Check the exit is blocked *)
-    if (universe.currentDepth = 1) and (universe.canExitDungeon = False) then
-      ui.displayMessage('The exit is locked...')
-    else if (universe.currentDepth = 1) and (universe.canExitDungeon = True) then
-      ui.displayMessage('You leave the smugglers cave!')
-    else
+    (* Check the player can leave the dungeon *)
+    if (universe.currentDepth = 1) then
+    begin
+      if (player_stats.canExitDungeon = True) then
+      begin
+        ui.displayMessage('You leave the smugglers cave!');
+        main.WinningScreen;
+      end
+      else if (player_stats.canExitDungeon = False) then
+        ui.displayMessage('The exit is locked...');
+    end
+    else  (* If not the first floor *)
     begin
       (* Ascend the stairs *)
       { Write current level to disk }

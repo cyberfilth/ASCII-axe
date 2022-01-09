@@ -169,7 +169,6 @@ begin
     (* Level data *)
     DataNode := AddChild(RootNode, 'levelData');
     AddElement(datanode, 'dungeonID', IntToStr(uniqueID));
-    AddElement(datanode, 'canExitDungeon', UTF8Encode(BoolToStr(canExitDungeon)));
     AddElement(datanode, 'title', UTF8Encode(universe.title));
     AddElement(datanode, 'floor', IntToStr(currentDepth));
     AddElement(datanode, 'levelVisited', BoolToStr(True));
@@ -298,8 +297,6 @@ begin
     ReadXMLFile(Doc, dfileName);
     (* Retrieve the nodes *)
     RootNode := Doc.DocumentElement.FindNode('levelData');
-    (* Can the player exit the dungeon *)
-    canExitDungeon := StrToBool(UTF8Encode(RootNode.FindNode('canExitDungeon').TextContent));;
     (* Name of dungeon *)
     title := RootNode.FindNode('title').TextContent;
     (* Has this level been explored already *)
@@ -468,6 +465,8 @@ begin
     universe.uniqueID := StrToInt(UTF8Encode(RootNode.FindNode('dungeonID').TextContent));
     (* Current depth *)
     universe.currentDepth := StrToInt(UTF8Encode(RootNode.FindNode('currentDepth').TextContent));
+    (* Can the player exit the dungeon *)
+    player_stats.canExitDungeon := StrToBool(UTF8Encode(RootNode.FindNode('canExitDungeon').TextContent));
 
     (* Player data *)
     SetLength(entities.entityList, 0);
@@ -593,6 +592,7 @@ begin
     AddElement(datanode, 'levelVisited', BoolToStr(True));
     AddElement(datanode, 'itemsOnThisFloor', IntToStr(items.itemAmount));
     AddElement(datanode, 'totalDepth', IntToStr(totalDepth));
+    AddElement(datanode, 'canExitDungeon', UTF8Encode(BoolToStr(player_stats.canExitDungeon)));
     WriteStr(Value, dungeonType);
     AddElement(datanode, 'mapType', Value);
     AddElement(datanode, 'npcAmount', IntToStr(entities.npcAmount));

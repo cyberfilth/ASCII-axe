@@ -40,6 +40,8 @@ procedure LevelUpInput(Keypress: TKeyEvent);
 procedure gameInput(Keypress: TKeyEvent);
 (* Input in LOSE SAVE state *)
 procedure LoseSaveInput(Keypress: TKeyEvent);
+(* Input in WIN ALPHA state *)
+procedure WinAlphaInput(Keypress: TKeyEvent);
 
 implementation
 
@@ -468,6 +470,16 @@ begin
     begin
       gameState := stTitle;
       main.exitToTitleMenu;
+    end;
+  end;
+end;
+
+procedure WinAlphaInput(Keypress: TKeyEvent);
+begin
+    case GetKeyEventChar(Keypress) of
+    'q', 'Q': { Quit the game }
+    begin
+      main.exitApplication;
     end;
   end;
 end;
