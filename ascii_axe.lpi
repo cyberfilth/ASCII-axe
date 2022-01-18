@@ -19,7 +19,7 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MinorVersionNr Value="35"/>
+      <MinorVersionNr Value="40"/>
       <Language Value="0809"/>
       <Attributes pvaPreRelease="True"/>
       <StringTable FileDescription="Classic roguelike game"/>
@@ -115,7 +115,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="45">
+    <Units Count="46">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -309,6 +309,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="scrWinAlpha"/>
       </Unit44>
+      <Unit45>
+        <Filename Value="entities\small_green_fungus.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit45>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

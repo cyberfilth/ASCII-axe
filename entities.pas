@@ -11,7 +11,8 @@ interface
 uses
   SysUtils, globalUtils,
   { List of creatures }
-  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_lobber;
+  cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_lobber,
+  small_green_fungus;
 
 type { NPC attitudes }
   Tattitudes = (stateNeutral, stateHostile, stateEscape);
@@ -143,7 +144,7 @@ begin
               (withinBounds(c, r) = True) then
             begin
               Inc(npcAmount);
-              green_fungus.createGreenFungus(npcAmount, c, r);
+              small_green_fungus.createSmallGreenFungus(npcAmount, c, r);
             end;
           end;
           ui.writeBufferedMessages;
@@ -151,7 +152,7 @@ begin
         end;
         Inc(fungusSpawnAttempts);
       end;
-    end; // does this need to be moved to before the Inc()...
+    end;
   { End of Green Fungus death }
 end;
 
@@ -220,7 +221,7 @@ var
   i: smallint;
 begin
   Result := 0;
-  // initialise variable
+  { initialise variable }
   for i := 0 to npcAmount do
   begin
     if (entityList[i].posX = x) and (entityList[i].posY = y) then
@@ -316,6 +317,8 @@ begin
     blood_bat.takeTurn(i)
   else if (entityList[i].race = 'Green Fungus') then
     green_fungus.takeTurn(i)
+  else if (entityList[i].race = 'Small Green Fungus') then
+    small_green_fungus.takeTurn(i)
   else if (entityList[i].race = 'Hob') then
     redcap_lesser.takeTurn(i)
   else if (entityList[i].race = 'Hob lobber') then
