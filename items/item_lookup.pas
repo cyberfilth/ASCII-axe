@@ -23,8 +23,8 @@ const
     ('aleTankard', 'clothArmour1', 'curePotion', 'basicClub');
   caveItems2: array[1..4] of string =
     ('aleTankard', 'aleTankard', 'crudeDagger', 'leatherArmour1');
-  caveItems3: array[1..4] of string =
-    ('aleTankard', 'crudeDagger', 'aleTankard', 'leatherArmour1');
+  caveItems3: array[1..5] of string =
+    ('aleTankard', 'crudeDagger', 'aleTankard', 'leatherArmour1', 'curePotion');
 
 (* Choose an item and call the generate code directly *)
 procedure dispenseItem(i: byte; dungeon: dungeonTerrain);
@@ -58,17 +58,17 @@ begin
     begin { Level 1}
       if (universe.currentDepth = 1) then
       begin
-        randSelect := globalUtils.randomRange(1, 4);
+        randSelect := globalUtils.randomRange(1, Length(caveItems1));
         thing := caveItems1[randSelect];
       end { Level 2 }
       else if (universe.currentDepth = 2) then
       begin
-        randSelect := globalUtils.randomRange(1, 4);
+        randSelect := globalUtils.randomRange(1, Length(caveItems2));
         thing := caveItems2[randSelect];
       end { Level 3 }
       else if (universe.currentDepth = 3) then
       begin
-        randSelect := globalUtils.randomRange(1, 4);
+        randSelect := globalUtils.randomRange(1, Length(caveItems3));
         thing := caveItems3[randSelect];
       end;
     end;
