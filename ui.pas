@@ -9,6 +9,7 @@ interface
 
 uses
   SysUtils, StrUtils, video, keyboard, scrTitle, dlgInfo, player_stats, globalUtils,
+  scrGame,
   {$IFDEF WINDOWS}
   JwaWinCon, {$ENDIF}
   (* CRT unit is just to clear the screen on exit *)
@@ -16,7 +17,7 @@ uses
 
 var
   vid: TVideoMode;
-  x, y: smallint;
+  x, y, displayCol, displayRow: smallint;
   messageArray: array[1..7] of shortstring = (' ', ' ', ' ', ' ', ' ', ' ', ' ');
   buffer: shortstring;
   equippedWeapon, equippedArmour: shortstring;
@@ -113,9 +114,9 @@ end;
 
 procedure screenBlank;
 begin
-  for y := 1 to 25 do
+  for y := 1 to displayRow do
   begin
-    for x := 1 to 80 do
+    for x := 1 to displayCol do
     begin
       TextOut(x, y, 'black', ' ');
     end;
@@ -130,8 +131,8 @@ begin
   { Initialise the video unit }
   InitVideo;
   InitKeyboard;
-  vid.Col := 80;
-  vid.Row := 25;
+  vid.Col := displayCol;
+  vid.Row := displayRow;
   vid.Color := True;
   SetVideoMode(vid);
   SetCursorType(crHidden);
@@ -249,19 +250,19 @@ end;
 procedure updateLevel;
 begin
   (* Paint over previous stats *)
-  TextOut(67, 4, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 9, 4, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219));
   (* Write out Level number *)
-  TextOut(67, 4, 'cyan', IntToStr(player_stats.playerLevel));
+  TextOut(scrGame.minX + 9, 4, 'cyan', IntToStr(player_stats.playerLevel));
 end;
 
 procedure updateXP;
 begin
   (* Paint over previous stats *)
-  TextOut(72, 6, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 14, 6, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(72, 6, 'cyan', IntToStr(entities.entityList[0].xpReward));
+  TextOut(scrGame.minX + 14, 6, 'cyan', IntToStr(entities.entityList[0].xpReward));
 end;
 
 procedure updateHealth;
@@ -276,14 +277,14 @@ begin
     Exit;
   end;
   (* Paint over previous stats *)
-  TextOut(68, 7, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 10, 7, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219));
   (* Write stats *)
-  TextOut(68, 7, 'cyan', IntToStr(entities.entityList[0].currentHP) +
+  TextOut(scrGame.minX + 10, 7, 'cyan', IntToStr(entities.entityList[0].currentHP) +
     '/' + IntToStr(entities.entityList[0].maxHP));
   (* Paint over health bar *)
-  TextOut(60, 8, 'black', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+  TextOut(scrGame.minX + 2, 8, 'black', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
     Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
     Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
   (* Length of health bar *)
@@ -326,48 +327,48 @@ begin
     bars := 16;
   (* Draw health bar *)
   for i := 1 to bars do
-    TextOut(59 + i, 8, 'green', Chr(223));
+    TextOut((scrGame.minX + 1) + i, 8, 'green', Chr(223));
 end;
 
 procedure updateAttack;
 begin
   (* Paint over previous stats *)
-  TextOut(68, 9, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 10, 9, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(68, 9, 'cyan', IntToStr(entities.entityList[0].attack));
+  TextOut(scrGame.minX + 10, 9, 'cyan', IntToStr(entities.entityList[0].attack));
 end;
 
 procedure updateDefence;
 begin
   (* Paint over previous stats *)
-  TextOut(69, 10, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 11, 10, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(69, 10, 'cyan', IntToStr(entities.entityList[0].defence));
+  TextOut(scrGame.minX + 11, 10, 'cyan', IntToStr(entities.entityList[0].defence));
 end;
 
 procedure updateWeapon;
 begin
   (* Paint over previous weapon *)
-  TextOut(59, 17, 'black', '                     '); { 21 characters }
+  TextOut(scrGame.minX + 1, 17, 'black', '                     '); { 21 characters }
   (* Display equipped weapon *)
   if (equippedWeapon <> 'No weapon equipped') then
-    TextOut(59, 17, 'cyan', equippedWeapon)
+    TextOut(scrGame.minX + 1, 17, 'cyan', equippedWeapon)
   else
-    TextOut(59, 17, 'darkGrey', equippedWeapon);
+    TextOut(scrGame.minX + 1, 17, 'darkGrey', equippedWeapon);
 end;
 
 procedure updateArmour;
 begin
   (* Paint over previous armour *)
-  TextOut(59, 18, 'black', '                     '); { 21 characters }
+  TextOut(scrGame.minX + 1, 18, 'black', '                     '); { 21 characters }
   (* Display equipped armour *)
   if (equippedArmour <> 'No armour worn') then
-    TextOut(59, 18, 'cyan', equippedArmour)
+    TextOut(scrGame.minX + 1, 18, 'cyan', equippedArmour)
   else
-    TextOut(59, 18, 'darkGrey', equippedArmour);
+    TextOut(scrGame.minX + 1, 18, 'darkGrey', equippedArmour);
 end;
 
 procedure exitPrompt;

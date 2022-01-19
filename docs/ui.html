@@ -16,7 +16,7 @@
 <p>
 User Interface - Unit responsible for displaying messages and screens</p>
 <span id="PasDoc-Uses"></span><h2 class="uses">Uses</h2>
-<ul class="useslist"><li>SysUtils</li><li>StrUtils</li><li>video</li><li>keyboard</li><li><a  href="scrTitle.html">scrTitle</a></li><li>dlgInfo</li><li><a  href="player_stats.html">player_stats</a></li><li><a  href="globalUtils.html">globalUtils</a></li><li>Crt</li></ul><h2 class="overview">Overview</h2>
+<ul class="useslist"><li>SysUtils</li><li>StrUtils</li><li>video</li><li>keyboard</li><li><a  href="scrTitle.html">scrTitle</a></li><li>dlgInfo</li><li><a  href="player_stats.html">player_stats</a></li><li><a  href="globalUtils.html">globalUtils</a></li><li><a  href="scrGame.html">scrGame</a></li><li>Crt</li></ul><h2 class="overview">Overview</h2>
 <span id="PasDoc-FuncsProcs"></span><h3 class="summary">Functions and Procedures</h3>
 <table class="summary wide_list">
 <tr class="list">
@@ -96,6 +96,12 @@ User Interface - Unit responsible for displaying messages and screens</p>
 </tr>
 <tr class="list">
 <td class="itemcode"><code><b><a  href="ui.html#y">y</a></b>: smallint;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a  href="ui.html#displayCol">displayCol</a></b>: smallint;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="ui.html#displayRow">displayRow</a></b>: smallint;</code></td>
 </tr>
 <tr class="list2">
 <td class="itemcode"><code><b><a  href="ui.html#messageArray">messageArray</a></b>: array[1..7] of shortstring = (' ', ' ', ' ', ' ', ' ', ' ', ' ');</code></td>
@@ -333,6 +339,20 @@ CRT unit is just to clear the screen on exit</p>
 <table class="detail wide_list">
 <tr class="list">
 <td class="itemcode"><span id="y"></span><code><b>y</b>: smallint;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="displayCol"></span><code><b>displayCol</b>: smallint;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="displayRow"></span><code><b>displayRow</b>: smallint;</code></td>
 </tr>
 <tr><td colspan="1">
 &nbsp;</td></tr>

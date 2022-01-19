@@ -11,10 +11,9 @@ uses
 
 const
   camHeight = 19;
-  camWidth = 57;
 
 var
-  r, c: smallint;
+  r, c, camWidth: smallint;
 
 function getX(Xcoord: smallint): smallint;
 function getY(Ycoord: smallint): smallint;

@@ -1,6 +1,6 @@
 (*
 Axes, Armour & Ale - The ASCII version
-Copyright 2021 Chris Hawkins
+Copyright 2021-2022 Chris Hawkins
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, m
 erge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -17,11 +17,12 @@ program ascii_axe;
 {$ENDIF}
 
 uses
-  main;
+  resolution, main;
 
 {$R *.res}
 
 begin
+  resolution.getSize;
   (* Initialise the display, keyboard and game variables *)
   main.initialise;
   main.loop;

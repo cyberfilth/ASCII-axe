@@ -13,11 +13,11 @@ type
 
 const
   (* Version info - a = Alpha, d = Debug, r = Release *)
-  VERSION = '40a';
+  VERSION = '41a';
   (* Columns of the game map *)
-  MAXCOLUMNS = 57;
+  MAXCOLUMNS = 80;
   (* Rows of the game map *)
-  MAXROWS = 19;
+  MAXROWS = 20;
   (* Save game file *)
   saveFile = 'saveGame.dat';
 

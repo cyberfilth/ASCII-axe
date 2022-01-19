@@ -1,4 +1,4 @@
-(* Main game screen *)
+(* Main game user interface *)
 
 unit scrGame;
 
@@ -6,6 +6,8 @@ unit scrGame;
 
 interface
 
+var
+  minX: smallint;
 
 (* Draws the panel on side of screen *)
 procedure drawSidepanel;
@@ -24,55 +26,55 @@ var
 begin
   (* Stats window *)
   { top line }
-  TextOut(58, 1, 'cyan', Chr(218));
-  for i := 59 to 79 do
+  TextOut(minX, 1, 'cyan', Chr(218));
+  for i := minX + 1 to minX + 21 do
   begin
     TextOut(i, 1, 'cyan', Chr(196));
   end;
-  TextOut(80, 1, 'cyan', Chr(191));
+  TextOut(minX + 22, 1, 'cyan', Chr(191));
   { edges }
   for i := 2 to 13 do
   begin
-    TextOut(58, i, 'cyan', Chr(179) + '                     ' + Chr(179));
+    TextOut(minX, i, 'cyan', Chr(179) + '                     ' + Chr(179));
   end;
   { bottom }
-  TextOut(58, 14, 'cyan', Chr(192));
-  for i := 59 to 79 do
+  TextOut(minX, 14, 'cyan', Chr(192));
+  for i := minX + 1 to minX + 21 do
   begin
     TextOut(i, 14, 'cyan', Chr(196));
   end;
-  TextOut(80, 14, 'cyan', Chr(217));
+  TextOut(minX + 22, 14, 'cyan', Chr(217));
 
   (* Equipment window *)
   { top line }
-  TextOut(58, 15, 'cyan', Chr(218));
-  for i := 59 to 79 do
+  TextOut(minX, 15, 'cyan', Chr(218));
+  for i := minX + 1 to minX + 21 do
   begin
     TextOut(i, 15, 'cyan', Chr(196));
   end;
-  TextOut(80, 15, 'cyan', Chr(191));
-  TextOut(60, 15, 'cyan', 'Equipment');
+  TextOut(minX + 22, 15, 'cyan', Chr(191));
+  TextOut(minX + 2, 15, 'cyan', 'Equipment');
   { edges }
   for i := 16 to 20 do
   begin
-    TextOut(58, i, 'cyan', Chr(179) + '                     ' + Chr(179));
+    TextOut(minX, i, 'cyan', Chr(179) + '                     ' + Chr(179));
   end;
   { bottom }
-  TextOut(58, 20, 'cyan', Chr(192));
-  for i := 59 to 79 do
+  TextOut(minX, 20, 'cyan', Chr(192));
+  for i := minX + 1 to minX + 21 do
   begin
     TextOut(i, 20, 'cyan', Chr(196));
   end;
-  TextOut(80, 20, 'cyan', Chr(217));
+  TextOut(minX + 22, 20, 'cyan', Chr(217));
 
   (* Write stat titles *)
-  TextOut(60, 2, 'cyan', entities.entityList[0].race);
-  TextOut(60, 3, 'cyan', 'The ' + entities.entityList[0].description);
-  TextOut(60, 4, 'cyan', 'Level:');
-  TextOut(60, 6, 'cyan', 'Experience:');
-  TextOut(60, 7, 'cyan', 'Health:');
-  TextOut(60, 9, 'cyan', 'Attack:');
-  TextOut(60, 10, 'cyan', 'Defence:');
+  TextOut(minX + 2, 2, 'cyan', entities.entityList[0].race);
+  TextOut(minX + 2, 3, 'cyan', 'The ' + entities.entityList[0].description);
+  TextOut(minX + 2, 4, 'cyan', 'Level:');
+  TextOut(minX + 2, 6, 'cyan', 'Experience:');
+  TextOut(minX + 2, 7, 'cyan', 'Health:');
+  TextOut(minX + 2, 9, 'cyan', 'Attack:');
+  TextOut(minX + 2, 10, 'cyan', 'Defence:');
 
   (* Write stats *)
   ui.updateLevel;

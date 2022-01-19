@@ -1,4 +1,4 @@
-(* Stationary hazard, when attacked will either poison the player or release spores *)
+(* Stationary hazard, deals poison damage in combat *)
 
 unit small_green_fungus;
 
