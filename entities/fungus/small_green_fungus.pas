@@ -35,9 +35,9 @@ begin
     description := 'a poisonous fungus';
     glyph := 'f';
     glyphColour := 'green';
-    maxHP := randomRange(2, 6);
+    maxHP := randomRange(3, 5);
     currentHP := maxHP;
-    attack := randomRange(2, 5);
+    attack := randomRange(3, 5);
     defence := randomRange(3, 5);
     weaponDice := 0;
     weaponAdds := 0;

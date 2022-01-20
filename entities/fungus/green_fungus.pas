@@ -35,7 +35,7 @@ begin
     description := 'a green fungus';
     glyph := 'f';
     glyphColour := 'green';
-    maxHP := randomRange(2, 6);
+    maxHP := randomRange(2, 5);
     currentHP := maxHP;
     attack := randomRange(2, 4);
     defence := randomRange(2, 3);

@@ -319,7 +319,7 @@ end;
 
 procedure combat(id: smallint);
 var
-  damageAmount: smallint;
+  damageAmount, chance: smallint;
 begin
   damageAmount := globalutils.randomRange(1, entities.entityList[id].attack) -
     entities.entityList[0].defence;
@@ -345,7 +345,11 @@ begin
   end
   else
   begin
-    ui.displayMessage('The hob screams curses');
+    chance := randomRange(1, 4);
+    if (chance = 1) then
+      ui.displayMessage('The hob screams curses')
+    else if (chance = 2) then
+      ui.displayMessage('The hob yells');
     combat_resolver.spiteDMG(id);
   end;
 end;
@@ -370,9 +374,8 @@ begin
     'e':
     begin
       if (map.canMove((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX + 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX + 1), entities.entityList[id].posY) = False)) then
         entities.moveNPC(id, (entities.entityList[id].posX + 1),
           entities.entityList[id].posY);
     end;
@@ -388,9 +391,8 @@ begin
     'w':
     begin
       if (map.canMove((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) and
-        (map.isOccupied((entities.entityList[id].posX - 1),
-        entities.entityList[id].posY) = False)) then
+        entities.entityList[id].posY) and (map.isOccupied(
+        (entities.entityList[id].posX - 1), entities.entityList[id].posY) = False)) then
 
 
         entities.moveNPC(id, (entities.entityList[id].posX - 1),
