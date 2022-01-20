@@ -93,7 +93,10 @@ begin
   for i := 1 to itemAmount do
   begin
     if (itemList[i].posX = x) and (itemList[i].posY = y) then
+    begin
       Result := True;
+      exit;
+    end;
   end;
 end;
 
