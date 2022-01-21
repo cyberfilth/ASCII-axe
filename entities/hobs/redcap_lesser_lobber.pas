@@ -407,15 +407,12 @@ procedure fireMissile(id: smallint);
 var
   damageAmount: smallint;
 begin
-  los.firingLine(id, entityList[id].posX, entityList[id].posY,
-    entityList[0].posX, entityList[0].posY);
+  los.firingLine(id, entityList[id].posX, entityList[id].posY, entityList[0].posX, entityList[0].posY);
   (* Check if rock has hit the player *)
-  damageAmount := globalutils.randomRange(1, entities.entityList[id].attack + 3) -
-    entities.entityList[0].defence;
+  damageAmount := globalutils.randomRange(1, entities.entityList[id].attack + 3) - entities.entityList[0].defence;
   if (damageAmount > 0) then
   begin
-    entities.entityList[0].currentHP :=
-      (entities.entityList[0].currentHP - damageAmount);
+    entities.entityList[0].currentHP := (entities.entityList[0].currentHP - damageAmount);
     if (entities.entityList[0].currentHP < 1) then
     begin
       killer := entityList[id].race;

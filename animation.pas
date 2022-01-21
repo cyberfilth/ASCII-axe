@@ -40,12 +40,21 @@ begin
     begin
       (* Paint over previous rock *)
       if (i > 2) then
-        TextOut(flightPath[i - 1].X, flightPath[i - 1].Y, 'lightGrey',
-          map.maparea[flightPath[i - 1].Y][flightPath[i - 1].X].Glyph);
+      begin
+        map.mapDisplay[flightPath[i - 1].Y, flightPath[i - 1].X].GlyphColour :=
+          'lightGrey';
+        map.mapDisplay[flightPath[i - 1].Y, flightPath[i - 1].X].Glyph := '.';
+      end;
       (* Draw rock *)
-      TextOut(flightPath[i].X, flightPath[i].Y, 'white', '*');
+      map.mapDisplay[flightPath[i].Y, flightPath[i].X].GlyphColour := 'white';
+      map.mapDisplay[flightPath[i].Y, flightPath[i].X].Glyph := '*';
       sleep(100);
     end;
+    (* Repaint map *)
+    camera.drawMap;
+    fov.fieldOfView(entityList[0].posX, entityList[0].posY,
+      entityList[0].visionRange, 1);
+
     UnlockScreenUpdate;
     UpdateScreen(False);
   end;

@@ -1,3 +1,3 @@
 #!/bin/bash
 delp -r ./
-ctags -R *.pas
+ctags -R --languages=Pascal
