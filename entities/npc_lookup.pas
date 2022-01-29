@@ -35,8 +35,8 @@ begin
   repeat
     r := globalutils.randomRange(2, (MAXROWS - 1));
     c := globalutils.randomRange(2, (MAXCOLUMNS - 1));
-    (* choose a location that is not a wall or occupied *)
-  until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False) and (smellmap[r][c] > 4);
+    (* choose a location that is not a wall, occupied or stair *)
+  until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False) and (smellmap[r][c] > 4) and (maparea[r][c].Glyph = '.');
 
   (* Randomly choose an NPC based on dungeon depth *)
   case dungeon of
