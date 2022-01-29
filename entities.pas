@@ -12,7 +12,7 @@ uses
   SysUtils, globalUtils,
   { List of creatures }
   cave_rat, giant_cave_rat, blood_bat, green_fungus, redcap_lesser, redcap_lesser_lobber,
-  small_green_fungus;
+  small_green_fungus, large_blood_bat;
 
 type { NPC attitudes }
   Tattitudes = (stateNeutral, stateHostile, stateEscape);
@@ -315,6 +315,8 @@ begin
     giant_cave_rat.takeTurn(i)
   else if (entityList[i].race = 'Blood Bat') then
     blood_bat.takeTurn(i)
+   else if (entityList[i].race = 'Large Blood Bat') then
+    large_blood_bat.takeTurn(i)
   else if (entityList[i].race = 'Green Fungus') then
     green_fungus.takeTurn(i)
   else if (entityList[i].race = 'Small Green Fungus') then

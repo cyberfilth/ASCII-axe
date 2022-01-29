@@ -1,13 +1,13 @@
 (* Weak enemy with simple AI, no pathfinding *)
 
-unit blood_bat;
+unit large_blood_bat;
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  SysUtils, Math, combat_resolver;
+  SysUtils, Math, combat_resolver, universe;
 
 (* Create a blood bat *)
 procedure createBloodBat(uniqueid, npcx, npcy: smallint);
@@ -34,22 +34,18 @@ uses
   entities, globalutils, ui, los, map;
 
 procedure createBloodbat(uniqueid, npcx, npcy: smallint);
-var
-  mood: byte;
 begin
-  (* Detemine hostility *)
-  mood := randomRange(1, 3);
   (* Add a blood bat to the list of creatures *)
   entities.listLength := length(entities.entityList);
   SetLength(entities.entityList, entities.listLength + 1);
   with entities.entityList[entities.listLength] do
   begin
     npcID := uniqueid;
-    race := 'Blood Bat';
-    description := 'a bloated red bat';
-    glyph := 'b';
+    race := 'Large Blood Bat';
+    description := 'a large red bat';
+    glyph := 'B';
     glyphColour := 'red';
-    maxHP := randomRange(1, 3);
+    maxHP := randomRange(3, 5) + universe.currentDepth;;
     currentHP := maxHP;
     attack := randomRange(entityList[0].attack - 2, entityList[0].attack + 2);
     defence := randomRange(entityList[0].defence - 2, entityList[0].defence + 1);
@@ -63,10 +59,7 @@ begin
     inView := False;
     blocks := False;
     faction := animalFaction;
-    if (mood = 1) then
-      state := stateHostile
-    else
-      state := stateNeutral;
+    state := stateHostile;
     discovered := False;
     weaponEquipped := False;
     armourEquipped := False;
