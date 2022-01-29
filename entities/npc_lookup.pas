@@ -15,8 +15,10 @@ uses
 const
   (* Array of creatures found in a cave, ordered by cave level *)
   caveNPC1: array[1..4] of string = ('caveRat', 'caveRat', 'bloodBat', 'greenFungus');
-  caveNPC2: array[1..6] of string = ('caveRat', 'giantRat', 'largeBat', 'redcapLesser', 'giantRat', 'greenFungus');
-  caveNPC3: array[1..5] of string = ('smallGrFungus', 'redcapLesser', 'giantRat', 'redcapLesser', 'redcapLsrLbr');
+  caveNPC2: array[1..6] of string =
+    ('caveRat', 'giantRat', 'largeBat', 'redcapLesser', 'giantRat', 'greenFungus');
+  caveNPC3: array[1..5] of string =
+    ('smallGrFungus', 'redcapLesser', 'giantRat', 'redcapLesser', 'redcapLsrLbr');
 
 
 (* randomly choose a creature and call the generate code directly *)
@@ -36,7 +38,8 @@ begin
     r := globalutils.randomRange(2, (MAXROWS - 1));
     c := globalutils.randomRange(2, (MAXCOLUMNS - 1));
     (* choose a location that is not a wall, occupied or stair *)
-  until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False) and (smellmap[r][c] > 4) and (maparea[r][c].Glyph = '.');
+  until (maparea[r][c].Blocks = False) and (maparea[r][c].Occupied = False) and
+    (smellmap[r][c] > 4) and (maparea[r][c].Glyph = '.');
 
   (* Randomly choose an NPC based on dungeon depth *)
   case dungeon of

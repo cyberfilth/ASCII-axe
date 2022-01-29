@@ -45,7 +45,7 @@ begin
     glyphColour := 'yellow';
     maxHP := randomRange(3, 5) + universe.currentDepth;
     currentHP := maxHP;
-    attack := randomRange(entityList[0].attack - 1, entityList[0].attack + 1);
+    attack := randomRange(entityList[0].attack, entityList[0].attack + 2);
     defence := randomRange(entityList[0].defence - 1, entityList[0].defence + 1);
     weaponDice := 0;
     weaponAdds := 0;
