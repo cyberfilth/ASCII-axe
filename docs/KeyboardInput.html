@@ -16,7 +16,7 @@
 <p>
 Player input for game controls and menu selections, grouped in procedures</p>
 <span id="PasDoc-Uses"></span><h2 class="uses">Uses</h2>
-<ul class="useslist"><li>Keyboard</li><li><a  href="player.html">player</a></li><li><a  href="player_inventory.html">player_inventory</a></li><li><a  href="player_stats.html">player_stats</a></li><li><a  href="map.html">map</a></li><li>dlgInfo</li><li><a  href="scrIntro.html">scrIntro</a></li><li><a  href="scrCharSelect.html">scrCharSelect</a></li><li><a  href="scrCharIntro.html">scrCharIntro</a></li></ul><h2 class="overview">Overview</h2>
+<ul class="useslist"><li>Keyboard</li><li><a  href="map.html">map</a></li><li>dlgInfo</li><li><a  href="scrIntro.html">scrIntro</a></li><li><a  href="scrCharSelect.html">scrCharSelect</a></li><li><a  href="scrCharIntro.html">scrCharIntro</a></li></ul><h2 class="overview">Overview</h2>
 <span id="PasDoc-FuncsProcs"></span><h3 class="summary">Functions and Procedures</h3>
 <table class="summary wide_list">
 <tr class="list">
@@ -65,6 +65,9 @@ Player input for game controls and menu selections, grouped in procedures</p>
 <td class="itemcode"><code>procedure <b><a  href="KeyboardInput.html#LoseSaveInput">LoseSaveInput</a></b>(Keypress: TKeyEvent);</code></td>
 </tr>
 <tr class="list2">
+<td class="itemcode"><code>procedure <b><a  href="KeyboardInput.html#dialogBoxInput">dialogBoxInput</a></b>(Keypress: TKeyEvent);</code></td>
+</tr>
+<tr class="list">
 <td class="itemcode"><code>procedure <b><a  href="KeyboardInput.html#WinAlphaInput">WinAlphaInput</a></b>(Keypress: TKeyEvent);</code></td>
 </tr>
 </table>
@@ -203,6 +206,15 @@ Input in GAME state</p>
 <tr><td colspan="1">
 <p>
 Input in LOSE SAVE state</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="dialogBoxInput"></span><code>procedure <b>dialogBoxInput</b>(Keypress: TKeyEvent);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Input in the DIALOG state</p>
 </td></tr>
 </table>
 <table class="detail wide_list">

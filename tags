@@ -65,8 +65,12 @@ chaseTarget	entities/hobs/redcap_lesser.pas	/^procedure chaseTarget(id, spx, spy
 chaseTarget	entities/hobs/redcap_lesser_lobber.pas	/^procedure chaseTarget(id, spx, spy: smallint);$/;"	p
 checkLevel	player/backup/player_stats.pas	/^procedure checkLevel;$/;"	p
 checkLevel	player/player_stats.pas	/^procedure checkLevel;$/;"	p
+checkNotifications	screens/backup/dlginfo.pas	/^procedure checkNotifications;$/;"	p
+checkNotifications	screens/dlginfo.pas	/^procedure checkNotifications;$/;"	p
 choose	screens/backup/scrcharselect.pas	/^procedure choose;$/;"	p
 choose	screens/scrcharselect.pas	/^procedure choose;$/;"	p
+clearPopup	backup/ui.pas	/^procedure clearPopup;$/;"	p
+clearPopup	ui.pas	/^procedure clearPopup;$/;"	p
 clearStatusBar	backup/ui.pas	/^procedure clearStatusBar;$/;"	p
 clearStatusBar	ui.pas	/^procedure clearStatusBar;$/;"	p
 combat	entities/ai_animal.pas	/^procedure combat(id: smallint);$/;"	p
@@ -160,6 +164,8 @@ deleteGameData	backup/file_handling.pas	/^procedure deleteGameData;$/;"	p
 deleteGameData	file_handling.pas	/^procedure deleteGameData;$/;"	p
 descendStairs	backup/map.pas	/^procedure descendStairs;$/;"	p
 descendStairs	map.pas	/^procedure descendStairs;$/;"	p
+dialogBoxInput	backup/keyboardinput.pas	/^procedure dialogBoxInput(Keypress: TKeyEvent);$/;"	p
+dialogBoxInput	keyboardinput.pas	/^procedure dialogBoxInput(Keypress: TKeyEvent);$/;"	p
 digCave	dungeons/backup/cave.pas	/^procedure digCave(floorNumber: byte);$/;"	p
 digCave	dungeons/cave.pas	/^procedure digCave(floorNumber: byte);$/;"	p
 dispenseItem	items/backup/item_lookup.pas	/^procedure dispenseItem(i: byte; dungeon: dungeonTerrain);$/;"	p
@@ -262,6 +268,8 @@ followScent	entities/hobs/backup/redcap_lesser_archer.pas	/^procedure followScen
 followScent	entities/hobs/backup/redcap_lesser_lobber.pas	/^procedure followScent(id: smallint);$/;"	p
 followScent	entities/hobs/redcap_lesser.pas	/^procedure followScent(id: smallint);$/;"	p
 followScent	entities/hobs/redcap_lesser_lobber.pas	/^procedure followScent(id: smallint);$/;"	p
+foundMap	screens/backup/dlginfo.pas	/^procedure foundMap;$/;"	p
+foundMap	screens/dlginfo.pas	/^procedure foundMap;$/;"	p
 gameInput	backup/keyboardinput.pas	/^procedure gameInput(Keypress: TKeyEvent);$/;"	p
 gameInput	keyboardinput.pas	/^procedure gameInput(Keypress: TKeyEvent);$/;"	p
 gameLoop	backup/main.pas	/^procedure gameLoop;$/;"	p

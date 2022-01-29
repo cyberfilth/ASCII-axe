@@ -11,14 +11,15 @@ interface
 
 uses
   SysUtils, Video, keyboard, KeyboardInput, ui, camera, map, scrGame, globalUtils,
-  universe, fov, player, player_inventory, player_stats, scrRIP, plot_gen,
-  file_handling, smell, scrTitle, scrWinAlpha
+  universe, fov, scrRIP, plot_gen, file_handling, smell, scrTitle, scrWinAlpha,
+  dlgInfo
   {$IFDEF DEBUG}, logging{$ENDIF};
 
+(* Finite State Machine game states *)
 type
   gameStatus = (stTitle, stIntro, stGame, stInventory, stDropMenu, stQuaffMenu,
     stWearWield, stQuitMenu, stGameOver, stDialogLevel, stAnim, stLoseSave,
-    stCharSelect, stCharIntro, stWinAlpha);
+    stCharSelect, stCharIntro, stDialogBox, stWinAlpha);
 
 var
   (* State machine for game menus / controls *)
@@ -41,7 +42,7 @@ procedure WinningScreen;
 implementation
 
 uses
-  entities, items;
+  entities, items, player, player_inventory, player_stats;
 
 procedure setSeed;
 begin
@@ -189,6 +190,7 @@ var
 begin
   (* Game state = game running *)
   gameState := stGame;
+  dlgInfo.dialogType := dlgNone;
   killer := 'empty';
   (* Initialise the game world and create 1st cave *)
   universe.dlistLength := 0;
@@ -298,7 +300,7 @@ begin
   UpdateScreen(False);
 end;
 
-(* Take input from player *)
+(* Take input from player for the KeyboardInput unit, based on current game state *)
 procedure loop;
 var
   Keypress: TKeyEvent;
@@ -328,8 +330,10 @@ begin
       stQuaffMenu: quaffInput(Keypress);
       { ---------------------------------    In the Wear / Wield menu }
       stWearWield: wearWieldInput(Keypress);
-      { ---------------------------------    In the Quaff menu }
+      { ---------------------------------    In the Level Up menu }
       stDialogLevel: LevelUpInput(Keypress);
+      { ---------------------------------    In the Dialog pop-up }
+      stDialogBox: dialogBoxInput(Keypress);
       { ---------------------------------    Gameplay controls }
       stGame: gameInput(Keypress);
       { ---------------------------------    Confirm overwrite game }
@@ -394,6 +398,8 @@ begin
   end;
   (* Check if the player has levelled up *)
   player_stats.checkLevel;
+  (* Process any dialog pop-ups *)
+   dlgInfo.checkNotifications;
 end;
 
 procedure returnToGameScreen;

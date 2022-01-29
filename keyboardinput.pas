@@ -7,8 +7,7 @@ unit KeyboardInput;
 interface
 
 uses
-  Keyboard, player, player_inventory, player_stats, map, dlgInfo,
-  scrIntro, scrCharSelect, scrCharIntro;
+  Keyboard, map, dlgInfo, scrIntro, scrCharSelect, scrCharIntro;
 
 (* Initialise keyboard unit *)
 procedure setupKeyboard;
@@ -40,13 +39,15 @@ procedure LevelUpInput(Keypress: TKeyEvent);
 procedure gameInput(Keypress: TKeyEvent);
 (* Input in LOSE SAVE state *)
 procedure LoseSaveInput(Keypress: TKeyEvent);
+(* Input in the DIALOG state *)
+procedure dialogBoxInput(Keypress: TKeyEvent);
 (* Input in WIN ALPHA state *)
 procedure WinAlphaInput(Keypress: TKeyEvent);
 
 implementation
 
 uses
-  main, ui;
+  main, ui, player, player_inventory, player_stats;
 
 procedure setupKeyboard;
 begin
@@ -474,9 +475,22 @@ begin
   end;
 end;
 
+procedure dialogBoxInput(Keypress: TKeyEvent);
+begin
+  case GetKeyEventChar(Keypress) of
+    'x', 'X': { Exit dialog box }
+    begin
+      { Clear the box }
+      main.gameState := stGame;
+      { Redraw the map }
+      ui.clearPopup;
+    end;
+  end;
+end;
+
 procedure WinAlphaInput(Keypress: TKeyEvent);
 begin
-    case GetKeyEventChar(Keypress) of
+  case GetKeyEventChar(Keypress) of
     'q', 'Q': { Quit the game }
     begin
       main.exitApplication;

@@ -9,6 +9,14 @@ interface
 uses
   SysUtils, video, plot_gen, universe, globalUtils;
 
+(* Types of pop-up dialog box *)
+type
+  dialogFlag = (dlgNone, dlgFoundSMap);
+
+(* Notifies the game loop whether to display a pop-up or not *)
+var
+  dialogType: dialogFlag;
+
 (* Display Info dialog box *)
 procedure infoDialog(message: shortstring);
 (* Display level up dialog box *)
@@ -17,11 +25,15 @@ procedure levelUpDialog(message: shortstring);
 procedure newGame;
 (* Display a warning when starting a new game *)
 procedure newWarning;
+(* Check if there is a pop-up to display *)
+procedure checkNotifications;
+(* 1st cave, found the Smugglers Map *)
+procedure foundMap;
 
 implementation
 
 uses
-  ui, entities;
+  ui, entities, main;
 
 procedure infoDialog(message: shortstring);
 var
@@ -152,6 +164,52 @@ begin
   UnlockScreenUpdate;
   (* only redraws the parts that have been updated *)
   UpdateScreen(False);
+end;
+
+procedure checkNotifications;
+begin
+  case dialogType of
+    dlgNone: exit;
+    dlgFoundSMap: foundMap;
+    else
+      exit;
+  end;
+end;
+
+procedure foundMap;
+var
+  x, y: smallint;
+begin
+  main.gameState := stDialogBox;
+  x := 3;
+  y := 5;
+  LockScreenUpdate;
+  (* Top border *)
+  TextOut(x, y, 'LgreyBGblack', chr(201));
+  for x := 4 to 53 do
+    TextOut(x, 5, 'LgreyBGblack', chr(205));
+  TextOut(54, y, 'LgreyBGblack', chr(187));
+  (* Vertical sides *)
+  for y := 6 to 12 do
+    TextOut(3, y, 'LgreyBGblack', chr(186) +
+      '                                                  ' + chr(186));
+  (* Bottom border *)
+  TextOut(3, 13, 'LgreyBGblack', chr(200)); // bottom left corner
+  for x := 4 to 53 do
+    TextOut(x, 13, 'LgreyBGblack', chr(205));
+  TextOut(54, 13, 'LgreyBGblack', chr(188)); // bottom right corner
+  (* Write the title *)
+  TextOut(5, 5, 'LgreyBGblack', ' Item Found ');
+  (* Write the message *)
+  TextOut(5, 7, 'LgreyBGblack', 'You have found the Smugglers Map!');
+  TextOut(5, 8, 'LgreyBGblack', 'In the distance, you hear the sound of a door');
+  TextOut(5, 9, 'LgreyBGblack', 'unlocking. It is time to leave.');
+  TextOut(5, 11, 'LgreyBGblack', 'Well done....');
+  TextOut(8, 13, 'LgreyBGblack', ' press [x] to continue');
+
+  UnlockScreenUpdate;
+  UpdateScreen(False);
+  dialogType := dlgNone;
 end;
 
 end.

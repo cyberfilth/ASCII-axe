@@ -68,11 +68,13 @@ procedure displayDialog(title, message: shortstring);
 procedure welcome;
 (* Get X coordinate to centre a string *)
 function centreX(textstring: shortstring): byte;
+(* Redraw map after a pop-up closes *)
+procedure clearPopup;
 
 implementation
 
 uses
-  entities, main;
+  entities, main, fov, items, map, camera;
 
 procedure TextOut(X, Y: word; textcol: shortstring; const S: string);
 var
@@ -422,6 +424,41 @@ end;
 function centreX(textstring: shortstring): byte;
 begin
   Result := 40 - (Length(textstring) div 2);
+end;
+
+procedure clearPopup;
+var
+  i: smallint;
+begin
+  LockScreenUpdate;
+  (* Draw player and FOV *)
+  fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
+  (* Redraw all NPC'S *)
+  for i := 1 to entities.npcAmount do
+    entities.redrawMapDisplay(i);
+  (* Redraw all items *)
+  for i := 1 to items.itemAmount do
+    if (map.canSee(items.itemList[i].posX, items.itemList[i].posY) = True) then
+    begin
+      items.itemList[i].inView := True;
+      items.drawItemsOnMap(i);
+      (* Display a message if this is the first time seeing this item *)
+      if (items.itemList[i].discovered = False) then
+      begin
+        ui.displayMessage('You see a ' + items.itemList[i].itemName);
+        items.itemList[i].discovered := True;
+      end;
+    end
+    else
+    begin
+      items.itemList[i].inView := False;
+      map.drawTile(itemList[i].posX, itemList[i].posY, 0);
+    end;
+  (* draw map through the camera *)
+  camera.drawMap;
+  UnlockScreenUpdate;
+  UpdateScreen(False);
+  dialogType := dlgNone;
 end;
 
 end.

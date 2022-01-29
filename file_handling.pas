@@ -8,7 +8,7 @@ interface
 
 uses
   SysUtils, DOM, XMLWrite, XMLRead, TypInfo, globalutils, universe,
-  cave, items, player_inventory, player_stats;
+  cave, items;
 
 (* Write a newly generate level of a dungeon to disk *)
 procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
@@ -27,7 +27,7 @@ procedure saveGame;
 implementation
 
 uses
-  map, main, entities;
+  map, main, entities, player_stats, player_inventory;
 
 procedure writeNewDungeonLevel(idNumber, lvlNum, totalDepth, totalRooms: byte;
   dtype: dungeonTerrain);

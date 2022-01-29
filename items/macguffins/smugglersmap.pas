@@ -6,7 +6,7 @@ unit smugglersMap;
 
 interface
 
-uses sysutils, player_stats;
+uses SysUtils, player_stats, dlgInfo, video;
 
 (* Create the map *)
 procedure createSmugglersMap(uniqueid, itmx, itmy: smallint);
@@ -42,6 +42,7 @@ end;
 
 procedure obtainMap;
 begin
+  dlgInfo.dialogType := dlgFoundSMap;
   ui.displayMessage('now you can leave the cave');
   ui.displayMessage('You have found the map');
   player_stats.canExitDungeon := True;
