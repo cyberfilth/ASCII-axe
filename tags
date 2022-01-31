@@ -28,8 +28,13 @@ WinAlphaInput	backup/keyboardinput.pas	/^procedure WinAlphaInput(Keypress: TKeyE
 WinAlphaInput	keyboardinput.pas	/^procedure WinAlphaInput(Keypress: TKeyEvent);$/;"	p
 WinningScreen	backup/main.pas	/^procedure WinningScreen;$/;"	p
 WinningScreen	main.pas	/^procedure WinningScreen;$/;"	p
+Zap	items/weapons/backup/staff_minor_scorch.pas	/^procedure Zap;$/;"	p
+Zap	items/weapons/staff_minor_scorch.pas	/^procedure Zap;$/;"	p
+Zzap	player/backup/player_inventory.pas	/^procedure Zzap(item: smallint);$/;"	p
+Zzap	player/player_inventory.pas	/^procedure Zzap(item: smallint);$/;"	p
 addToInventory	player/backup/player_inventory.pas	/^function addToInventory(itemNumber: smallint): boolean;$/;"	f
 addToInventory	player/player_inventory.pas	/^function addToInventory(itemNumber: smallint): boolean;$/;"	f
+areaBurnEffect	animation.pas	/^procedure areaBurnEffect;$/;"	p
 ascendStairs	backup/map.pas	/^procedure ascendStairs;$/;"	p
 ascendStairs	map.pas	/^procedure ascendStairs;$/;"	p
 beginLogging	logging.pas	/^procedure beginLogging;$/;"	p
@@ -140,6 +145,8 @@ createSmallGreenFungus	entities/backup/small_green_fungus.pas	/^procedure create
 createSmallGreenFungus	entities/fungus/small_green_fungus.pas	/^procedure createSmallGreenFungus(uniqueid, npcx, npcy: smallint);$/;"	p
 createSmugglersMap	items/macguffins/backup/smugglersmap.pas	/^procedure createSmugglersMap(uniqueid, itmx, itmy: smallint);$/;"	p
 createSmugglersMap	items/macguffins/smugglersmap.pas	/^procedure createSmugglersMap(uniqueid, itmx, itmy: smallint);$/;"	p
+createStaff	items/weapons/backup/staff_minor_scorch.pas	/^procedure createStaff(uniqueid, itmx, itmy: smallint);$/;"	p
+createStaff	items/weapons/staff_minor_scorch.pas	/^procedure createStaff(uniqueid, itmx, itmy: smallint);$/;"	p
 decisionEscape	entities/animals/cave_rat.pas	/^procedure decisionEscape(id: smallint);$/;"	p
 decisionEscape	entities/animals/giant_cave_rat.pas	/^procedure decisionEscape(id: smallint);$/;"	p
 decisionEscape	entities/backup/giant_cave_rat.pas	/^procedure decisionEscape(id: smallint);$/;"	p
@@ -532,8 +539,10 @@ useItem	items/backup/potion_curepoison.pas	/^procedure useItem;$/;"	p
 useItem	items/potion_curepoison.pas	/^procedure useItem;$/;"	p
 useItem	items/weapons/backup/basic_club.pas	/^procedure useItem(equipped: boolean);$/;"	p
 useItem	items/weapons/backup/crude_dagger.pas	/^procedure useItem(equipped: boolean);$/;"	p
+useItem	items/weapons/backup/staff_minor_scorch.pas	/^procedure useItem(equipped: boolean);$/;"	p
 useItem	items/weapons/basic_club.pas	/^procedure useItem(equipped: boolean);$/;"	p
 useItem	items/weapons/crude_dagger.pas	/^procedure useItem(equipped: boolean);$/;"	p
+useItem	items/weapons/staff_minor_scorch.pas	/^procedure useItem(equipped: boolean);$/;"	p
 wander	entities/ai_animal.pas	/^procedure wander(id, spx, spy: smallint);$/;"	p
 wander	entities/animals/backup/large_blood_bat.pas	/^procedure wander(id, spx, spy: smallint);$/;"	p
 wander	entities/animals/blood_bat.pas	/^procedure wander(id, spx, spy: smallint);$/;"	p

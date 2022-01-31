@@ -214,6 +214,8 @@ begin
           { Convert extended ASCII to plain text }
           if (itemList[i].glyph = chr(24)) then
             AddElement(DataNode, 'glyph', '|')
+          else if (itemList[i].glyph = chr(186)) then
+            AddElement(DataNode, 'glyph', '=')
           else
             AddElement(DataNode, 'glyph', itemList[i].glyph);
 
@@ -354,6 +356,8 @@ begin
         { Convert plain text to extended ASCII }
         if (ItemsNode.FindNode('glyph').TextContent[1] = '|') then
           items.itemList[i].glyph := chr(24)
+        else if (ItemsNode.FindNode('glyph').TextContent[1] = '=') then
+          items.itemList[i].glyph := chr(186)
         else
           items.itemList[i].glyph := char(widechar(ItemsNode.FindNode('glyph').TextContent[1]));
 
@@ -507,6 +511,8 @@ begin
     player_stats.maxVisionRange := StrToInt(UTF8Encode(PlayerDataNode.FindNode('maxVisionRange').TextContent));
     player_stats.playerRace:=UTF8Encode(PlayerDataNode.FindNode('playerRace').TextContent);
     player_stats.clanName:=UTF8Encode(PlayerDataNode.FindNode('clanName').TextContent);
+    player_stats.enchantedWeaponEquipped:=StrToBool(UTF8Encode(PlayerDataNode.FindNode('enchantedWeapon').TextContent));
+    player_stats.enchWeapType := StrToInt(UTF8Encode(PlayerDataNode.FindNode('enchWeapType').TextContent));
 
     (* Player Inventory *)
     player_inventory.initialiseInventory;
@@ -526,6 +532,8 @@ begin
       { Convert plain text to extended ASCII }
       if (InventoryNode.FindNode('glyph').TextContent[1] = '|') then
         player_inventory.inventory[i].glyph := chr(24)
+      else if (InventoryNode.FindNode('glyph').TextContent[1] = '=') then
+        player_inventory.inventory[i].glyph := chr(186)
       else
         player_inventory.inventory[i].glyph := char(widechar(InventoryNode.FindNode('glyph').TextContent[1]));
 
@@ -629,6 +637,8 @@ begin
     AddElement(DataNode, 'maxVisionRange', IntToStr(player_stats.maxVisionRange));
     AddElement(DataNode, 'playerRace', player_stats.playerRace);
     AddElement(DataNode, 'clanName', player_stats.clanName);
+    AddElement(DataNode, 'enchantedWeapon', BoolToStr(player_stats.enchantedWeaponEquipped));
+    AddElement(DataNode, 'enchWeapType', IntToStr(player_stats.enchWeapType));
 
     (* Player inventory *)
     for i := 0 to 9 do
@@ -648,6 +658,8 @@ begin
       { Convert extended ASCII to plain text }
       if (inventory[i].glyph = chr(24)) then
         AddElement(DataNode, 'glyph', '|')
+      else if (inventory[i].glyph = chr(186)) then
+        AddElement(DataNode, 'glyph', '=')
       else
         AddElement(DataNode, 'glyph', inventory[i].glyph);
 

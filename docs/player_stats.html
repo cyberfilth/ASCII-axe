@@ -47,13 +47,19 @@ Additional player stats that are not shared with other entities are stored here<
 <td class="itemcode"><code><b><a  href="player_stats.html#maxVisionRange">maxVisionRange</a></b>: smallint;</code></td>
 </tr>
 <tr class="list">
-<td class="itemcode"><code><b><a  href="player_stats.html#playerRace">playerRace</a></b>: shortstring;</code></td>
+<td class="itemcode"><code><b><a  href="player_stats.html#enchWeapType">enchWeapType</a></b>: smallint;</code></td>
 </tr>
 <tr class="list2">
-<td class="itemcode"><code><b><a  href="player_stats.html#clanName">clanName</a></b>: shortstring;</code></td>
+<td class="itemcode"><code><b><a  href="player_stats.html#playerRace">playerRace</a></b>: shortstring;</code></td>
 </tr>
 <tr class="list">
+<td class="itemcode"><code><b><a  href="player_stats.html#clanName">clanName</a></b>: shortstring;</code></td>
+</tr>
+<tr class="list2">
 <td class="itemcode"><code><b><a  href="player_stats.html#canExitDungeon">canExitDungeon</a></b>: boolean;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a  href="player_stats.html#enchantedWeaponEquipped">enchantedWeaponEquipped</a></b>: boolean;</code></td>
 </tr>
 </table>
 <h2 class="description">Description</h2>
@@ -119,7 +125,7 @@ Increase attack &amp; defence</p>
 </tr>
 <tr><td colspan="1">
 <p>
-Player level and the maximum vision range (before the light fails and range decreases)</p>
+Player level, maximum vision range and enchanted weapon type</p>
 </td></tr>
 </table>
 <table class="detail wide_list">
@@ -128,7 +134,16 @@ Player level and the maximum vision range (before the light fails and range decr
 </tr>
 <tr><td colspan="1">
 <p>
-Player level and the maximum vision range (before the light fails and range decreases)</p>
+Player level, maximum vision range and enchanted weapon type</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="enchWeapType"></span><code><b>enchWeapType</b>: smallint;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Player level, maximum vision range and enchanted weapon type</p>
 </td></tr>
 </table>
 <table class="detail wide_list">
@@ -156,6 +171,15 @@ Is the player Elf, Dwarf or Human. clanName is only used for Dwarven characters<
 <tr><td colspan="1">
 <p>
 Is it possible to leave the current dungeon</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><span id="enchantedWeaponEquipped"></span><code><b>enchantedWeaponEquipped</b>: boolean;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+Is a magical weapon equipped</p>
 </td></tr>
 </table>
 </td></tr></table></body></html>

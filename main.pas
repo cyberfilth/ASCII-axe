@@ -204,6 +204,8 @@ begin
   entities.spawnPlayer;
   (* Set player stats *)
   player_stats.playerLevel := 1;
+  player_stats.enchantedWeaponEquipped := False;
+  player_stats.enchWeapType := 0;
   (* Spawn game entities *)
   universe.spawnDenizens;
   (* Initialise items list *)

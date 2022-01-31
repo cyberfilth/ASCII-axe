@@ -14,6 +14,8 @@ type
 
 (* Animate a rock being thrown *)
 procedure throwRock(id: smallint; var flightPath: a);
+(* Animate nearby enemies burning *)
+procedure areaBurnEffect;
 
 implementation
 
@@ -67,6 +69,11 @@ begin
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
   UnlockScreenUpdate;
   UpdateScreen(False);
+end;
+
+procedure areaBurnEffect;
+begin
+
 end;
 
 end.

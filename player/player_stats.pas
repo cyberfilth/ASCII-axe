@@ -10,12 +10,14 @@ uses
   SysUtils, video;
 
 var
-  (* Player level and the maximum vision range (before the light fails and range decreases) *)
-  playerLevel, maxVisionRange: smallint;
+  (* Player level, maximum vision range and enchanted weapon type *)
+  playerLevel, maxVisionRange, enchWeapType: smallint;
   (* Is the player Elf, Dwarf or Human. clanName is only used for Dwarven characters *)
   playerRace, clanName: shortstring;
   (* Is it possible to leave the current dungeon *)
   canExitDungeon: boolean;
+  (* Is a magical weapon equipped *)
+  enchantedWeaponEquipped: boolean;
 
 (* Check if the player has levelled up *)
 procedure checkLevel;

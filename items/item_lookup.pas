@@ -15,7 +15,9 @@ uses
   { List of armour }
   leather_armour1, cloth_armour1,
   { Quest items }
-  smugglersMap;
+  smugglersMap,
+  { Magical items }
+  staff_minor_scorch;
 
 const
   (* Array of items found in a cave, ordered by cave level *)
@@ -86,6 +88,7 @@ begin
     'leatherArmour1': leather_armour1.createLeatherArmour(i, c, r);
     'basicClub': basic_club.createClub(i, c, r);
     'clothArmour1': cloth_armour1.createClothArmour(i, c, r);
+    'staffMnrScorch': staff_minor_scorch.createStaff(itemAmount, c, r);
   end;
 end;
 
@@ -99,6 +102,7 @@ begin
     5: cloth_armour1.useItem(equipped);
     6: potion_curePoison.useItem;
     7: smugglersMap.obtainMap;
+    8: staff_minor_scorch.useItem(equipped);
   end;
 end;
 
@@ -118,7 +122,8 @@ begin
   if (universe.currentDepth = 3) then
     smugglersMap.createSmugglersMap(itemAmount, c, r)
   else
-    ale_tankard.createAleTankard(itemAmount, c, r);
+    //ale_tankard.createAleTankard(itemAmount, c, r);
+    staff_minor_scorch.createStaff(itemAmount, c, r);
 end;
 
 end.

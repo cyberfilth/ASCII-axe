@@ -51,6 +51,8 @@ procedure quaffSelection(selection: smallint);
 procedure wield(message: char);
 (* Wear / Wield selected item *)
 procedure wearWieldSelection(selection: smallint);
+(* Zap equipped item *)
+procedure Zzap(item: smallint);
 
 implementation
 
@@ -87,7 +89,8 @@ begin
     if (inventory[i].equipped = True) then
     begin
       (* Check for weapons *)
-      if (inventory[i].itemType = itmWeapon) then
+      if (inventory[i].itemType = itmWeapon) or
+        (inventory[i].itemType = itmEnchantedWeapon) then
       begin
         ui.equippedWeapon := inventory[i].Name;
         ui.updateWeapon;
@@ -469,6 +472,18 @@ begin
       Inc(entityList[0].moveCount);
       wield(msg);
     end;
+  end;
+end;
+
+procedure Zzap(item: smallint);
+begin
+  case item of
+    8:
+    begin
+      ui.displayMessage('Zzzzzap!');
+    end;
+    else
+      ui.displayMessage('You have no magical weapon equipped');
   end;
 end;
 

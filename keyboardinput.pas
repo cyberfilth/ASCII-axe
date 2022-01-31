@@ -426,6 +426,11 @@ begin
       map.descendStairs;
       main.gameLoop;
     end;
+    'z', 'Z': {Zap magic }
+    begin
+      player_inventory.Zzap(player_stats.enchWeapType);
+      main.gameLoop;
+    end;
     'i', 'I': { Inventory }
     begin
       main.gameState := stInventory;
