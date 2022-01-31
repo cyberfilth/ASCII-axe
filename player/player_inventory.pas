@@ -7,7 +7,7 @@ unit player_inventory;
 interface
 
 uses
-  SysUtils, StrUtils, video, entities, items, item_lookup, player_stats;
+  SysUtils, StrUtils, video, entities, items, item_lookup, player_stats, staff_minor_scorch;
 
 type
   (* Items in inventory *)
@@ -478,11 +478,11 @@ end;
 procedure Zzap(item: smallint);
 begin
   case item of
-    8:
+    8: { Staff of Minor Scorch }
     begin
-      ui.displayMessage('Zzzzzap!');
+      staff_minor_scorch.Zap;
     end;
-    else
+    else { No enchanted weapon equipped }
       ui.displayMessage('You have no magical weapon equipped');
   end;
 end;

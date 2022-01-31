@@ -6,6 +6,9 @@ unit staff_minor_scorch;
 
 interface
 
+uses
+  magicEffects;
+
 (* Create a staff *)
 procedure createStaff(uniqueid, itmx, itmy: smallint);
 (* Equip weapon *)
@@ -47,11 +50,12 @@ begin
   begin
     entityList[0].weaponEquipped := True;
     Inc(entityList[0].weaponDice);
-    ui.displayMessage('You equip the enchanted staff. The staff can scorch nearby enemies [z]');
+    ui.displayMessage(
+      'You equip the enchanted staff. The staff can scorch nearby enemies [z]');
     ui.equippedWeapon := 'Staff of scorch';
     ui.writeBufferedMessages;
-    player_stats.enchantedWeaponEquipped:= True;
-    player_stats.enchWeapType:= 8;
+    player_stats.enchantedWeaponEquipped := True;
+    player_stats.enchWeapType := 8;
   end
   else
     (* To unequip the weapon *)
@@ -61,16 +65,16 @@ begin
     ui.displayMessage('You unequip the enchanted staff.');
     ui.equippedWeapon := 'No weapon equipped';
     ui.writeBufferedMessages;
-    player_stats.enchantedWeaponEquipped:= False;
-    player_stats.enchWeapType:= 0;
+    player_stats.enchantedWeaponEquipped := False;
+    player_stats.enchWeapType := 0;
   end;
 end;
 
-(* Placeholder until magic is added *)
 procedure Zap;
 begin
-   ui.displayMessage('Zap!');
+  (* Check mana amount *)
+
+  magicEffects.minorScorch;
 end;
 
 end.
-

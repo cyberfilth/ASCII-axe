@@ -400,6 +400,8 @@ lookupUse	items/backup/item_lookup.pas	/^procedure lookupUse(x: smallint; equipp
 lookupUse	items/item_lookup.pas	/^procedure lookupUse(x: smallint; equipped: boolean);$/;"	p
 loop	backup/main.pas	/^procedure loop;$/;"	p
 loop	main.pas	/^procedure loop;$/;"	p
+minorScorch	backup/magiceffects.pas	/^procedure minorScorch;$/;"	p
+minorScorch	magiceffects.pas	/^procedure minorScorch;$/;"	p
 moveNPC	backup/entities.pas	/^procedure moveNPC(id, newX, newY: smallint);$/;"	p
 moveNPC	entities.pas	/^procedure moveNPC(id, newX, newY: smallint);$/;"	p
 movePlayer	player/backup/player.pas	/^procedure movePlayer(dir: word);$/;"	p

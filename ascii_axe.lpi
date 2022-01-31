@@ -115,7 +115,7 @@
       <FormatVersion Value="2"/>
       <Modes Count="0"/>
     </RunParams>
-    <Units Count="50">
+    <Units Count="51">
       <Unit0>
         <Filename Value="ascii_axe.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -329,6 +329,11 @@
         <Filename Value="items\weapons\staff_minor_scorch.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit49>
+      <Unit50>
+        <Filename Value="magiceffects.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="magicEffects"/>
+      </Unit50>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
