@@ -7,7 +7,7 @@ unit magicEffects;
 interface
 
 uses
-  SysUtils, los, entities, ui, player_stats;
+  SysUtils, video, los, entities, ui, player_stats, animation;
 
 (* Burn enemies in a cirle area from starting centre coordinates *)
 procedure minorScorch;
@@ -17,13 +17,10 @@ implementation
 procedure minorScorch;
 var
   i, damageAmount: smallint;
-  anyTargetHit, plural: boolean;
-  listOfDead: shortstring;
+  anyTargetHit: boolean;
 begin
   i := 0;
   anyTargetHit := False;
-  plural := False;
-  listOfDead := '';
   (* Damage amount is 4 + player level *)
   damageAmount := 4 + player_stats.playerLevel;
   (* Check if any enemies are near *)
@@ -33,9 +30,14 @@ begin
     if (entityList[i].inView = True) and (entityList[i].isDead = False) then
     begin
       (* Area of effect is Players vision range - 1 *)
-      if (los.inView(entityList[0].posX, entityList[0].posY, entityList[i].posX, entityList[i].posY, entityList[0].visionRange - 1) = True) then
+      if (los.inView(entityList[0].posX, entityList[0].posY,
+        entityList[i].posX, entityList[i].posY, entityList[0].visionRange - 1) =
+        True) then
       begin
         anyTargetHit := True;
+        (* Draw each affected NPC in red *)
+        animation.areaBurnEffect(entityList[i].posX, entityList[i].posY,
+          entityList[i].glyph);
         (* Deal damage *)
         entityList[i].currentHP := (entityList[i].currentHP - damageAmount);
         (* Check if NPC killed *)
@@ -44,14 +46,6 @@ begin
           entities.killEntity(i);
           entityList[0].xpReward := entityList[0].xpReward + entityList[i].xpReward;
           ui.updateXP;
-          (* Create log message *)
-          if (listOfDead = '') then
-            listOfDead := entityList[i].race
-          else
-          begin
-            plural := True;
-            listOfDead := listOfDead + ', ' + entityList[i].race;
-          end;
         end;
       end;
     end;
@@ -61,10 +55,8 @@ begin
     ui.displayMessage('Flames shoot out, but hit nothing')
   else
   begin
-    if (plural = False) then
-      ui.displayMessage('The ' + listOfDead + ' burns.')
-    else
-      ui.displayMessage('The ' + listOfDead + ' all burn.');
+    ui.displayMessage('Flames scorch your enemies');
+    Sleep(500);
   end;
 end;
 

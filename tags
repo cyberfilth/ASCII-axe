@@ -34,7 +34,8 @@ Zzap	player/backup/player_inventory.pas	/^procedure Zzap(item: smallint);$/;"	p
 Zzap	player/player_inventory.pas	/^procedure Zzap(item: smallint);$/;"	p
 addToInventory	player/backup/player_inventory.pas	/^function addToInventory(itemNumber: smallint): boolean;$/;"	f
 addToInventory	player/player_inventory.pas	/^function addToInventory(itemNumber: smallint): boolean;$/;"	f
-areaBurnEffect	animation.pas	/^procedure areaBurnEffect;$/;"	p
+areaBurnEffect	animation.pas	/^procedure areaBurnEffect(x, y: smallint; NPCglyph: shortstring);$/;"	p
+areaBurnEffect	backup/animation.pas	/^procedure areaBurnEffect(x, y: smallint; NPCglyph: shortstring);$/;"	p
 ascendStairs	backup/map.pas	/^procedure ascendStairs;$/;"	p
 ascendStairs	map.pas	/^procedure ascendStairs;$/;"	p
 beginLogging	logging.pas	/^procedure beginLogging;$/;"	p

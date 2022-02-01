@@ -15,7 +15,7 @@ type
 (* Animate a rock being thrown *)
 procedure throwRock(id: smallint; var flightPath: a);
 (* Animate nearby enemies burning *)
-procedure areaBurnEffect;
+procedure areaBurnEffect(x, y: smallint; NPCglyph: shortstring);
 
 implementation
 
@@ -71,9 +71,23 @@ begin
   UpdateScreen(False);
 end;
 
-procedure areaBurnEffect;
+procedure areaBurnEffect(x, y: smallint; NPCglyph: shortstring);
 begin
-
+  (* Change game state to stop receiving inputs *)
+  main.gameState := stAnim;
+  { prepare changes to the screen }
+  LockScreenUpdate;
+  map.mapDisplay[y, x].GlyphColour := 'red';
+  map.mapDisplay[y, x].Glyph := NPCglyph;
+   (* Repaint map *)
+    camera.drawMap;
+  //TextOut(x, y, 'yellow', 'X');
+  { Write those changes to the screen }
+  UnlockScreenUpdate;
+  { only redraws the parts that have been updated }
+  UpdateScreen(False);
+  (* Restore game state *)
+  main.gameState := stGame;
 end;
 
 end.
