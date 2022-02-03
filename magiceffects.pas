@@ -9,6 +9,9 @@ interface
 uses
   SysUtils, video, los, entities, ui, player_stats, animation;
 
+type
+  TSmallintArray = array of smallint;
+
 (* Burn enemies in a cirle area from starting centre coordinates *)
 procedure minorScorch;
 
@@ -18,8 +21,10 @@ procedure minorScorch;
 var
   i, damageAmount, targetAmount: smallint;
   anyTargetHit: boolean;
-  targetList: array of smallint;
+  targetList: TSmallintArray;
 begin
+  (*  initialise array *)
+  targetList := Default(TSmallintArray);
   SetLength(targetList, 0);
   i := 0;
   targetAmount := 1;
@@ -46,7 +51,8 @@ begin
     end;
   end;
   (* Draw each affected NPC in red *)
-  animation.areaBurnEffect(targetList);
+  if (anyTargetHit = True) then
+    animation.areaBurnEffect(targetList);
 
   (* Deal damage *)
   for i := 1 to entities.npcAmount do
