@@ -73,31 +73,55 @@ end;
 
 procedure areaBurnEffect(getEm: array of smallint);
 var
-  i: byte;
+  i, x, boomTimer: byte;
+  boom: shortstring;
 begin
+  boomTimer := 0;
+  boom := 'red';
   (* Change game state to stop receiving inputs *)
   main.gameState := stAnim;
-  { prepare changes to the screen }
-  LockScreenUpdate;
-
-  (* Loop through array and draw each NPC in red *)
-  for i := Low(getEm) to High(getEm) do
+  (* Loop through Scorch colours *)
+  for x := 1 to 3 do
   begin
-    map.mapDisplay[entityList[getEm[i]].posY, entityList[getEm[i]].posX].GlyphColour := 'red';
-    map.mapDisplay[entityList[getEm[i]].posY, entityList[getEm[i]].posX].Glyph := entityList[getEm[i]].glyph;
+    if (x = 1) then
+    begin
+      boomTimer := 200;
+      boom := 'red';
+    end
+    else if (x = 2) then
+    begin
+      boomTimer := 150;
+      boom := 'lightMagenta';
+    end
+    else if (x = 3) then
+    begin
+      boomTimer := 80;
+      boom := 'white';
+    end;
+
+    { prepare changes to the screen }
+    LockScreenUpdate;
+
+    (* Loop through array and draw each NPC *)
+    for i := Low(getEm) to High(getEm) do
+    begin
+      map.mapDisplay[entityList[getEm[i]].posY,
+        entityList[getEm[i]].posX].GlyphColour := boom;
+      map.mapDisplay[entityList[getEm[i]].posY, entityList[getEm[i]].posX].Glyph :=
+        entityList[getEm[i]].glyph;
+    end;
+
+    (* Repaint map *)
+    camera.drawMap;
+
+    { Write those changes to the screen }
+    UnlockScreenUpdate;
+    { only redraws the parts that have been updated }
+    UpdateScreen(False);
+    sleep(boomTimer);
   end;
-
-  (* Repaint map *)
-  camera.drawMap;
-
-  { Write those changes to the screen }
-  UnlockScreenUpdate;
-  { only redraws the parts that have been updated }
-  UpdateScreen(False);
   (* Restore game state *)
   main.gameState := stGame;
-  Sleep(500);
 end;
 
 end.
-
