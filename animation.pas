@@ -91,7 +91,7 @@ begin
     else if (x = 2) then
     begin
       boomTimer := 150;
-      boom := 'lightMagenta';
+      boom := 'pink';
     end
     else if (x = 3) then
     begin

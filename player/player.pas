@@ -89,12 +89,31 @@ begin
     posX := map.startX;
     posY := map.startY;
   end;
-  (* Occupy tile *)
-  map.occupy(entityList[0].posX, entityList[0].posY);
+  (* Ability to cast enchantments *)
+  { Elf }
+  if (player_stats.playerRace = 'Elf') then
+  begin
+    player_stats.maxMagick := 20;
+    player_stats.currentMagick := 20;
+  end
+  { Human }
+  else if (player_stats.playerRace = 'Human') then
+  begin
+    player_stats.maxMagick := 12;
+    player_stats.currentMagick := 12;
+  end
+  { Dwarf - Cannot cast magic }
+  else
+  begin
+    player_stats.maxMagick := 0;
+    player_stats.currentMagick := 0;
+  end;
   (* set up inventory *)
   player_inventory.initialiseInventory;
   ui.equippedWeapon := 'No weapon equipped';
   ui.equippedArmour := 'No armour worn';
+  (* Occupy tile *)
+  map.occupy(entityList[0].posX, entityList[0].posY);
   (* Draw player and FOV *)
   fov.fieldOfView(entityList[0].posX, entityList[0].posY, entityList[0].visionRange, 1);
 end;

@@ -19,13 +19,19 @@ implementation
 
 procedure minorScorch;
 var
-  i, damageAmount, targetAmount: smallint;
+  i, damageAmount, targetAmount, cost: smallint;
   anyTargetHit: boolean;
   targetList: TSmallintArray;
 begin
-  (*  initialise array *)
-  targetList := Default(TSmallintArray);
+  (*  Set array to 0 *)
   SetLength(targetList, 0);
+  (* Cost of casting magick *)
+  cost := (5 - player_stats.playerLevel);
+  if (cost > player_stats.currentMagick) then
+  begin
+    ui.displayMessage('You don''t have enough magickal energy to cast!');
+    exit;
+  end;
   i := 0;
   targetAmount := 1;
   anyTargetHit := False;
@@ -83,6 +89,7 @@ begin
   begin
     ui.displayMessage('Flames scorch your enemies');
   end;
+  Dec(player_stats.currentMagick, cost);
 end;
 
 end.

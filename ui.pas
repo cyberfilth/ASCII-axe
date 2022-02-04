@@ -48,6 +48,8 @@ procedure updateLevel;
 procedure updateXP;
 (* Update player health display *)
 procedure updateHealth;
+(* Update player magick display *)
+procedure updateMagick;
 (* Update player attack value *)
 procedure updateAttack;
 (* Update player defence value *)
@@ -86,6 +88,7 @@ begin
     'black': tint := video.Black;
     'blue': tint := video.Blue;
     'green': tint := video.Green;
+    'lightGreen': tint := video.LightGreen;
     'greenBlink': tint := video.Green + video.Blink;
     'cyan': tint := video.Cyan;
     'cyanBGblackTXT': tint := ($03 shl 4);
@@ -252,8 +255,8 @@ end;
 procedure updateLevel;
 begin
   (* Paint over previous stats *)
-  TextOut(scrGame.minX + 9, 4, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219) + Chr(219));
+  TextOut(scrGame.minX + 9, 4, 'black', Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out Level number *)
   TextOut(scrGame.minX + 9, 4, 'cyan', IntToStr(player_stats.playerLevel));
 end;
@@ -261,8 +264,8 @@ end;
 procedure updateXP;
 begin
   (* Paint over previous stats *)
-  TextOut(scrGame.minX + 14, 6, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219) + Chr(219));
+  TextOut(scrGame.minX + 14, 6, 'black', Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
   TextOut(scrGame.minX + 14, 6, 'cyan', IntToStr(entities.entityList[0].xpReward));
 end;
@@ -279,16 +282,16 @@ begin
     Exit;
   end;
   (* Paint over previous stats *)
-  TextOut(scrGame.minX + 10, 7, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 10, 7, 'black', Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219));
+    Chr(219) + Chr(219) + Chr(219));
   (* Write stats *)
   TextOut(scrGame.minX + 10, 7, 'cyan', IntToStr(entities.entityList[0].currentHP) +
     '/' + IntToStr(entities.entityList[0].maxHP));
   (* Paint over health bar *)
-  TextOut(scrGame.minX + 2, 8, 'black', Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+  TextOut(scrGame.minX + 2, 8, 'black', Chr(223) + Chr(223) + Chr(223) +
     Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
-    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
+    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
   (* Length of health bar *)
   bars := 0;
   (* Calculate percentage of total health *)
@@ -332,23 +335,93 @@ begin
     TextOut((scrGame.minX + 1) + i, 8, 'green', Chr(223));
 end;
 
-procedure updateAttack;
+procedure updateMagick;
+var
+  healthPercentage, bars, i: byte;
 begin
   (* Paint over previous stats *)
-  TextOut(scrGame.minX + 10, 9, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 10, 9, 'black', Chr(219) + Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219));
+    Chr(219) + Chr(219) + Chr(219));
+  (* Write stats *)
+  TextOut(scrGame.minX + 10, 9, 'cyan', IntToStr(player_stats.currentMagick) +
+    '/' + IntToStr(player_stats.maxMagick));
+  (* Paint over magick bar *)
+  TextOut(scrGame.minX + 2, 10, 'black', Chr(223) + Chr(223) + Chr(223) +
+    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) +
+    Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223) + Chr(223));
+  (* Length of magick bar *)
+  bars := 0;
+  (* Calculate percentage of total magick *)
+  healthPercentage := (player_stats.currentMagick * 100) div player_stats.maxMagick;
+  (* Calculate the length of the magick bar *)
+  if (healthPercentage <= 6) then
+    bars := 1
+  else if (healthPercentage > 6) and (healthPercentage <= 12) then
+    bars := 2
+  else if (healthPercentage > 12) and (healthPercentage <= 18) then
+    bars := 3
+  else if (healthPercentage > 18) and (healthPercentage < 25) then
+    bars := 4
+  else if (healthPercentage >= 25) and (healthPercentage <= 31) then
+    bars := 5
+  else if (healthPercentage > 31) and (healthPercentage <= 37) then
+    bars := 6
+  else if (healthPercentage > 37) and (healthPercentage <= 43) then
+    bars := 7
+  else if (healthPercentage > 43) and (healthPercentage < 50) then
+    bars := 8
+  else if (healthPercentage >= 50) and (healthPercentage <= 56) then
+    bars := 9
+  else if (healthPercentage > 56) and (healthPercentage <= 62) then
+    bars := 10
+  else if (healthPercentage > 62) and (healthPercentage <= 68) then
+    bars := 11
+  else if (healthPercentage > 68) and (healthPercentage < 75) then
+    bars := 12
+  else if (healthPercentage >= 75) and (healthPercentage <= 81) then
+    bars := 13
+  else if (healthPercentage > 81) and (healthPercentage <= 87) then
+    bars := 14
+  else if (healthPercentage > 87) and (healthPercentage <= 94) then
+    bars := 15
+  else if (healthPercentage > 94) then
+    bars := 16;
+  (* Draw magick bar *)
+  for i := 1 to bars do
+    TextOut((scrGame.minX + 1) + i, 10, 'blue', Chr(223));
+end;
+
+procedure updateAttack;
+var
+  position: byte;
+begin
+  if (player_stats.playerRace = 'Dwarf') then
+    position := 9
+  else
+    position := 11;
+  (* Paint over previous stats *)
+  TextOut(scrGame.minX + 10, position, 'black', Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(scrGame.minX + 10, 9, 'cyan', IntToStr(entities.entityList[0].attack));
+  TextOut(scrGame.minX + 10, position, 'cyan', IntToStr(entities.entityList[0].attack));
 end;
 
 procedure updateDefence;
+var
+  position: byte;
 begin
+  if (player_stats.playerRace = 'Dwarf') then
+    position := 10
+  else
+    position := 12;
   (* Paint over previous stats *)
-  TextOut(scrGame.minX + 11, 10, 'black', Chr(219) + Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219));
+  TextOut(scrGame.minX + 11, position, 'black', Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
+    Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
-  TextOut(scrGame.minX + 11, 10, 'cyan', IntToStr(entities.entityList[0].defence));
+  TextOut(scrGame.minX + 11, position, 'cyan', IntToStr(entities.entityList[0].defence));
 end;
 
 procedure updateWeapon;

@@ -529,6 +529,8 @@ updateHealth	backup/ui.pas	/^procedure updateHealth;$/;"	p
 updateHealth	ui.pas	/^procedure updateHealth;$/;"	p
 updateLevel	backup/ui.pas	/^procedure updateLevel;$/;"	p
 updateLevel	ui.pas	/^procedure updateLevel;$/;"	p
+updateMagick	backup/ui.pas	/^procedure updateMagick;$/;"	p
+updateMagick	ui.pas	/^procedure updateMagick;$/;"	p
 updateWeapon	backup/ui.pas	/^procedure updateWeapon;$/;"	p
 updateWeapon	ui.pas	/^procedure updateWeapon;$/;"	p
 updateXP	backup/ui.pas	/^procedure updateXP;$/;"	p

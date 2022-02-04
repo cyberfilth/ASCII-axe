@@ -6,6 +6,9 @@ unit scrGame;
 
 interface
 
+uses
+  player_stats;
+
 var
   minX: smallint;
 
@@ -73,13 +76,25 @@ begin
   TextOut(minX + 2, 4, 'cyan', 'Level:');
   TextOut(minX + 2, 6, 'cyan', 'Experience:');
   TextOut(minX + 2, 7, 'cyan', 'Health:');
-  TextOut(minX + 2, 9, 'cyan', 'Attack:');
-  TextOut(minX + 2, 10, 'cyan', 'Defence:');
+  (* Dwarf doesn't display magic in the sidebar *)
+  if (player_stats.playerRace = 'Dwarf') then
+  begin
+    TextOut(minX + 2, 9, 'cyan', 'Attack:');
+    TextOut(minX + 2, 10, 'cyan', 'Defence:');
+  end
+  else
+  begin
+    TextOut(minX + 2, 9, 'cyan', 'Magick:');
+    TextOut(minX + 2, 11, 'cyan', 'Attack:');
+    TextOut(minX + 2, 12, 'cyan', 'Defence:');
+  end;
 
   (* Write stats *)
   ui.updateLevel;
   ui.updateXP;
   ui.updateHealth;
+  if (player_stats.playerRace <> 'Dwarf') then
+    ui.updateMagick;
   ui.updateAttack;
   ui.updateDefence;
   ui.updateWeapon;

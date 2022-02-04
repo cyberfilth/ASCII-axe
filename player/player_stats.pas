@@ -18,6 +18,8 @@ var
   canExitDungeon: boolean;
   (* Is a magical weapon equipped *)
   enchantedWeaponEquipped: boolean;
+  (* Magical ability *)
+  maxMagick, currentMagick: smallint;
 
 (* Check if the player has levelled up *)
 procedure checkLevel;

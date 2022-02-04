@@ -380,6 +380,9 @@ begin
   entities.occupyUpdate;
   (* Update health display to show damage *)
   ui.updateHealth;
+  (* Update magick display *)
+  if (player_stats.playerRace <> 'Dwarf') then
+  ui.updateMagick;
   (* Reduce smell counter *)
   if (smell.smellCounter > 0) then
     Dec(smell.smellCounter);
