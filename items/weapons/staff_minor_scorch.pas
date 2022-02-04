@@ -21,6 +21,7 @@ implementation
 uses
   items, entities, ui, player_stats;
 
+(* Description of item depends on player race *)
 procedure createStaff(uniqueid, itmx, itmy: smallint);
 begin
   items.listLength := length(items.itemList);
@@ -28,8 +29,16 @@ begin
   with items.itemList[items.listLength] do
   begin
     itemID := uniqueid;
-    itemName := 'Staff of minor scorch';
-    itemDescription := '+1D6 to attack, scorches nearby enemies';
+    if (player_stats.playerRace <> 'Dwarf') then
+    begin
+      itemName := 'Staff of minor scorch';
+      itemDescription := '+1D6 to attack, scorches nearby enemies';
+    end
+    else
+    begin
+      itemName := 'Wooden staff';
+      itemDescription := 'adds 1D6 to attack';
+    end;
     itemType := itmWeapon;
     itemMaterial := matWood;
     useID := 8;
@@ -50,9 +59,16 @@ begin
   begin
     entityList[0].weaponEquipped := True;
     Inc(entityList[0].weaponDice);
-    ui.displayMessage(
-      'You equip the enchanted staff. The staff can scorch nearby enemies [z]');
-    ui.equippedWeapon := 'Staff of scorch';
+    if (player_stats.playerRace <> 'Dwarf') then
+    begin
+      ui.displayMessage('You equip the enchanted staff. The staff can scorch nearby enemies [z]');
+      ui.equippedWeapon := 'Staff of scorch';
+    end
+    else
+    begin
+      ui.displayMessage('You equip the staff. You sense it has magical powers beyond your ability');
+      ui.equippedWeapon := 'Wooden staff';
+    end;
     ui.writeBufferedMessages;
     player_stats.enchantedWeaponEquipped := True;
     player_stats.enchWeapType := 8;
@@ -62,7 +78,10 @@ begin
   begin
     entityList[0].weaponEquipped := False;
     Dec(entityList[0].weaponDice);
-    ui.displayMessage('You unequip the enchanted staff.');
+    if (player_stats.playerRace <> 'Dwarf') then
+      ui.displayMessage('You unequip the enchanted staff.')
+    else
+      ui.displayMessage('You unequip the staff.');
     ui.equippedWeapon := 'No weapon equipped';
     ui.writeBufferedMessages;
     player_stats.enchantedWeaponEquipped := False;
