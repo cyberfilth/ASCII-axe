@@ -508,6 +508,8 @@ begin
 
     (* Player stats *)
     player_stats.playerLevel := StrToInt(UTF8Encode(PlayerDataNode.FindNode('playerLevel').TextContent));
+    player_stats.currentMagick := StrToInt(UTF8Encode(PlayerDataNode.FindNode('currentMagick').TextContent));
+    player_stats.maxMagick := StrToInt(UTF8Encode(PlayerDataNode.FindNode('maxMagick').TextContent));
     player_stats.maxVisionRange := StrToInt(UTF8Encode(PlayerDataNode.FindNode('maxVisionRange').TextContent));
     player_stats.playerRace:=UTF8Encode(PlayerDataNode.FindNode('playerRace').TextContent);
     player_stats.clanName:=UTF8Encode(PlayerDataNode.FindNode('clanName').TextContent);
@@ -634,6 +636,8 @@ begin
 
     (* Player stats *)
     AddElement(DataNode, 'playerLevel', IntToStr(player_stats.playerLevel));
+    AddElement(DataNode, 'currentMagick', IntToStr(player_stats.currentMagick));
+    AddElement(DataNode, 'maxMagick', IntToStr(player_stats.maxMagick));
     AddElement(DataNode, 'maxVisionRange', IntToStr(player_stats.maxVisionRange));
     AddElement(DataNode, 'playerRace', player_stats.playerRace);
     AddElement(DataNode, 'clanName', player_stats.clanName);
