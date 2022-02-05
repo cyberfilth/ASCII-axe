@@ -33,5 +33,6 @@ View inventory with 'i'
 Drop an item with 'd'
 Quaff / drink with 'q'
 Wear armour or Wield a weapon with 'w'
+Zap magic with 'z'
 To exit a menu / quit the game press ESCAPE (on Linux you will need to double-tap the ESCAPE key)
 </pre>
