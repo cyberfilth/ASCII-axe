@@ -3,7 +3,7 @@
 unit magicEffects;
 
 {$mode fpc}{$H+}
-
+{$WARN 5091 off : Local variable "$1" of a managed type does not seem to be initialized}
 interface
 
 uses
