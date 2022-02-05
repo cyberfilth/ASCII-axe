@@ -355,7 +355,7 @@ begin
   (* Calculate percentage of total magick *)
   magickPercentage := (player_stats.currentMagick * 100) div player_stats.maxMagick;
   (* Calculate the length of the magick bar *)
-  if (magickPercentage <= 6) then
+  if (magickPercentage >= 1) and (magickPercentage <= 6) then
     bars := 1
   else if (magickPercentage > 6) and (magickPercentage <= 12) then
     bars := 2
@@ -401,9 +401,9 @@ begin
   else
     position := 11;
   (* Paint over previous stats *)
-  TextOut(scrGame.minX + 10, position, 'black', Chr(219) + Chr(219) + Chr(219) +
+  TextOut(scrGame.minX + 10, position, 'black', Chr(219) + Chr(219) +
     Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) + Chr(219) +
-    Chr(219) + Chr(219) + Chr(219));
+    Chr(219) + Chr(219) + Chr(219) + Chr(219));
   (* Write out XP amount *)
   TextOut(scrGame.minX + 10, position, 'cyan', IntToStr(entities.entityList[0].attack));
 end;
