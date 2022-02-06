@@ -7,7 +7,7 @@ unit green_fungus;
 interface
 
 uses
-  SysUtils;
+  SysUtils, small_green_fungus;
 
 (* Create fungus *)
 procedure createGreenFungus(uniqueid, npcx, npcy: smallint);
@@ -17,6 +17,8 @@ procedure takeTurn(id: smallint);
 function isNextToPlayer(spx, spy: smallint): boolean;
 (* Fungus attacks *)
 procedure combat(idOwner, idTarget: smallint);
+(* NPC Death *)
+procedure death(id: smallint);
 
 implementation
 
@@ -48,7 +50,7 @@ begin
     targetY := 0;
     inView := False;
     blocks := False;
-    faction:=fungusFaction;
+    faction := fungusFaction;
     state := stateHostile;
     discovered := False;
     weaponEquipped := False;
@@ -163,6 +165,44 @@ begin
   end
   else
     ui.displayMessage('The fungus lashes out at you but misses');
+end;
+
+(* Attempt to spread spores *)
+procedure death(id: smallint);
+var
+  fungusSpawnAttempts: byte;
+  i, amount, r, c: smallint;
+begin
+  fungusSpawnAttempts := 0;
+  (* Limit the number of attempts to find a space *)
+  if (fungusSpawnAttempts < 3) then
+  begin
+    begin
+      (* Set a random number of spores *)
+      amount := randomRange(0, 3);
+      if (amount > 0) then
+      begin
+        for i := 1 to amount do
+        begin
+          (* Choose a space to place the fungus *)
+          r := globalutils.randomRange(entityList[id].posY - 4,
+            entityList[id].posY + 4);
+          c := globalutils.randomRange(entityList[id].posX - 4,
+            entityList[id].posX + 4);
+          (* choose a location that is not a wall or occupied *)
+          if (maparea[r][c].Blocks <> True) and (maparea[r][c].Occupied <> True) and
+            (withinBounds(c, r) = True) then
+          begin
+            Inc(npcAmount);
+            small_green_fungus.createSmallGreenFungus(npcAmount, c, r);
+          end;
+        end;
+        ui.writeBufferedMessages;
+        ui.bufferMessage('The fungus releases spores into the air');
+      end;
+      Inc(fungusSpawnAttempts);
+    end;
+  end;
 end;
 
 end.

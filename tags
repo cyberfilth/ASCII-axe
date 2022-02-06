@@ -148,6 +148,7 @@ createSmugglersMap	items/macguffins/backup/smugglersmap.pas	/^procedure createSm
 createSmugglersMap	items/macguffins/smugglersmap.pas	/^procedure createSmugglersMap(uniqueid, itmx, itmy: smallint);$/;"	p
 createStaff	items/weapons/backup/staff_minor_scorch.pas	/^procedure createStaff(uniqueid, itmx, itmy: smallint);$/;"	p
 createStaff	items/weapons/staff_minor_scorch.pas	/^procedure createStaff(uniqueid, itmx, itmy: smallint);$/;"	p
+death	entities/fungus/green_fungus.pas	/^procedure death(id: smallint);$/;"	p
 decisionEscape	entities/animals/cave_rat.pas	/^procedure decisionEscape(id: smallint);$/;"	p
 decisionEscape	entities/animals/giant_cave_rat.pas	/^procedure decisionEscape(id: smallint);$/;"	p
 decisionEscape	entities/backup/giant_cave_rat.pas	/^procedure decisionEscape(id: smallint);$/;"	p

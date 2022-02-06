@@ -111,11 +111,7 @@ begin
 end;
 
 procedure killEntity(id: smallint);
-var
-  i, amount, r, c: smallint;
-  fungusSpawnAttempts: byte;
 begin
-  fungusSpawnAttempts := 0;
   entityList[id].isDead := True;
   entityList[id].glyph := '%';
   entityList[id].blocks := False;
@@ -123,37 +119,7 @@ begin
 
   { Green Fungus }
   if (entityList[id].race = 'Green Fungus') then
-    (* Attempt to spread spores *)
-    (* Limit the number of attempts to find a space *)
-    if (fungusSpawnAttempts < 3) then
-    begin
-      begin
-        (* Set a random number of spores *)
-        amount := randomRange(0, 3);
-        if (amount > 0) then
-        begin
-          for i := 1 to amount do
-          begin
-            (* Choose a space to place the fungus *)
-            r := globalutils.randomRange(entityList[id].posY - 4,
-              entityList[id].posY + 4);
-            c := globalutils.randomRange(entityList[id].posX - 4,
-              entityList[id].posX + 4);
-            (* choose a location that is not a wall or occupied *)
-            if (maparea[r][c].Blocks <> True) and (maparea[r][c].Occupied <> True) and
-              (withinBounds(c, r) = True) then
-            begin
-              Inc(npcAmount);
-              small_green_fungus.createSmallGreenFungus(npcAmount, c, r);
-            end;
-          end;
-          ui.writeBufferedMessages;
-          ui.bufferMessage('The fungus releases spores into the air');
-        end;
-        Inc(fungusSpawnAttempts);
-      end;
-    end;
-  { End of Green Fungus death }
+    green_fungus.death(id);
 end;
 
 
@@ -315,7 +281,7 @@ begin
     giant_cave_rat.takeTurn(i)
   else if (entityList[i].race = 'Blood Bat') then
     blood_bat.takeTurn(i)
-   else if (entityList[i].race = 'Large Blood Bat') then
+  else if (entityList[i].race = 'Large Blood Bat') then
     large_blood_bat.takeTurn(i)
   else if (entityList[i].race = 'Green Fungus') then
     green_fungus.takeTurn(i)

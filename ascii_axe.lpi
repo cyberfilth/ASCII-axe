@@ -19,10 +19,10 @@
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
-      <MinorVersionNr Value="44"/>
+      <MinorVersionNr Value="45"/>
       <Language Value="0809"/>
       <Attributes pvaPreRelease="True"/>
-      <StringTable FileDescription="Classic roguelike game"/>
+      <StringTable FileDescription="ASCII roguelike game"/>
     </VersionInfo>
     <BuildModes Count="3">
       <Item1 Name="Default" Default="True"/>
