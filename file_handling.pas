@@ -237,6 +237,8 @@ begin
           DataNode := AddChild(RootNode, 'NPCdata');
           AddElement(DataNode, 'npcID', IntToStr(entities.entityList[i].npcID));
           AddElement(DataNode, 'race', entities.entityList[i].race);
+          AddElement(DataNode, 'intName', entities.entityList[i].intName);
+          AddElement(DataNode, 'article', BoolToStr(entities.entityList[i].article));
           AddElement(DataNode, 'description', entities.entityList[i].description);
 
            { Convert extended ASCII to plain text }
@@ -386,6 +388,8 @@ begin
         SetLength(entities.entityList, entities.listLength + 1);
         entities.entityList[i].npcID := StrToInt(UTF8Encode(NPCnode.FindNode('npcID').TextContent));
         entities.entityList[i].race := UTF8Encode(NPCnode.FindNode('race').TextContent);
+        entities.entityList[i].intName := UTF8Encode(NPCnode.FindNode('intName').TextContent);
+        entities.entityList[i].article := StrToBool(UTF8Encode(NPCnode.FindNode('article').TextContent));
         entities.entityList[i].description := UTF8Encode(NPCnode.FindNode('description').TextContent);
 
         { Convert plain text to extended ASCII }

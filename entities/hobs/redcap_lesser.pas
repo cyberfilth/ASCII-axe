@@ -50,6 +50,8 @@ begin
   begin
     npcID := uniqueid;
     race := 'Hob';
+    intName := 'Hob';
+    article := True;
     description := 'a short Hob wearing a red cap';
     glyph := chr(1);
     glyphColour := 'lightMagenta';

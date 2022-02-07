@@ -46,6 +46,8 @@ begin
   begin
     npcID := uniqueid;
     race := 'Blood Bat';
+    intName := 'BloodBat';
+    article := True;
     description := 'a bloated red bat';
     glyph := 'b';
     glyphColour := 'red';

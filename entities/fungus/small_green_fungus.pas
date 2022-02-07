@@ -32,6 +32,8 @@ begin
   begin
     npcID := uniqueid;
     race := 'Small Green Fungus';
+    intName := 'SmallGreenFungus';
+    article := True;
     description := 'a poisonous fungus';
     glyph := 'f';
     glyphColour := 'green';

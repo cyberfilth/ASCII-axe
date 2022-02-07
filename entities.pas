@@ -28,6 +28,10 @@ type
     npcID: smallint;
     (* Creature type *)
     race: shortstring;
+    (* Internal name *)
+    intName: shortstring;
+    (* Article (the) *)
+    article: boolean;
     (* Description of creature *)
     description: string;
     (* health and position on game map *)
@@ -275,23 +279,17 @@ end;
 
 procedure Creature.entityTakeTurn(i: smallint);
 begin
-  if (entityList[i].race = 'Cave Rat') then
-    cave_rat.takeTurn(i)
-  else if (entityList[i].race = 'Giant Rat') then
-    giant_cave_rat.takeTurn(i)
-  else if (entityList[i].race = 'Blood Bat') then
-    blood_bat.takeTurn(i)
-  else if (entityList[i].race = 'Large Blood Bat') then
-    large_blood_bat.takeTurn(i)
-  else if (entityList[i].race = 'Green Fungus') then
-    green_fungus.takeTurn(i)
-  else if (entityList[i].race = 'Small Green Fungus') then
-    small_green_fungus.takeTurn(i)
-  else if (entityList[i].race = 'Hob') then
-    redcap_lesser.takeTurn(i)
-  else if (entityList[i].race = 'Hob lobber') then
-    redcap_lesser_lobber.takeTurn(i);
-
+  case (entityList[i].intName) of
+    'CaveRat': cave_rat.takeTurn(i);
+    'GiantRat': giant_cave_rat.takeTurn(i);
+    'BloodBat': blood_bat.takeTurn(i);
+    'LargeBloodBat': large_blood_bat.takeTurn(i);
+    'GreenFungus': green_fungus.takeTurn(i);
+    'SmallGreenFungus': small_green_fungus.takeTurn(i);
+    'Hob': redcap_lesser.takeTurn(i);
+    'HobLobber': redcap_lesser_lobber.takeTurn(i);
+  end;
+  (* Occupy their current tile *)
   occupyUpdate;
 end;
 

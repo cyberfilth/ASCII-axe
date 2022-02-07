@@ -40,6 +40,8 @@ begin
   begin
     npcID := uniqueid;
     race := 'Giant Rat';
+    intName := 'GiantRat';
+    article := True;
     description := 'a giant rat';
     glyph := 'r';
     glyphColour := 'yellow';

@@ -34,7 +34,13 @@ uses
 procedure combat(npcID: smallint);
 var
   damageAmount: smallint;
+  opponent: shortstring;
 begin
+  (* Get the opponents name *)
+  opponent := entities.entityList[npcID].race;
+  if (entities.entityList[npcID].article = True) then
+    opponent := 'the ' + opponent;
+
   (* Attacking an NPC automatically makes it hostile *)
   entities.entityList[npcID].state := stateHostile;
   (* Number of turns NPC will follow you if out of sight *)
@@ -48,34 +54,38 @@ begin
 
   if ((damageAmount - entities.entityList[0].tmrDrunk) > 0) then
   begin
-    entities.entityList[npcID].currentHP := (entities.entityList[npcID].currentHP - damageAmount);
+    entities.entityList[npcID].currentHP :=
+      (entities.entityList[npcID].currentHP - damageAmount);
     (* If it was a killing blow *)
     if (entities.entityList[npcID].currentHP < 1) then
     begin
-      (* If the target was a barrel that was broken open *)
-      if (entities.entityList[npcID].race = 'barrel') then
-        ui.bufferMessage('You break open the barrel')
-      else
-        (* If the target was an NPC *)
-        ui.displayMessage('You manage to kill the ' + entities.entityList[npcID].race);
+      (* If the target was an NPC *)
+      ui.displayMessage('You manage to kill ' + opponent);
       entities.killEntity(npcID);
-      entities.entityList[0].xpReward := entities.entityList[0].xpReward + entities.entityList[npcID].xpReward;
+      entities.entityList[0].xpReward :=
+        entities.entityList[0].xpReward + entities.entityList[npcID].xpReward;
       ui.updateXP;
       exit;
     end
     else
     if (damageAmount = 1) then
-      ui.displayMessage('Parrying, you slightly injure the ' + entities.entityList[npcID].race)
+      ui.displayMessage('Parrying, you slightly injure ' + opponent)
     else
-      ui.displayMessage('You hit the ' + entities.entityList[npcID].race + ' for ' + IntToStr(damageAmount) + ' points of damage');
+      ui.displayMessage('You hit ' + opponent + ' for ' + IntToStr(damageAmount) + ' points of damage');
   end;
 end;
 
 procedure spiteDMG(npc: smallint);
 var
   spiteDamage, i: smallint;
+  opponent: shortstring;
 begin
   spiteDamage := 0;
+  (* Get the opponents name *)
+  opponent := entities.entityList[npc].race;
+  if (entities.entityList[npc].article = True) then
+    opponent := 'the ' + opponent;
+
   (* If player is armed *)
   if (entityList[0].weaponEquipped = True) then
   begin
@@ -96,17 +106,18 @@ begin
     (* If it was a killing blow *)
     if (entities.entityList[npc].currentHP < 1) then
     begin
-      ui.displayMessage('You kill the ' + entities.entityList[npc].race);
+      ui.displayMessage('You kill ' + opponent);
       entities.killEntity(npc);
-      entities.entityList[0].xpReward := entities.entityList[0].xpReward + entities.entityList[npc].xpReward;
+      entities.entityList[0].xpReward :=
+        entities.entityList[0].xpReward + entities.entityList[npc].xpReward;
       ui.updateXP;
       exit;
     end
     else
     if (spiteDamage = 1) then
-      ui.displayMessage('You slightly injure the ' + entities.entityList[npc].race)
+      ui.displayMessage('You slightly injure ' + opponent)
     else
-      ui.displayMessage('You hit the ' + entities.entityList[npc].race + ' for ' + IntToStr(spiteDamage) + ' points of damage');
+      ui.displayMessage('You hit ' + opponent + ' for ' + IntToStr(spiteDamage) + ' points of damage');
   end;
 end;
 

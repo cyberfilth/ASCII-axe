@@ -47,7 +47,9 @@ begin
   with entities.entityList[entities.listLength] do
   begin
     npcID := uniqueid;
-    race := 'Hob lobber';
+    race := 'Hob';
+    intName := 'HobLobber';
+    article := True;
     description := 'a Hob holding rocks';
     glyph := chr(1);
     glyphColour := 'lightMagenta';

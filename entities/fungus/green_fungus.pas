@@ -34,6 +34,8 @@ begin
   begin
     npcID := uniqueid;
     race := 'Green Fungus';
+    intName := 'GreenFungus';
+    article := True;
     description := 'a green fungus';
     glyph := 'f';
     glyphColour := 'green';
