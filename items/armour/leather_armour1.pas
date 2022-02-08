@@ -25,6 +25,7 @@ begin
     itemID := uniqueid;
     itemName := 'Leather armour';
     itemDescription := 'adds 2 to defence';
+    itemArticle := 'some';
     itemType := itmArmour;
     itemMaterial := matLeather;
     useID := 3;

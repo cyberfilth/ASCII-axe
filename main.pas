@@ -230,7 +230,7 @@ begin
       (* Display a message if this is the first time seeing this item *)
       if (items.itemList[i].discovered = False) then
       begin
-        ui.displayMessage('You see a ' + items.itemList[i].itemName);
+        ui.displayMessage('You see ' + items.itemList[i].itemArticle + ' ' + items.itemList[i].itemName);
         items.itemList[i].discovered := True;
       end;
     end
@@ -382,7 +382,7 @@ begin
   ui.updateHealth;
   (* Update magick display *)
   if (player_stats.playerRace <> 'Dwarf') then
-  ui.updateMagick;
+    ui.updateMagick;
   (* Reduce smell counter *)
   if (smell.smellCounter > 0) then
     Dec(smell.smellCounter);
@@ -404,7 +404,7 @@ begin
   (* Check if the player has levelled up *)
   player_stats.checkLevel;
   (* Process any dialog pop-ups *)
-   dlgInfo.checkNotifications;
+  dlgInfo.checkNotifications;
 end;
 
 procedure returnToGameScreen;
@@ -433,7 +433,7 @@ begin
       (* Display a message if this is the first time seeing this item *)
       if (items.itemList[i].discovered = False) then
       begin
-        ui.displayMessage('You see a ' + items.itemList[i].itemName);
+        ui.displayMessage('You see ' + items.itemList[i].itemArticle + ' ' + items.itemList[i].itemName);
         items.itemList[i].discovered := True;
       end;
     end

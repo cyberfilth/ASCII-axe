@@ -24,6 +24,7 @@ begin
     itemID := uniqueid;
     itemName := 'tankard of ale';
     itemDescription := 'restores 5 health points';
+    itemArticle := 'a';
     itemType := itmDrink;
     itemMaterial := matSteel;
     useID := 1;

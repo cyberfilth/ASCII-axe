@@ -27,6 +27,7 @@ begin
     itemID := uniqueid;
     itemName := 'Smugglers Map';
     itemDescription := 'The map you''ve been searching for';
+    itemArticle := 'the';
     itemType := itmQuest;
     itemMaterial := matPaper;
     useID := 7;

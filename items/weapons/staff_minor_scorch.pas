@@ -39,6 +39,7 @@ begin
       itemName := 'Wooden staff';
       itemDescription := 'adds 1D6 to attack';
     end;
+    itemArticle := 'a';
     itemType := itmWeapon;
     itemMaterial := matWood;
     useID := 8;

@@ -25,6 +25,7 @@ begin
     itemID := uniqueid;
     itemName := 'crude dagger';
     itemDescription := 'adds 1D6+2 to attack';
+    itemArticle := 'a';
     itemType := itmWeapon;
     itemMaterial := matIron;
     useID := 2;

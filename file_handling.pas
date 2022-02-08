@@ -205,6 +205,7 @@ begin
           TDOMElement(dataNode).SetAttribute('itemID', UTF8Decode(IntToStr(itemList[i].itemID)));
           AddElement(DataNode, 'Name', itemList[i].itemName);
           AddElement(DataNode, 'description', itemList[i].itemDescription);
+          AddElement(DataNode, 'article', itemList[i].itemArticle);
           WriteStr(Value, itemList[i].itemType);
           AddElement(DataNode, 'itemType', Value);
           WriteStr(Value, itemList[i].itemMaterial);
@@ -351,6 +352,7 @@ begin
         items.itemList[i].itemID := StrToInt(UTF8Encode(ItemsNode.Attributes.Item[0].NodeValue));
         items.itemList[i].itemName := UTF8Encode(ItemsNode.FindNode('Name').TextContent);
         items.itemList[i].itemDescription := UTF8Encode(ItemsNode.FindNode('description').TextContent);
+        items.itemList[i].itemArticle := UTF8Encode(ItemsNode.FindNode('article').TextContent);
         items.itemList[i].itemType := tItem(GetEnumValue(Typeinfo(tItem), UTF8Encode(ItemsNode.FindNode('itemType').TextContent)));
         items.itemList[i].itemMaterial := tMaterial(GetEnumValue(Typeinfo(tMaterial), UTF8Encode(ItemsNode.FindNode('itemMaterial').TextContent)));
         items.itemList[i].useID := StrToInt(UTF8Encode(ItemsNode.FindNode('useID').TextContent));
@@ -531,6 +533,7 @@ begin
       player_inventory.inventory[i].Name := UTF8Encode(InventoryNode.FindNode('Name').TextContent);
       player_inventory.inventory[i].equipped := StrToBool(UTF8Encode(InventoryNode.FindNode('equipped').TextContent));
       player_inventory.inventory[i].description := UTF8Encode(InventoryNode.FindNode('description').TextContent);
+      player_inventory.inventory[i].article := UTF8Encode(InventoryNode.FindNode('article').TextContent);
       player_inventory.inventory[i].itemType := tItem(GetEnumValue(Typeinfo(tItem), UTF8Encode(InventoryNode.FindNode('itemType').TextContent)));
       player_inventory.inventory[i].itemMaterial := tMaterial(GetEnumValue(Typeinfo(tMaterial), UTF8Encode(InventoryNode.FindNode('itemMaterial').TextContent)));
       player_inventory.inventory[i].useID := StrToInt(UTF8Encode(InventoryNode.FindNode('useID').TextContent));
@@ -657,6 +660,7 @@ begin
       AddElement(DataNode, 'Name', inventory[i].Name);
       AddElement(DataNode, 'equipped', BoolToStr(inventory[i].equipped));
       AddElement(DataNode, 'description', inventory[i].description);
+      AddElement(DataNode, 'article', inventory[i].article);
       WriteStr(Value, inventory[i].itemType);
       AddElement(DataNode, 'itemType', Value);
       WriteStr(Value, inventory[i].itemMaterial);

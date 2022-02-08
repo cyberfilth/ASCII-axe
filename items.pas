@@ -20,8 +20,8 @@ type
   Item = record
     (* Unique ID *)
     itemID: smallint;
-    (* Item name & description *)
-    itemName, itemDescription: shortstring;
+    (* Item name, description and article *)
+    itemName, itemDescription, itemArticle: shortstring;
     (* drink, weapon, armour, missile *)
     itemType: tItem;
     (* Item material *)
@@ -151,7 +151,7 @@ begin
         (* Display a message if this is the first time seeing this item *)
         if (items.itemList[i].discovered = False) then
         begin
-          ui.displayMessage('You see a ' + items.itemList[i].itemName);
+          ui.displayMessage('You see ' + items.itemList[i].itemArticle + ' ' + items.itemList[i].itemName);
           items.itemList[i].discovered := True;
         end;
       end

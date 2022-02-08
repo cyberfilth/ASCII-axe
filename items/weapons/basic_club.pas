@@ -25,6 +25,7 @@ begin
     itemID := uniqueid;
     itemName := 'wooden club';
     itemDescription := 'adds 1D6 to attack';
+    itemArticle := 'a';
     itemType := itmWeapon;
     itemMaterial := matWood;
     useID := 4;

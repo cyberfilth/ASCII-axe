@@ -13,7 +13,7 @@ type
   (* Items in inventory *)
   Equipment = record
     id, useID, sortIndex: smallint;
-    Name, description, glyph, glyphColour: shortstring;
+    Name, description, article, glyph, glyphColour: shortstring;
     itemType: tItem;
     itemMaterial: tMaterial;
     (* Is the item still in the inventory *)
@@ -71,6 +71,7 @@ begin
     inventory[i].Name := 'Empty';
     inventory[i].equipped := False;
     inventory[i].description := 'x';
+    inventory[i].article := 'x';
     inventory[i].itemType := itmEmptySlot;
     inventory[i].itemMaterial := matEmpty;
     inventory[i].glyph := 'x';
@@ -130,6 +131,7 @@ begin
           inventory[i].sortIndex := 3;
         inventory[i].Name := itemList[itemNumber].itemname;
         inventory[i].description := itemList[itemNumber].itemDescription;
+        inventory[i].article := itemList[itemNumber].itemArticle;
         inventory[i].itemType := itemList[itemNumber].itemType;
         inventory[i].itemMaterial := itemList[itemNumber].itemMaterial;
         inventory[i].useID := itemList[itemNumber].useID;
@@ -144,6 +146,7 @@ begin
           itemID := itemNumber;
           itemName := 'empty';
           itemDescription := '';
+          itemArticle := '';
           itemType := itmEmptySlot;
           itemMaterial := matEmpty;
           useID := 1;
@@ -172,6 +175,7 @@ begin
       itemID := itemNumber;
       itemName := 'empty';
       itemDescription := '';
+      itemArticle := '';
       itemType := itmEmptySlot;
       itemMaterial := matEmpty;
       useID := 1;
@@ -201,6 +205,7 @@ begin
     newItem.itemID := items.itemAmount;
     newItem.itemName := inventory[itemNumber].Name;
     newItem.itemDescription := inventory[itemNumber].description;
+    newItem.itemArticle := inventory[itemNumber].article;
     newItem.itemType := inventory[itemNumber].itemType;
     newItem.itemMaterial := inventory[itemNumber].itemMaterial;
     newItem.useID := inventory[itemNumber].useID;
@@ -223,6 +228,7 @@ begin
     inventory[itemNumber].Name := 'Empty';
     inventory[itemNumber].equipped := False;
     inventory[itemNumber].description := 'x';
+    inventory[itemNumber].article := 'x';
     inventory[itemNumber].itemType := itmEmptySlot;
     inventory[itemNumber].itemMaterial := matEmpty;
     inventory[itemNumber].glyph := 'x';
@@ -383,6 +389,7 @@ begin
     inventory[selection].Name := 'Empty';
     inventory[selection].equipped := False;
     inventory[selection].description := 'x';
+    inventory[selection].article := 'x';
     inventory[selection].itemType := itmEmptySlot;
     inventory[selection].itemMaterial := matEmpty;
     inventory[selection].glyph := 'x';

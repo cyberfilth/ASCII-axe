@@ -518,7 +518,7 @@ begin
       (* Display a message if this is the first time seeing this item *)
       if (items.itemList[i].discovered = False) then
       begin
-        ui.displayMessage('You see a ' + items.itemList[i].itemName);
+        ui.displayMessage('You see ' + items.itemList[i].itemArticle + ' ' + items.itemList[i].itemName);
         items.itemList[i].discovered := True;
       end;
     end

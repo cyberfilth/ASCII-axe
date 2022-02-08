@@ -25,6 +25,7 @@ begin
     itemID := uniqueid;
     itemName := 'potion of Cure';
     itemDescription := 'cures poison';
+    itemArticle := 'a';
     itemType := itmDrink;
     itemMaterial := matSteel;
     useID := 6;
